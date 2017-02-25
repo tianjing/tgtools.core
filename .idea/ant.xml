@@ -4,7 +4,8 @@
     <buildFile url="file://$PROJECT_DIR$/build.xml">
       <customJdkName value="1.6" />
       <properties>
-        <property name="basedir" value="C:\Works\DQ\jsecjgwork" />
+        <property name="basedir" value="C:\Works\GitHub" />
+        <property name="outproject" value="C:\Works\DQ\jsecjgwork" />
       </properties>
     </buildFile>
   </component>
