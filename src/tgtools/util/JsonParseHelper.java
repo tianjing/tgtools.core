@@ -2,6 +2,7 @@ package tgtools.util;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
@@ -27,6 +28,8 @@ public class JsonParseHelper {
 
     static
     {
+        m_mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        m_realMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         m_realMapper.setPropertyNamingStrategy(new PropertyNamingStrategy() {
             private static final long serialVersionUID = 1L;
             // 反序列化时调用
@@ -152,6 +155,26 @@ public class JsonParseHelper {
     }
 
     /**
+     * 将JSONObject 转换为对象 字段名大小写完全匹配
+     * @param json json对象
+     * @param cls 对象类型
+     * @return 转换后的对象
+     * @throws APPErrorException
+     */
+    public static Object parseRealToObject(JSONObject json, Class<?> cls) throws APPErrorException {
+        return parseToObject(json.toString(),cls,true);
+    }
+    /**
+     * 将JSONObject 转换为对象 字段名大小写完全匹配
+     * @param json json对象
+     * @param cls 对象类型
+     * @return 转换后的对象
+     * @throws APPErrorException
+     */
+    public static Object parseRealToObject(JSONArray json, Class<?> cls) throws APPErrorException {
+        return parseToObject(json.toString(),cls,true);
+    }
+    /**
      * 将JSONObject 转换为对象
      * @param json json对象
      * @param cls 对象类型
@@ -171,6 +194,19 @@ public class JsonParseHelper {
      */
     public static Object parseToObject(JSONArray json, Class<?> cls) throws APPErrorException {
         return parseToObject(json.toString(),cls,false);
+    }
+    public static void main(String [] args)
+    {
+        String json="{'NAME':'ERWQ','VALUE':null,'fdas':'11'}";
+
+        try {
+            JSONObject json1 =new JSONObject(json);
+            Entity entity=(Entity)parseToObject(json1.toString(),Entity.class,true);
+            tgtools.util.LogHelper.info("","entity:"+entity.getNAME(),"");
+
+        } catch (APPErrorException e) {
+            e.printStackTrace();
+        }
     }
 
 }
