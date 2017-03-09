@@ -1,5 +1,6 @@
 package tgtools.db;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public class DBCPDataAccess implements IDataAccess {
 	private static String password = ""; // 密码
 	private static ObjectPool<?> connectionPool = null;
 	private static String poolname = "";
-
+	private String m_DataBaseType = "";
 	/**
 	 * 连接池启动
 	 * 
@@ -59,7 +60,39 @@ public class DBCPDataAccess implements IDataAccess {
 			e.printStackTrace();
 		}
 	}
+	@Override
+	public void setDataBaseType(String p_DataBaseType) {
+		m_DataBaseType=p_DataBaseType;
+	}
 
+	@Override
+	public String getDataBaseType() {
+		if (!StringUtil.isNullOrEmpty(m_DataBaseType)) {
+			return m_DataBaseType;
+		}
+		String url = getUrl();
+		if (!StringUtil.isNullOrEmpty(url)) {
+			m_DataBaseType=url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
+		}
+		return m_DataBaseType;
+	}
+
+	@Override
+	public String getUrl() {
+		if (null != m_DataSource) {
+			try {
+				Method method = m_DataSource.getClass().getDeclaredMethod("getUrl", new Class[]{});
+				if (null == method) {
+					LogHelper.info("", "无法获取getUrl方法。", "DMDataAccess.getUrl");
+				}
+				Object obj = method.invoke(m_DataSource, new Object[]{});
+				return null == obj ? StringUtil.EMPTY_STRING : obj.toString();
+			} catch (Exception e) {
+				LogHelper.error("", "获取数据库连接出错。", "DMDataAccess.getUrl", e);
+			}
+		}
+		return StringUtil.EMPTY_STRING;
+	}
 	/**
 	 * 释放连接池
 	 */

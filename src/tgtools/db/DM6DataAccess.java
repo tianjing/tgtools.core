@@ -1,12 +1,9 @@
 package tgtools.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
 
 import tgtools.exceptions.APPErrorException;
 
-import javax.sql.DataSource;
 
 public class DM6DataAccess extends DMDataAccess implements IDataAccess {
 

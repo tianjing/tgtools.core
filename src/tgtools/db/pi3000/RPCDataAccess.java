@@ -4,19 +4,23 @@ import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 import tgtools.rpc.RPCClient;
 import tgtools.util.LogHelper;
+import tgtools.util.StringUtil;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
 public class RPCDataAccess implements tgtools.db.IDataAccess {
 
 	private RPCClient m_Client;
-
+	private String m_DataBaseType = "PI3000";
+	private String m_Url="";
 	public RPCDataAccess()
 	{}
 	public RPCDataAccess(String p_Url)
 	{
+		m_Url=p_Url;
 		try {
 			init(p_Url);
 			LogHelper.info("","初始化参数："+p_Url,"RPCDataAccess");
@@ -26,7 +30,20 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
 			LogHelper.error("","初始化失败,参数："+p_Url,"RPCDataAccess",e);
 		}
 	}
+	@Override
+	public void setDataBaseType(String p_DataBaseType) {
+		m_DataBaseType=p_DataBaseType;
+	}
 
+	@Override
+	public String getDataBaseType() {
+		return m_DataBaseType;
+	}
+
+	@Override
+	public String getUrl() {
+		return m_Url;
+	}
 	@Override
 	public DataSource getDataSource() {
 		return null;

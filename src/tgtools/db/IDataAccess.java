@@ -9,6 +9,24 @@ import tgtools.exceptions.APPErrorException;
 import javax.sql.DataSource;
 
 public interface IDataAccess {
+
+	/**
+	 * 获取数据库设置
+	 * @param p_DataBaseType
+	 * @return
+     */
+	void setDataBaseType(String p_DataBaseType);
+	/**
+	 * 取数据库类型
+	 * @return
+     */
+	String getDataBaseType();
+
+	/**
+	 * 获取数据库连接
+	 * @return
+     */
+	String getUrl();
 	/**
 	 * 获取数据源
 	 * @return

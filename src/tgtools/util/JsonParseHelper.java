@@ -197,16 +197,7 @@ public class JsonParseHelper {
     }
     public static void main(String [] args)
     {
-        String json="{'NAME':'ERWQ','VALUE':null,'fdas':'11'}";
 
-        try {
-            JSONObject json1 =new JSONObject(json);
-            Entity entity=(Entity)parseToObject(json1.toString(),Entity.class,true);
-            tgtools.util.LogHelper.info("","entity:"+entity.getNAME(),"");
-
-        } catch (APPErrorException e) {
-            e.printStackTrace();
-        }
     }
 
 }
