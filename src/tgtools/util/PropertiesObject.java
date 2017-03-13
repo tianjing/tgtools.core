@@ -1,6 +1,7 @@
 package tgtools.util;
 
 import tgtools.exceptions.APPErrorException;
+import tgtools.exceptions.APPRuntimeException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * 名  称：支持变量且可以转换到类
- *  变量形式：${}
+ *  变量形式：#{}
  *  使用 convert 转换到类
  * 编写者：田径
  * 功  能：
@@ -20,20 +21,27 @@ import java.util.regex.Pattern;
 public class PropertiesObject extends Properties {
 
 
-    private static final Pattern PATTERN =  Pattern.compile("\\$\\{([^\\}]+)\\}");
+    private static final Pattern PATTERN =  Pattern.compile("#\\{([^\\}]+)\\}");
 
     @Override
     public String getProperty(String key) {
         String value = super.getProperty(key);
         if(null==value)return null;
+
         Matcher matcher = PATTERN.matcher(value);
         StringBuffer buffer = new StringBuffer();
-        while (matcher.find()) {
-            String matcherKey = matcher.group(1);
-            String matchervalue = super.getProperty(matcherKey);
-            if (matchervalue != null) {
-                matcher.appendReplacement(buffer, matchervalue);
+        try {
+            while (matcher.find()) {
+                String matcherKey = matcher.group(1);
+                String matchervalue = super.getProperty(matcherKey);
+                if (matchervalue != null) {
+                    matchervalue=matchervalue.replaceAll("\\$", "\\\\\\$");
+                    matcher.appendReplacement(buffer, matchervalue);
+                }
             }
+        }catch (Exception e)
+        {
+            throw new APPRuntimeException("获取值出错；key："+key+";原因："+e.getMessage(),e);
         }
         matcher.appendTail(buffer);
         return buffer.toString();
@@ -90,7 +98,7 @@ public class PropertiesObject extends Properties {
         try {
             return convert(p_Class.newInstance());
         } catch (Exception e) {
-            throw new APPErrorException("实例化对象出错："+p_Class);
+            throw new APPErrorException("实例化对象出错："+p_Class+";错误："+e.getMessage(),e);
         }
 
     }
