@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import tgtools.data.DataRow;
+import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 import tgtools.json.JSONArray;
 import tgtools.json.JSONException;
@@ -137,21 +139,41 @@ public class JsonParseHelper {
             throw new APPErrorException("JSon转换失败",e);
         }
     }
+
     /**
-     * 将json字符串转换程对象
-     * @param json json字符串
-     * @param cls 对象类型
-     * @param p_IsReal 是否使用真实字段名（默认小写字段名）
-     * @return 转换后的对象
+     * 将DataTable 转换成实例 字段名完全匹配
+     * @param p_Table
+     * @param cls 数组类型 如 Menu[].class
+     * @return
+     * @throws APPErrorException
      */
-    public static Object parseToObject(String json, Class<?> cls,boolean p_IsReal) throws APPErrorException {
-        Object vo = null;
+    public static <T>T parseToObject(DataTable p_Table, Class<T> cls) throws APPErrorException {
+        return parseToObject(p_Table.toJson(),cls,true);
+    }
+    /**
+     *
+     * @param p_Table
+     * @param cls 数组类型 如 Menu[].class
+     * @param p_IsReal 字段名是否完全匹配
+     * @return
+     * @throws APPErrorException
+     */
+    public static <T>T parseToObject(DataTable p_Table, Class<T> cls, boolean p_IsReal) throws APPErrorException {
+        return parseToObject(p_Table.toJson(),cls,p_IsReal);
+    }
+        /**
+         * 将json字符串转换程对象
+         * @param json json字符串
+         * @param cls 对象类型
+         * @param p_IsReal 是否使用真实字段名（默认小写字段名）
+         * @return 转换后的对象
+         */
+    public static <T>T parseToObject(String json, Class<T> cls,boolean p_IsReal) throws APPErrorException {
         try {
-            vo = getMapper(p_IsReal).readValue(json, cls);
+            return getMapper(p_IsReal).readValue(json, cls);
         } catch (IOException e) {
             throw new APPErrorException("json转换实体出错",e);
         }
-        return vo;
     }
 
     /**
@@ -195,9 +217,7 @@ public class JsonParseHelper {
     public static Object parseToObject(JSONArray json, Class<?> cls) throws APPErrorException {
         return parseToObject(json.toString(),cls,false);
     }
-    public static void main(String [] args)
-    {
 
-    }
+
 
 }

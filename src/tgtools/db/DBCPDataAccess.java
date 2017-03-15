@@ -23,6 +23,7 @@ import com.sun.rowset.CachedRowSetImpl;
 
 import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
+import tgtools.util.JsonParseHelper;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
@@ -178,7 +179,10 @@ public class DBCPDataAccess implements IDataAccess {
 			close(conn);
 		}
 	}
-
+	@Override
+	public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+		return (T) JsonParseHelper.parseToObject(Query(sql),p_Class,true);
+	}
 	@Override
 	public int executeUpdate(String sql) throws APPErrorException {
 		Connection conn = null;

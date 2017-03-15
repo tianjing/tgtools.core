@@ -46,6 +46,16 @@ public interface IDataAccess {
 	 * @throws APPErrorException
 	 */
 	DataTable Query(String sql)throws APPErrorException;
+
+	/**
+	 * 查询并返回table对象
+	 * @param sql
+	 * @param p_Class
+	 * @param <T>
+	 * @return
+	 * @throws APPErrorException
+     */
+	<T>T Query(String sql,Class<T> p_Class)throws APPErrorException;
 	/**
 	 * 执行一个sql 如 update insert
 	 * @param sql

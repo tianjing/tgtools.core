@@ -9,9 +9,16 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+
 public class ReflectionUtil {
 
-
+	/**
+	 * 找到指定的成员
+	 * @param p_Class 要需找的类型
+	 * @param p_FieldName 字段名称
+     * @return
+     */
 	public static Field findField(Class p_Class,String p_FieldName)
 	{
 		if(StringUtil.isNullOrEmpty(p_FieldName))return null;
@@ -27,6 +34,12 @@ public class ReflectionUtil {
 		return null;
 	}
 
+	/**
+	 * 将字符串转换成指定的类型
+	 * @param p_class 转换后的类型
+	 * @param p_value 值
+     * @return
+     */
 	public static Object instanceSimpleClass(Class<?> p_class, String p_value)
 	  {
 	    if (p_class.equals(String.class))

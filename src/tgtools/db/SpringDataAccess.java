@@ -14,6 +14,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import org.w3c.dom.Document;
 import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
+import tgtools.util.JsonParseHelper;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
@@ -97,6 +98,11 @@ public class SpringDataAccess implements IDataAccess {
 			close(statement);
 			close(conn);
 		}
+	}
+
+	@Override
+	public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+		return (T) JsonParseHelper.parseToObject(Query(sql),p_Class,true);
 	}
 
 	@Override

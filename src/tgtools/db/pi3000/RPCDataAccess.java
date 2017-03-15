@@ -3,6 +3,7 @@ package tgtools.db.pi3000;
 import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 import tgtools.rpc.RPCClient;
+import tgtools.util.JsonParseHelper;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
@@ -69,7 +70,11 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
 			
 		}
 	}
-
+	@Override
+	public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+		Object obj = JsonParseHelper.parseToObject(Query(sql),p_Class,true);
+		return (T) JsonParseHelper.parseToObject(Query(sql),p_Class,true);
+	}
 	@Override
 	public int executeUpdate(String sql) throws APPErrorException {
 		WsDsResult result=new WsDsResult();
