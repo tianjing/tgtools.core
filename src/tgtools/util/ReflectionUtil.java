@@ -1,9 +1,13 @@
 package tgtools.util;
 
 import tgtools.data.DbTypeConverter;
+import tgtools.exceptions.APPErrorException;
 import tgtools.exceptions.APPRuntimeException;
+import tgtools.json.JSONException;
+import tgtools.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -33,6 +37,33 @@ public class ReflectionUtil {
 		}
 		return null;
 	}
+
+	/**
+	 * 执行对象中的方法（反射）
+	 * 如：invokeMethod("get",new JSONObject(),new Class[]{String.class},new Object[]{"dd	"})
+	 * @param p_MethodName 方法名称
+	 * @param p_Obj 对象
+	 * @param parameterTypes 方法的参数类型
+	 * @param p_Params 方法的参数
+	 * @return
+	 * @throws APPErrorException
+     */
+	 public static Object invokeMethod(String p_MethodName,Object p_Obj,Class<?>[] parameterTypes,Object[] p_Params) throws APPErrorException {
+		 try {
+			 String methodname =p_MethodName;
+
+			 Method method = p_Obj.getClass().getDeclaredMethod(methodname, parameterTypes);
+			 if (null == method) {
+				 throw new APPErrorException("处理出错：找不到方法名：" + methodname);
+			 }
+			 return method.invoke(p_Obj, p_Params);
+		 } catch (Exception e) {
+			 throw new APPErrorException("处理出错：" + e.getMessage(), e);
+		 }
+
+
+	 }
+
 
 	/**
 	 * 将字符串转换成指定的类型
