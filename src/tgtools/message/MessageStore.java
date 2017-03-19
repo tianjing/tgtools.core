@@ -27,7 +27,7 @@ public class MessageStore {
     public static void saveMessage(Message p_Message) throws APPErrorException {
         try {
             m_Messages.put(p_Message);
-            m_Cache.replace(m_Element);
+            updateCache();
         } catch (InterruptedException e) {
             throw new APPErrorException("Message存储失败，原因：" + e.getMessage(), e);
         }
@@ -39,10 +39,15 @@ public class MessageStore {
         }
         try {
             Message message= m_Messages.take();
-            m_Cache.replace(m_Element);
+            updateCache();
             return message;
         } catch (InterruptedException e) {
             throw new APPErrorException("Message取出失败，原因：" + e.getMessage(), e);
         }
     }
+    private static void updateCache()
+    {
+        m_Cache.put(new Element("Message", m_Messages));
+    }
+
 }
