@@ -17,12 +17,16 @@ import java.util.Vector;
  * 时  间：15:24
  */
 public class MessageFactory {
-
-
     private static Vector<MessageListening> m_Listens = new Vector<MessageListening>();
     private static Vector<MessageListening> m_TempAddListens = new Vector<MessageListening>();
     private static Vector<MessageListening> m_TempDelListens = new Vector<MessageListening>();
+    private static IMessageStore m_MessageStroe=null;
     private static boolean m_IsRun;
+
+    static{
+        m_MessageStroe = new MessageLocalStore();
+    }
+
 
     public static boolean isRun() {
         return m_IsRun;
@@ -54,7 +58,7 @@ public class MessageFactory {
             }
             Message message = null;
             try {
-                message = MessageStore.getMessage();
+                message = m_MessageStroe.getMessage();
             } catch (Exception ex) {
                 LogHelper.error("", "Message取出时出错：" + ex.getMessage(), "ServiceFactory", ex);
             }
@@ -94,7 +98,7 @@ public class MessageFactory {
         }
     }
     public static void sendMessage(Message p_Message) throws APPErrorException {
-        MessageStore.saveMessage(p_Message);
+        m_MessageStroe.addMessage(p_Message);
     }
 
     public static void registerListening(MessageListening p_MessageListening) throws APPErrorException {
