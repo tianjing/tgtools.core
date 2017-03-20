@@ -1,14 +1,11 @@
 package tgtools.message;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-import tgtools.cache.CacheFactory;
 import tgtools.exceptions.APPErrorException;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * 名  称：
+ * 名  称：本机消息缓存 利用本机的内存存储或取出消息
  * 编写者：田径
  * 功  能：
  * 时  间：18:23

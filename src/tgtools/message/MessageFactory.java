@@ -27,15 +27,25 @@ public class MessageFactory {
         m_MessageStroe = new MessageLocalStore();
     }
 
-
+    /**
+     * 是否运行
+     * @return
+     */
     public static boolean isRun() {
         return m_IsRun;
     }
 
-    public static void setIsRun(boolean m_IsRun) {
+    /**
+     * 设置运行状态
+     * @param m_IsRun
+     */
+    private static void setIsRun(boolean m_IsRun) {
         MessageFactory.m_IsRun = m_IsRun;
     }
 
+    /**
+     * 启动消息处理器
+     */
     public static void start() {
         m_IsRun = true;
         ThreadPoolFactory.addTask(new Runnable() {
@@ -85,6 +95,10 @@ public class MessageFactory {
             }
         }
     }
+
+    /**
+     * 合并添加或删除的监听
+     */
     private static void mergaListen()
     {
         if(!m_TempAddListens.isEmpty())
@@ -97,10 +111,21 @@ public class MessageFactory {
             m_Listens.removeAll(m_TempDelListens);
         }
     }
+
+    /**
+     * 发送消息
+     * @param p_Message
+     * @throws APPErrorException
+     */
     public static void sendMessage(Message p_Message) throws APPErrorException {
         m_MessageStroe.addMessage(p_Message);
     }
 
+    /**
+     * 注册一个监听
+     * @param p_MessageListening
+     * @throws APPErrorException
+     */
     public static void registerListening(MessageListening p_MessageListening) throws APPErrorException {
         m_TempAddListens.add(p_MessageListening);
     }
