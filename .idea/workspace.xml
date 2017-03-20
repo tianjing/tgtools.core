@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/message/Message.java" afterPath="$PROJECT_DIR$/src/tgtools/message/Message.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/message/MessageFactory.java" afterPath="$PROJECT_DIR$/src/tgtools/message/MessageFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/message/MessageListening.java" afterPath="$PROJECT_DIR$/src/tgtools/message/MessageListening.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/message/MessageLocalStore.java" afterPath="$PROJECT_DIR$/src/tgtools/message/MessageLocalStore.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/build.property" afterPath="$PROJECT_DIR$/src/META-INF/build.property" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -953,14 +952,7 @@
       <workItem from="1489818898585" duration="2903000" />
       <workItem from="1489908245948" duration="7488000" />
       <workItem from="1489970941686" duration="411000" />
-      <workItem from="1489973120593" duration="1672000" />
-    </task>
-    <task id="LOCAL-00009" summary="修复 removelast时逻辑">
-      <created>1470901435217</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1470901435217</updated>
+      <workItem from="1489973120593" duration="1792000" />
     </task>
     <task id="LOCAL-00010" summary="增加日志调试模式">
       <created>1471847048955</created>
@@ -1298,11 +1290,18 @@
       <option name="project" value="LOCAL" />
       <updated>1489974131816</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="增加消息实现（beta）">
+      <created>1489974802554</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1489974802554</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="228397000" />
+    <option name="totallyTimeSpent" value="228517000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
