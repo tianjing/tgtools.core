@@ -218,11 +218,10 @@ public class ZipStringUtil {
 	}
 
 	public static void main(String[] arg) throws IOException {
-		String ss="H4sIAAAAAAAAAKtWKi5NTk4tLlZSsFJIS8wpTtVRKskvScwJyi8HiRnoKCWXFgUkpqeCFBjqKKUk\r\nliQCmUquQUH+QYoKeaU5OUq1AAVrFwRGAAAA";
-		String ress= new String(new sun.misc.BASE64Decoder()
-				.decodeBuffer(ss));
+		String ss="H4sIAAAAAAAAAHNKqqhIyswrTi0q0XnaO/3JrjU6T5cufbJ38tP GToVFRUASB0fniAAAAA=";
+		String ss1="Bbxxbinsert,南京,奥体变,xxx";
 		//String res= gunzip(ss);
-		System.out.println(gzip("fda_Binfo,2013-12-12"));
-		System.out.println(gunzip(gzip("fda_Binfo,2013-12-12")));
+		System.out.println("gzip:"+gzip(ss1));
+		System.out.println(gunzip(ss));
 	}
 }

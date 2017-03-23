@@ -1,5 +1,7 @@
 package tgtools.util;
 
+import tgtools.exceptions.APPRuntimeException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -85,14 +87,39 @@ public class RegexHelper {
         return Pattern.compile(rexp).matcher(p_Content).find();
     }
 
-    public static void main(String[] args) {
-//        String content = "<html><a>12321</a><a>dfasfds</a></html>";
-//        String reg = "<a>(.*?)</a>";
-//        List<String> res = RegexHelper.regexAll(content, reg);
-//        System.out.println(res.size());
-//
-//        String res2 = RegexHelper.regexFirst(content, reg);
-//        System.out.println(res2);
-        System.out.println(isNubmer("3213.00"));
+    /**
+     * 正则替换字符串内容
+     * 如： String sql="a='11' and b=''22''";
+     *     System.out.println("escape:"+replace(sql,"''","'+"));
+     *     输出：a=''11'' and b=''22''
+     * @param p_Content 原文
+     * @param p_ReplaceStr 匹配后替换的内容
+     * @param p_Pattern 正则表达式
+     * @return
+     */
+    public static String replace(String p_Content,String p_ReplaceStr,String p_Pattern) {
+        Pattern pattern=Pattern.compile(p_Pattern);
+
+        Matcher matcher = pattern.matcher(p_Content);
+        StringBuffer buffer = new StringBuffer();
+        try {
+            while (matcher.find()) {
+                String matchervalue = p_ReplaceStr;
+                if (matchervalue != null) {
+                    matchervalue=matchervalue.replaceAll("\\$", "\\\\\\$");
+                    matcher.appendReplacement(buffer, matchervalue);
+                }
+            }
+        }catch (Exception e)
+        {
+            throw new APPRuntimeException("正则替换出错；原因："+e.getMessage(),e);
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
+    }
+
+        public static void main(String[] args) {
+            String sql="a='11' and b=''22''";
+            System.out.println("escape:"+replace(sql,"char(38)","'+"));
     }
 }

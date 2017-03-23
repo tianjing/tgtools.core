@@ -10,10 +10,13 @@ import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
 public class DataBaseFactory {
+	public static final String DBTYPE_DM7="dm";
+	public static final String DBTYPE_DM6="dm6";
+	public static final String DBTYPE_MYSQL="mysql";
+	public static final String DBTYPE_ORACLE="oracle";
+
 	static {
-
 		m_Connections = new LinkedHashMap<String, IDataAccess>();
-
 	}
 
 	/**
