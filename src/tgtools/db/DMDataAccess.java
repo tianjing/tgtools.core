@@ -81,9 +81,9 @@ public class DMDataAccess implements IDataAccess {
     public String getUrl() {
         if (null != m_DataSource) {
             try {
-                Method method = m_DataSource.getClass().getDeclaredMethod("getUrl", new Class[]{});
+                Method method = m_DataSource.getClass().getDeclaredMethod("getURL", new Class[]{});
                 if (null == method) {
-                    LogHelper.info("", "无法获取getUrl方法。", "DMDataAccess.getUrl");
+                    LogHelper.info("", "无法获取getUrl方法。", "DMDataAccess.getURL");
                 }
                 Object obj = method.invoke(m_DataSource, new Object[]{});
                 return null == obj ? StringUtil.EMPTY_STRING : obj.toString();
