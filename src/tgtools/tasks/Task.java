@@ -36,8 +36,6 @@ public abstract class Task {
 	protected boolean m_IsAsync =false;
 
 
-	public boolean isConcurrency(){return false;}
-
 	public boolean isBusy() {
 		return m_IsBusy;
 	}

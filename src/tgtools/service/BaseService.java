@@ -18,8 +18,9 @@ public abstract class BaseService extends Task {
     protected abstract Date getEndTime();
 
     public Date m_LastTime;
-    public boolean m_IsStop; 
-    
+    public boolean m_IsStop;
+    public boolean isConcurrency(){return false;}
+
     public Date getLastTime() {
     	return m_LastTime;
     }
