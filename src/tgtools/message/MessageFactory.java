@@ -17,9 +17,9 @@ import java.util.Vector;
  * 时  间：15:24
  */
 public class MessageFactory {
-    private static Vector<MessageListening> m_Listens = new Vector<MessageListening>();
-    private static Vector<MessageListening> m_TempAddListens = new Vector<MessageListening>();
-    private static Vector<MessageListening> m_TempDelListens = new Vector<MessageListening>();
+    private static Vector<IMessageListening> m_Listens = new Vector<IMessageListening>();
+    private static Vector<IMessageListening> m_TempAddListens = new Vector<IMessageListening>();
+    private static Vector<IMessageListening> m_TempDelListens = new Vector<IMessageListening>();
     private static IMessageStore m_MessageStroe=null;
     private static boolean m_IsRun;
 
@@ -72,17 +72,17 @@ public class MessageFactory {
             } catch (Exception ex) {
                 LogHelper.error("", "Message取出时出错：" + ex.getMessage(), "ServiceFactory", ex);
             }
-            if (null == message) {
-                continue;
-            }
-            mergaListen();
+            if (null != message) {
 
-            Enumeration<MessageListening> list = m_Listens.elements();
-            while (list.hasMoreElements()) {
-                MessageListening listen = list.nextElement();
-                listen.onMessage(message);
-                if (message.getIsComplete()) {
-                    break;
+                mergaListen();
+
+                Enumeration<IMessageListening> list = m_Listens.elements();
+                while (list.hasMoreElements()) {
+                    IMessageListening listen = list.nextElement();
+                    listen.onMessage(message);
+                    if (message.getIsComplete()) {
+                        break;
+                    }
                 }
             }
             if (!m_IsRun) {
@@ -126,7 +126,7 @@ public class MessageFactory {
      * @param p_MessageListening
      * @throws APPErrorException
      */
-    public static void registerListening(MessageListening p_MessageListening) throws APPErrorException {
+    public static void registerListening(IMessageListening p_MessageListening) throws APPErrorException {
         m_TempAddListens.add(p_MessageListening);
     }
 
@@ -136,7 +136,7 @@ public class MessageFactory {
      * @param p_MessageListening
      * @throws APPErrorException
      */
-    public static void unRegisterListening(MessageListening p_MessageListening) throws APPErrorException {
+    public static void unRegisterListening(IMessageListening p_MessageListening) throws APPErrorException {
         m_TempDelListens.remove(p_MessageListening);
     }
 
@@ -151,7 +151,7 @@ public class MessageFactory {
             return;
         }
 
-        List<MessageListening> result = new ArrayList<MessageListening>();
+        List<IMessageListening> result = new ArrayList<IMessageListening>();
         for (int i = 0; i < m_Listens.size(); i++) {
             if (p_ListenName.equals(m_Listens.get(i).getName())) {
                 result.add(m_Listens.get(i));

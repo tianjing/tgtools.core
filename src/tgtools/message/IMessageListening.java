@@ -6,7 +6,7 @@ package tgtools.message;
  * 功  能：
  * 时  间：15:26
  */
-public interface MessageListening {
+public interface IMessageListening {
     /**
      * 监听名称（也是接收名称）
      * @return

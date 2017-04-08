@@ -26,12 +26,18 @@ public class Message {
     private String m_Sender;
     private String m_Reciver;
     private String m_Content;
+    private String m_Event;
     private Date m_CreateTime;
     private boolean m_IsComplete;
 
 
+    public String getEvent() {
+        return m_Event;
+    }
 
-
+    public void setEvent(String p_Event) {
+        m_Event = p_Event;
+    }
 
     /**
      * 获取消息ID
