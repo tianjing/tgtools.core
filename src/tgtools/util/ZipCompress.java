@@ -92,10 +92,6 @@ public class ZipCompress {
 		return zos;
 	}
 
-    private void ddd(String aa ,String dd)
-	{
-
-    }
 	/**
 	 * 对文件夹或者文件进行压缩
 	 *
