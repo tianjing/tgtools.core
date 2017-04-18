@@ -452,6 +452,16 @@ public class DataTable implements Serializable {
 	 */
 	public String toJson(boolean p_IgnoreNull)
 	{
+		return toJson(p_IgnoreNull,false);
+	}
+	/**
+	 * 转换成json格式
+	 * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+	 * @param p_UseLower 列名是否小写，true:列名大写转小写，false：保持列名
+	 * @return
+	 */
+	public String toJson(boolean p_IgnoreNull,boolean p_UseLower)
+	{
 		StringBuilder sb = new StringBuilder();
 		int count = this.rows.size();
 		for (int i = 0; i < count; i++) {
