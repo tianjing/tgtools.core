@@ -166,7 +166,8 @@ public class DataTable implements Serializable {
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
         EqualCondition var3 = new EqualCondition("MAPTYPE", "系统配置", Types.VARCHAR | Types.NVARCHAR);
         EqualCondition var5 = new EqualCondition("KEY_", "系统名称", Types.VARCHAR | Types.NVARCHAR);
-
+        dt.getColumn("ID_").setColumnName("id");
+        dt.toJson();
         AndCondition var2 = new AndCondition();
         var2.add(var3);
         var2.add(var5);
@@ -533,8 +534,8 @@ public class DataTable implements Serializable {
                 if (datatype == java.sql.Types.BLOB) {
                     continue;
                 }
-                String name = column.getKey();
-                Object value = row.getValue(name);
+                String name = column.getValue().getColumnName();
+                Object value = row.getValue(column.getKey());
                 try {
                     if (p_UseLower) {
                         name = name.toLowerCase();
