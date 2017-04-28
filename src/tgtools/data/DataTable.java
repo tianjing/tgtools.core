@@ -161,8 +161,8 @@ public class DataTable implements Serializable {
         String sql1 = "SELECT (case when 1=2 then 0.0 else convert(DECIMAL(7,2),1) end)as res FROM DUAL ";
         String sql2 = "SELECT convert(DECIMAL(7,2),1)as res FROM DUAL";
         String sql3 = "SELECT convert(DECIMAL(7,2),52.32)as res FROM DUAL";
-        String sql4 = "select * from BQ_SYS.ACT_DATADICTIONARY";
-        tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
+        String sql4 = "select *,ID_ as \"iD\" from BQ_SYS.ACT_DATADICTIONARY";
+        tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "BQ_SYS", "BQ_SYS123"});
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
         EqualCondition var3 = new EqualCondition("MAPTYPE", "系统配置", Types.VARCHAR | Types.NVARCHAR);
         EqualCondition var5 = new EqualCondition("KEY_", "系统名称", Types.VARCHAR | Types.NVARCHAR);
@@ -172,7 +172,7 @@ public class DataTable implements Serializable {
         var2.add(var5);
 
         tgtools.data.DataRowCollection rows = dt.select(var2);
-        System.out.println("rows.size:" + rows.size());
+        System.out.println("rows.size:" +dt.toJson());
     }
 
     public String getTableName() {
@@ -193,11 +193,10 @@ public class DataTable implements Serializable {
     }
 
     public DataColumn getColumn(String p_columnName) {
-        DataColumn col = (DataColumn) this.columns.get(p_columnName
-                .toUpperCase());
+        DataColumn col = (DataColumn) this.columns.get(p_columnName);// .toUpperCase()
         if (col == null) {
             throw new APPRuntimeException(String.format("数据表中不存在数据列[%1$s]。",
-                    new Object[]{p_columnName.toUpperCase()}));
+                    new Object[]{p_columnName}));//.toUpperCase()
         }
 
         return col;
@@ -213,7 +212,7 @@ public class DataTable implements Serializable {
     }
 
     public boolean containsColumn(String p_columnName) {
-        return this.columns.containsKey(p_columnName.toUpperCase());
+        return this.columns.containsKey(p_columnName);//.toUpperCase()
     }
 
     public DataColumn appendColumn(String p_columnName) {
@@ -234,7 +233,7 @@ public class DataTable implements Serializable {
     }
 
     public DataColumn appendColumn(DataColumn p_dataColumn) {
-        String upname = p_dataColumn.getColumnName().toUpperCase();
+        String upname = p_dataColumn.getColumnName();//.toUpperCase()
 
         DataColumn column = null;
         if (!containsColumn(upname)) {
@@ -251,7 +250,7 @@ public class DataTable implements Serializable {
     }
 
     public void removeColumn(String p_columnName) {
-        String upname = p_columnName.toUpperCase();
+        String upname = p_columnName;//.toUpperCase()
         int colIndex = ((DataColumn) this.columns.get(upname))
                 .getIndexInColList();
         for (int i = 0; i < this.rows.size(); i++) {

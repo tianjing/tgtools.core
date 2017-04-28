@@ -44,7 +44,9 @@ public class DMDataAccess implements IDataAccess {
                 setValue(clazz, source, "setPassword", m_Password);
                 m_DataSource = source;
             }
-            throw new APPErrorException("没有找到DmdbDataSource");
+            else {
+                throw new APPErrorException("没有找到DmdbDataSource");
+            }
         } catch (Exception e) {
             throw new APPErrorException("没有找到DmDriver", e);
         }
