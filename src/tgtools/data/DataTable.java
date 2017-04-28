@@ -217,7 +217,7 @@ public class DataTable implements Serializable {
     }
 
     public DataColumn appendColumn(String p_columnName) {
-        String upname = p_columnName.toUpperCase();
+        String upname = p_columnName;//.toUpperCase();
 
         DataColumn column = null;
         if (!containsColumn(upname)) {
