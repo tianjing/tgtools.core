@@ -63,7 +63,7 @@ public class DataRow  implements IXmlSerializable, Cloneable, Serializable{
 	  }
 	  public void setValue(String p_columnName, Object p_value, boolean p_ignoreReadOnly)
 	  {
-	    DataColumn column = this.table.getColumn(p_columnName);//.toUpperCase()
+	    DataColumn column = this.table.getColumn(p_columnName.toUpperCase());
 	    if ((!p_ignoreReadOnly) && (column.isReadOnly())) {
 	      throw new DataAccessException(String.format("无法向只读字段[%1$s]设置数值。", new Object[] { p_columnName }));
 	    }
@@ -175,7 +175,7 @@ public class DataRow  implements IXmlSerializable, Cloneable, Serializable{
 	          break;
 	        if (p_reader.isStartElement())
 	        {
-	          String columnName = p_reader.getLocalName();//.toUpperCase()
+	          String columnName = p_reader.getLocalName().toUpperCase();
 	          p_reader.next();
 	          Object value = DbTypeConverter.toCommonType(XmlSerializeHelper.readText(p_reader), this.table.getColumn(columnName).getColumnType());
 

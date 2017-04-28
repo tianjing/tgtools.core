@@ -54,10 +54,10 @@ public class DataColumn implements IXmlSerializable{
 
 	  public String getColumnName()
 	  {
-	    //if (this.caseSensitive) {
+	    if (this.caseSensitive) {
 	      return this.columnName;
-	    //}
-	   // return this.columnName.toUpperCase();
+	    }
+	    return this.columnName.toUpperCase();
 	  }
 
 	  public void setColumnName(String p_columnName)
