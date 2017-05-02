@@ -161,19 +161,12 @@ public class DataTable implements Serializable {
         String sql1 = "SELECT (case when 1=2 then 0.0 else convert(DECIMAL(7,2),1) end)as res FROM DUAL ";
         String sql2 = "SELECT convert(DECIMAL(7,2),1)as res FROM DUAL";
         String sql3 = "SELECT convert(DECIMAL(7,2),52.32)as res FROM DUAL";
-        String sql4 = "select * from BQ_SYS.ACT_DATADICTIONARY";
+        String sql4 = "select REV_,ID_,KEY_ from BQ_SYS.ACT_DATADICTIONARY";
         tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
-        EqualCondition var3 = new EqualCondition("MAPTYPE", "系统配置", Types.VARCHAR | Types.NVARCHAR);
-        EqualCondition var5 = new EqualCondition("KEY_", "系统名称", Types.VARCHAR | Types.NVARCHAR);
-        dt.getColumn("ID_").setColumnName("id");
         dt.toJson();
-        AndCondition var2 = new AndCondition();
-        var2.add(var3);
-        var2.add(var5);
 
-        tgtools.data.DataRowCollection rows = dt.select(var2);
-        System.out.println("rows.size:" + rows.size());
+        System.out.println("rows.size:" + dt.toJson());
     }
 
     public String getTableName() {
@@ -529,13 +522,14 @@ public class DataTable implements Serializable {
             DataRow row = this.rows.get(i);
             sb.append("{");
             int ide = 0;
-            for (Map.Entry<String, DataColumn> column : this.columns.entrySet()) {
-                int datatype = column.getValue().getColumnType();
+            for (int j=0;j<this.getColumns().size();j++) {
+                DataColumn column =this.getColumn(j);
+                int datatype = column.getColumnType();
                 if (datatype == java.sql.Types.BLOB) {
                     continue;
                 }
-                String name = column.getValue().getColumnName();
-                Object value = row.getValue(column.getKey());
+                String name = column.getColumnName();
+                Object value = row.getValue(column.getColumnName());
                 try {
                     if (p_UseLower) {
                         name = name.toLowerCase();
