@@ -44,14 +44,7 @@ public abstract class Task {
 		this.m_IsBusy = p_IsBusy;
 	}
 
-	public boolean isAsync() {
-		return m_IsAsync;
-	}
 
-	public void setIsAsync(boolean p_IsAsync) {
-		this.m_IsAsync = p_IsAsync;
-	}
-	
 	public void setTaskListener(ITaskListener p_TaskListener) {
 		m_TaskListener = p_TaskListener;
 	}

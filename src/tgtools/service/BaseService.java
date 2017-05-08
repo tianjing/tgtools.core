@@ -94,6 +94,13 @@ public abstract class BaseService extends Task {
         super.onError(p_Exception);
     }
 
+    public boolean isAsync() {
+        return m_IsAsync;
+    }
+
+    public void setIsAsync(boolean p_IsAsync) {
+        this.m_IsAsync = p_IsAsync;
+    }
 }
 
 
