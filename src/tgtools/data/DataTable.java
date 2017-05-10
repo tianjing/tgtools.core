@@ -35,11 +35,19 @@ public class DataTable implements Serializable {
     private ArrayList<DataColumn> columnIndexArray;
     private DataRowCollection rows;
     private String m_Sql;
+    private boolean m_CaseSensitive=false;
 
+    /**
+     * 构造一个没有行和列的DataTable
+     */
     public DataTable() {
         this("NewDataTable");
     }
 
+    /**
+     * 构造一个没有行和列的DataTable
+     * @param p_tableName
+     */
     public DataTable(String p_tableName) {
         this.tableName = p_tableName;
         this.columns = new DataColumnCollection();
@@ -47,6 +55,12 @@ public class DataTable implements Serializable {
         this.rows = new DataRowCollection();
     }
 
+    /**
+     * 构造  通过数据库查询结果添加到DataTable
+     * @param p_resultSet
+     * @param currentSql
+     * @param rowLimit
+     */
     public DataTable(ResultSet p_resultSet, String currentSql, int rowLimit) {
         this();
         ResultSetMetaData rsmd = null;
@@ -55,6 +69,7 @@ public class DataTable implements Serializable {
         int cols;
         try {
             rsmd = p_resultSet.getMetaData();
+
             cols = rsmd.getColumnCount();
             for (int i = 1; i <= cols; i++) {
                 String colName = rsmd.getColumnName(i);
@@ -113,6 +128,11 @@ public class DataTable implements Serializable {
         }
     }
 
+    /**
+     * 构造  通过数据库查询结果添加到DataTable
+     * @param p_resultSet
+     * @param currentSql
+     */
     public DataTable(ResultSet p_resultSet, String currentSql) {
         this(p_resultSet, currentSql, -1);
     }
@@ -161,62 +181,103 @@ public class DataTable implements Serializable {
         String sql1 = "SELECT (case when 1=2 then 0.0 else convert(DECIMAL(7,2),1) end)as res FROM DUAL ";
         String sql2 = "SELECT convert(DECIMAL(7,2),1)as res FROM DUAL";
         String sql3 = "SELECT convert(DECIMAL(7,2),52.32)as res FROM DUAL";
-        String sql4 = "select REV_,ID_,KEY_ from BQ_SYS.ACT_DATADICTIONARY";
+        String sql4 = "select REV_,ID_,KEY_,ID_ as \"id\",KEY_ as \"key\" from BQ_SYS.ACT_DATADICTIONARY";
         tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
         dt.toJson();
-
+        dt.setCaseSensitive(true);
+        dt.changeColumnName("REV_","rev_");
         System.out.println("rows.size:" + dt.toJson());
     }
 
+    /**
+     * 获取 TableName
+     * @return
+     */
     public String getTableName() {
         return this.tableName;
     }
 
+    /**
+     * 设置 TableName
+     * @param p_tableName
+     */
     public void setTableName(String p_tableName) {
         this.tableName = p_tableName;
     }
 
+    /**
+     * 获取列的集合
+     * @return
+     */
     public DataColumnCollection getColumns() {
         return this.columns;
     }
 
+    /**
+     * 获取列的索引
+     * @param p_columnName
+     * @return
+     */
     public int getColumnIndex(String p_columnName) {
         return ((DataColumn) this.columns.get(p_columnName))
                 .getIndexInColList();
     }
 
+    /**
+     * 根据列名称获取列对象
+     * @param p_columnName
+     * @return
+     */
     public DataColumn getColumn(String p_columnName) {
-        DataColumn col = (DataColumn) this.columns.get(p_columnName
-                .toUpperCase());
+        DataColumn col = (DataColumn) this.columns.get(getColumnName(p_columnName));
         if (col == null) {
             throw new APPRuntimeException(String.format("数据表中不存在数据列[%1$s]。",
-                    new Object[]{p_columnName.toUpperCase()}));
+                    new Object[]{getColumnName(p_columnName)}));
         }
 
         return col;
     }
 
+    /**
+     * 根据列索引获取列对象
+     * @param p_columnIndex
+     * @return
+     */
     public DataColumn getColumn(int p_columnIndex) {
         return (DataColumn) this.columnIndexArray.get(p_columnIndex);
     }
 
+    /**
+     * 根据列索引获取列名称
+     * @param p_columnIndex
+     * @return
+     */
     public String getColumnName(int p_columnIndex) {
-        return ((DataColumn) this.columnIndexArray.get(p_columnIndex))
-                .getColumnName();
+        return  this.columnIndexArray.get(p_columnIndex).getColumnName();
     }
 
+    /**
+     * 是否包含同列名
+     * @param p_columnName
+     * @return
+     */
     public boolean containsColumn(String p_columnName) {
-        return this.columns.containsKey(p_columnName.toUpperCase());
+        return this.columns.containsKey(getColumnName(p_columnName));
     }
 
+    /**
+     * 添加列
+     * @param p_columnName
+     * @return
+     */
     public DataColumn appendColumn(String p_columnName) {
-        String upname = p_columnName.toUpperCase();
+        String upname = p_columnName;//getColumnName(p_columnName);
 
         DataColumn column = null;
         if (!containsColumn(upname)) {
             column = new DataColumn(this, upname);
-            this.columns.put(upname, column);
+            this.columns.put(column.getColumnName(), column);
             this.columnIndexArray.add(column);
             column.setIndexInColList(this.columnIndexArray.size() - 1);
             for (int i = 0; i < this.rows.size(); i++)
@@ -227,13 +288,18 @@ public class DataTable implements Serializable {
         return column;
     }
 
+    /**
+     * 添加列
+     * @param p_dataColumn
+     * @return
+     */
     public DataColumn appendColumn(DataColumn p_dataColumn) {
-        String upname = p_dataColumn.getColumnName().toUpperCase();
+        String upname = p_dataColumn.getColumnName();
 
         DataColumn column = null;
         if (!containsColumn(upname)) {
             column = p_dataColumn;
-            this.columns.put(upname, column);
+            this.columns.put(column.getColumnName(), column);
             this.columnIndexArray.add(column);
             column.setIndexInColList(this.columnIndexArray.size() - 1);
             for (int i = 0; i < this.rows.size(); i++)
@@ -244,36 +310,59 @@ public class DataTable implements Serializable {
         return column;
     }
 
+    /**
+     * 删除列
+     * @param p_columnName
+     */
     public void removeColumn(String p_columnName) {
-        String upname = p_columnName.toUpperCase();
-        int colIndex = ((DataColumn) this.columns.get(upname))
-                .getIndexInColList();
+        String upname = getColumnName(p_columnName);
+        int colIndex = this.columns.get(upname).getIndexInColList();
         for (int i = 0; i < this.rows.size(); i++) {
-            ((DataRow) this.rows.get(i)).removeData(colIndex);
+           this.rows.get(i).removeData(colIndex);
         }
         this.columnIndexArray.remove(colIndex);
         this.columns.remove(upname);
         for (int i = 0; i < this.columnIndexArray.size(); i++)
-            ((DataColumn) this.columnIndexArray.get(i)).setIndexInColList(i);
+            this.columnIndexArray.get(i).setIndexInColList(i);
     }
 
+    /**
+     * 清除所有列
+     */
     public void clearColumn() {
         this.columns.clear();
         this.columnIndexArray.clear();
     }
 
+    /**
+     * 获取行数
+     * @return
+     */
     public int getRowCount() {
         return this.getRows().size();
     }
 
+    /**
+     * 获取所有行集合
+     * @return
+     */
     public DataRowCollection getRows() {
         return this.rows;
     }
 
+    /**
+     * 根据索引获取行对象
+     * @param p_index
+     * @return
+     */
     public DataRow getRow(int p_index) {
-        return (DataRow) this.rows.get(p_index);
+        return this.rows.get(p_index);
     }
 
+    /**
+     * 添加空行
+     * @return
+     */
     public DataRow appendRow() {
         DataRow row = new DataRow(this);
 
@@ -288,19 +377,89 @@ public class DataTable implements Serializable {
         return row;
     }
 
+    /**
+     * 删除一行
+     * @param p_rowIndex
+     */
     public void removeRow(int p_rowIndex) {
         this.rows.remove(p_rowIndex);
     }
 
+    /**
+     * 清除所有行
+     */
     public void clearRow() {
         this.rows.clear();
     }
 
+    /**
+     * 清除所有行和列
+     */
     public void clear() {
         clearColumn();
         clearRow();
     }
 
+    /**
+     * 设置 是否区分大小写
+     * @param p_CaseSensitive
+     */
+    public void setCaseSensitive(boolean p_CaseSensitive)
+    {
+        m_CaseSensitive=true;
+        this.columns.clear();
+        for(int i=0,count =this.columnIndexArray.size();i<count;i++)
+        {
+            this.columnIndexArray.get(i).setCaseSensitive(p_CaseSensitive);
+            this.columns.put(this.columnIndexArray.get(i).getColumnName(),this.columnIndexArray.get(i));
+        }
+    }
+
+    /**
+     * 是否区分大小写
+     */
+    public boolean isCaseSensitive()
+    {
+        return m_CaseSensitive;
+    }
+
+    /**
+     * 根据是否区分大小写转换列名
+     * @param p_ColumnName
+     * @return
+     */
+    private String getColumnName(String p_ColumnName)
+    {
+        if(m_CaseSensitive)
+        {
+            return p_ColumnName;
+        }
+        return p_ColumnName.toUpperCase();
+    }
+
+    /**
+     * 修改列名称
+     * @param p_OldName
+     * @param p_NewName
+     * @throws APPErrorException
+     */
+    public void changeColumnName(String p_OldName,String p_NewName) throws APPErrorException {
+        DataColumn column= this.getColumn(p_OldName);
+        if(null==column)
+        {
+            throw new APPErrorException("没有找列："+p_OldName);
+        }
+        columns.remove(p_OldName);
+        column.setColumnName(p_NewName);
+        columns.put(column.getColumnName(),column);
+    }
+
+    /**
+     * 根据条件筛选数据
+     * @param p_condition 条件
+     * @param p_orders 排序
+     * @return
+     */
     public DataRowCollection select(Condition p_condition, Order[] p_orders) {
         LinkedList<DataRow> rows = new LinkedList<DataRow>();
         for (DataRow matchRow : getRows()) {
@@ -313,7 +472,7 @@ public class DataTable implements Serializable {
                         int result = 0;
                         for (Order order : p_orders) {
                             result = order.compare(matchRow,
-                                    (DataRow) rows.get(i));
+                                    rows.get(i));
                             if (result < 0) {
                                 rows.add(i, matchRow);
                                 inserted = true;
@@ -345,11 +504,19 @@ public class DataTable implements Serializable {
         rowCollection.addAll(rows);
         return rowCollection;
     }
-
+    /**
+     * 根据条件筛选数据
+     * @param p_condition 条件
+     * @return
+     */
     public DataRowCollection select(Condition p_condition) {
         return select(p_condition, new Order[0]);
     }
-
+    /**
+     * 根据条件和列名获取最大值
+     * @param p_condition 条件
+     * @return
+     */
     public Object max(String p_columnName, Condition p_condition) {
         if (!NumberUtility.isNumberDbType(getColumn(p_columnName)
                 .getColumnType())) {
@@ -374,7 +541,11 @@ public class DataTable implements Serializable {
         }
         return result;
     }
-
+    /**
+     * 根据条件和列名获取最小值
+     * @param p_condition 条件
+     * @return
+     */
     public Object min(String p_columnName, Condition p_condition) {
         if (!NumberUtility.isNumberDbType(getColumn(p_columnName)
                 .getColumnType())) {
@@ -400,6 +571,12 @@ public class DataTable implements Serializable {
         return result;
     }
 
+    /**
+     * 根据条件和列名求和
+     * @param p_columnName
+     * @param p_condition
+     * @return
+     */
     public Object sum(String p_columnName, Condition p_condition) {
         if (!NumberUtility.isNumberDbType(getColumn(p_columnName)
                 .getColumnType())) {
@@ -427,14 +604,19 @@ public class DataTable implements Serializable {
         }
         return result;
     }
-
+    /**
+     * 根据条件和列名求平均数
+     * @param p_columnName
+     * @param p_condition
+     * @return
+     */
     public Object avg(String p_columnName, Condition p_condition) {
         if (!NumberUtility.isNumberDbType(getColumn(p_columnName)
                 .getColumnType())) {
             throw new DataAccessException("聚合函数 AVG 不支持非数值类型的字段 "
                     + p_columnName);
         }
-        Object result = null;
+        Double result = null;
         int count = 0;
         for (DataRow matchRow : getRows()) {
             if ((p_condition == null) || (p_condition.isValid(matchRow))) {
@@ -456,11 +638,15 @@ public class DataTable implements Serializable {
             result = Double.valueOf(Double.valueOf(result.toString())
                     .doubleValue() / count);
         if (result != null) {
-            return NumberUtility.toInteger((Double) result);
+            return NumberUtility.toInteger(result);
         }
         return result;
     }
 
+    /**
+     * 克隆一个新的DataTable只保留列，没有行数据
+     * @return
+     */
     public DataTable cloneTableStructure() {
         DataTable newTable = new DataTable();
         for (int i = 0; i < this.columnIndexArray.size(); i++) {
@@ -482,7 +668,10 @@ public class DataTable implements Serializable {
         }
         return newTable;
     }
-
+    /**
+     * 克隆一个新的DataTable 包含列和行
+     * @return
+     */
     public DataTable clone() {
         DataTable temp = this.cloneTableStructure();
         DataRowCollection rows = this.getRows();
@@ -493,6 +682,10 @@ public class DataTable implements Serializable {
         return temp;
     }
 
+    /**
+     * 添加一个空行
+     * @param row
+     */
     public void appendRow(DataRow row) {
         row.table = this;
         this.rows.add(row);
@@ -565,6 +758,13 @@ public class DataTable implements Serializable {
         return toJson(true);
     }
 
+    /**
+     * 将值转换成json的值类型
+     * @param p_Value
+     * @param p_ValueType
+     * @param p_IgnoreNull
+     * @return
+     */
     private String getJsonValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
         if (p_Value == null || p_Value instanceof DbNull) {
             if (p_IgnoreNull) {

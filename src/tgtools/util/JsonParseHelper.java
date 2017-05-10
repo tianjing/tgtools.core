@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
-import tgtools.data.DataRow;
 import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 import tgtools.json.JSONArray;
@@ -217,7 +216,4 @@ public class JsonParseHelper {
     public static Object parseToObject(JSONArray json, Class<?> cls) throws APPErrorException {
         return parseToObject(json.toString(),cls,false);
     }
-
-
-
 }
