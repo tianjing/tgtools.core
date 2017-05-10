@@ -185,7 +185,7 @@ public class DataTable implements Serializable {
         tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
         dt.toJson();
-        dt.setCaseSensitive(true);
+        //dt.setCaseSensitive(true);
         dt.changeColumnName("REV_","rev_");
         System.out.println("rows.size:" + dt.toJson());
     }
@@ -721,7 +721,7 @@ public class DataTable implements Serializable {
                 if (datatype == java.sql.Types.BLOB) {
                     continue;
                 }
-                String name = column.getColumnName();
+                String name = getColumnName(column.getColumnName());
                 Object value = row.getValue(column.getColumnName());
                 try {
                     if (p_UseLower) {
