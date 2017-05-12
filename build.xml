@@ -49,6 +49,7 @@
 
         <copy file="${indir}META-INF/build.property" tofile="${outfile}META-INF/build.property"/>
         <copy file="${indir}log4j.properties" tofile="${outfile}log4j.properties"/>
+        <copy file="${indir}ehcache.xml" tofile="${outfile}ehcache.xml"/>
 
         <javac srcdir="${indir}" destdir="${outfile}" includeantruntime="on" encoding="UTF-8">
             <classpath refid="build.classpath"/>
