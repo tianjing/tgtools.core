@@ -725,7 +725,12 @@ public class JSONObject
   {
     return toString(indentFactor, 0);
   }
-
+  public Map toMap()
+  {
+    Map<String,Object>  result=new HashMap<String,Object>(map.size());
+    result.putAll(map);
+    return result;
+  }
   String toString(int indentFactor, int indent)
     throws JSONException
   {
