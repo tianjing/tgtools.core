@@ -6,6 +6,8 @@ import tgtools.data.mapping.EqualCondition;
 import tgtools.data.mapping.Order;
 import tgtools.exceptions.APPErrorException;
 import tgtools.exceptions.APPRuntimeException;
+import tgtools.json.JSONArray;
+import tgtools.json.JSONObject;
 import tgtools.util.LogHelper;
 import tgtools.util.NumberUtility;
 import tgtools.util.StringUtil;
@@ -186,6 +188,8 @@ public class DataTable implements Serializable {
         DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
         dt.toJson();
         //dt.setCaseSensitive(true);
+        System.out.println("JSONArray::"+ new JSONArray(dt.toJson()));
+        System.out.println("JSONObject::"+ new JSONObject(dt.getRow(0).toJson()));
         dt.changeColumnName("REV_","rev_");
         System.out.println("rows.size:" + dt.toJson());
     }
@@ -428,7 +432,7 @@ public class DataTable implements Serializable {
      * @param p_ColumnName
      * @return
      */
-    private String getColumnName(String p_ColumnName)
+    String getColumnName(String p_ColumnName)
     {
         if(m_CaseSensitive)
         {
@@ -540,6 +544,16 @@ public class DataTable implements Serializable {
             return NumberUtility.toInteger((Double) result);
         }
         return result;
+    }
+
+    /**
+     * 找到行的索引
+     * @param p_Row
+     * @return
+     */
+    public int indexOfRow(DataRow p_Row)
+    {
+        return rows.indexOf(p_Row);
     }
     /**
      * 根据条件和列名获取最小值
@@ -700,7 +714,6 @@ public class DataTable implements Serializable {
     public String toJson(boolean p_IgnoreNull) {
         return toJson(p_IgnoreNull, false);
     }
-
     /**
      * 转换成json格式
      *
@@ -713,37 +726,9 @@ public class DataTable implements Serializable {
         int count = this.rows.size();
         for (int i = 0; i < count; i++) {
             DataRow row = this.rows.get(i);
-            sb.append("{");
-            int ide = 0;
-            for (int j=0;j<this.getColumns().size();j++) {
-                DataColumn column =this.getColumn(j);
-                int datatype = column.getColumnType();
-                if (datatype == java.sql.Types.BLOB) {
-                    continue;
-                }
-                String name = getColumnName(column.getColumnName());
-                Object value = row.getValue(column.getColumnName());
-                try {
-                    if (p_UseLower) {
-                        name = name.toLowerCase();
-                    }
-                    if (ide > 0) {
-
-                        sb.append(",\"" + name + "\":"
-                                + getJsonValue(value, datatype, p_IgnoreNull));
-                    } else {
-                        sb.append("\"" + name + "\":"
-                                + getJsonValue(value, datatype, p_IgnoreNull));
-                    }
-                } catch (Exception e) {
-                    LogHelper.error("", "第" + String.valueOf(i) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！sql:" + this.m_Sql, "table.tojson", e);
-                }
-                ide++;
-            }
-            if (i == count - 1) {
-                sb.append("}");
-            } else {
-                sb.append("},");
+            sb.append(row.toJson(p_IgnoreNull,p_UseLower));
+            if (i != count - 1) {
+                sb.append(",");
             }
         }
         return "[" + sb.toString() + "]";
@@ -758,32 +743,7 @@ public class DataTable implements Serializable {
         return toJson(true);
     }
 
-    /**
-     * 将值转换成json的值类型
-     * @param p_Value
-     * @param p_ValueType
-     * @param p_IgnoreNull
-     * @return
-     */
-    private String getJsonValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
-        if (p_Value == null || p_Value instanceof DbNull) {
-            if (p_IgnoreNull) {
-                return "\"\"";
-            } else
-                return "null";
-        }
-        switch (p_ValueType) {
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-            case Types.INTEGER:
-            case Types.BOOLEAN:
-                return p_Value.toString();
 
-            default:
-                return "\"" + StringUtil.convertJson(p_Value.toString()) + "\"";
-
-        }
-    }
 
     public void readXml(XMLStreamReader p_reader) {
         try {

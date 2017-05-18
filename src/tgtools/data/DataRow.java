@@ -1,5 +1,6 @@
 package tgtools.data;
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -9,6 +10,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import tgtools.util.LogHelper;
+import tgtools.util.StringUtil;
 import tgtools.xml.IXmlSerializable;
 import tgtools.xml.XmlSerializeException;
 import tgtools.xml.XmlSerializeHelper;
@@ -213,4 +216,89 @@ public class DataRow  implements IXmlSerializable, Cloneable, Serializable{
 	      throw new XmlSerializeException("DataRow 序列化为 Xml 时发生异常。", e);
 	    }
 	  }
+	/**
+	 * 转换成json格式,并忽略null 参看 toJson(true)
+	 *
+	 * @return
+	 */
+	public String toJson() {
+		return toJson(true);
+	}
+	/**
+	 * 转换成json格式
+	 *
+	 * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+	 * @return
+	 */
+	public String toJson(boolean p_IgnoreNull) {
+		return toJson(p_IgnoreNull, false);
+	}
+
+	/**
+	 * 转换成json格式
+	 *
+	 * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+	 * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+	 * @return
+	 */
+	public String toJson(boolean p_IgnoreNull, boolean p_UseLower)
+	{
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("{");
+		int ide = 0;
+		for (int j=0;j<this.getTable().getColumns().size();j++) {
+			DataColumn column =this.getTable().getColumn(j);
+			int datatype = column.getColumnType();
+			if (datatype == java.sql.Types.BLOB) {
+				continue;
+			}
+			String name = this.getTable().getColumnName(column.getColumnName());
+			Object value = this.getValue(column.getColumnName());
+			try {
+				if (p_UseLower) {
+					name = name.toLowerCase();
+				}
+				if (ide > 0) {
+
+					sb.append(",\"" + name + "\":"
+							+ getJsonValue(value, datatype, p_IgnoreNull));
+				} else {
+					sb.append("\"" + name + "\":"
+							+ getJsonValue(value, datatype, p_IgnoreNull));
+				}
+			} catch (Exception e) {
+				LogHelper.error("", "第" + String.valueOf(this.getTable().indexOfRow(this)) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！", "table.tojson", e);
+			}
+			ide++;
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+	/**
+	 * 将值转换成json的值类型
+	 * @param p_Value
+	 * @param p_ValueType
+	 * @param p_IgnoreNull
+	 * @return
+	 */
+	private String getJsonValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
+		if (p_Value == null || p_Value instanceof DbNull) {
+			if (p_IgnoreNull) {
+				return "\"\"";
+			} else
+				return "null";
+		}
+		switch (p_ValueType) {
+			case Types.NUMERIC:
+			case Types.DECIMAL:
+			case Types.INTEGER:
+			case Types.BOOLEAN:
+				return p_Value.toString();
+
+			default:
+				return "\"" + StringUtil.convertJson(p_Value.toString()) + "\"";
+
+		}
+	}
 }
