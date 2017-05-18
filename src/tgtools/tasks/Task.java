@@ -161,12 +161,34 @@ public abstract class Task {
 			}
 		});
 	}
+	public void runThreadWait(TaskContext p_Param) {
+		m_IsAsync = true;
+		m_IsBusy = true;
+		final TaskContext p_TaskContext = p_Param;
+		ThreadPoolFactory.addTask(new Runnable() {
 
-	/**
-	 * 报告状态变化
-	 * 
-	 * @param p_Status
-	 */
+			@Override
+			public void run() {
+				try {
+					Task.this.run(p_TaskContext);
+				} catch (Exception e) {
+					Task.this.onError(e);
+				}
+				finally
+				{
+					synchronized (Task.this)
+					{Task.this.notifyAll();}
+					m_IsAsync = false;
+					m_IsBusy = false;
+				}
+			}
+		});
+	}
+		/**
+         * 报告状态变化
+         *
+         * @param p_Status
+         */
 	public void reportStatus(String p_Status) {
 		m_Status = p_Status;
 		onStatusChange(m_Status);

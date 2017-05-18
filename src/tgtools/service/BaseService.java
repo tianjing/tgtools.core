@@ -9,7 +9,7 @@ public abstract class BaseService extends Task {
 
     public BaseService()
     {
-    	m_IsStop = true;
+    	m_IsStop = false;
     }
     /// <summary>
     /// Milliseconds 
@@ -36,11 +36,10 @@ public abstract class BaseService extends Task {
     
     public void start()
     {
-        if (m_IsStop)
+        if (!m_IsStop)
         {
         	runThread(null);
-            
-        	m_IsStop = false;
+
         }
     }
 
@@ -55,7 +54,7 @@ public abstract class BaseService extends Task {
     /// <returns></returns>
     public boolean canRun()
     {
-        if (!m_IsStop)
+        if (m_IsStop)
         {
             return false;
         }

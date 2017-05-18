@@ -1,8 +1,11 @@
 package tgtools.service;
 
+import java.util.Date;
 import java.util.Hashtable;
 
+import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
+import tgtools.tasks.TaskContext;
 import tgtools.threads.ThreadPoolFactory;
 import tgtools.util.DateUtil;
 import tgtools.util.LogHelper;
@@ -158,5 +161,61 @@ public class ServiceFactory {
 
 
     }
-	
+    public static void main(String[] args) {
+        try {
+            tgtools.db.DataBaseFactory.add("DBCP", "jdbc:dm://192.168.1.240:5236", "BQ_SYS123", "BQ_SYS");
+        } catch (APPErrorException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < 2; i++) {
+            try {
+                ServiceFactory.register(new TService());
+            } catch (APPErrorException e) {
+                e.printStackTrace();
+            }
+        }
+        ServiceFactory.start();
+        while(true)
+        {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //System.out.println("全部结束");
+    }
+
+    public static class TService extends BaseService {
+        private static int index = 0;
+        private int curindex = 0;
+        public TService() {
+            index = index + 1;
+            curindex = index;
+        }
+
+        @Override
+        protected int getInterval() {
+            return 10000;
+        }
+
+        @Override
+        protected Date getEndTime() {
+            return DateUtil.getMaxDate();
+        }
+
+        @Override
+        public void run(TaskContext p_Param) {
+            System.out.println("线程:" + curindex + ";开始");
+            try {
+                DataTable dt= tgtools.db.DataBaseFactory.getDefault().Query("select top 10000 * from loginfo");
+                String ss=dt.toJson();
+            } catch (APPErrorException e) {
+                e.printStackTrace();
+            }
+            System.out.println("线程:" + curindex + ";结束");
+        }
+    }
 }
+
