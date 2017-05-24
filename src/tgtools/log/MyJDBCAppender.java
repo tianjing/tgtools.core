@@ -77,11 +77,13 @@ public class MyJDBCAppender extends AppenderSkeleton {
 		try {
 			StringBuilder sb = new StringBuilder();
 			sb.append("CREATE TABLE LOGINFO ( ");
+			sb.append(" ID_ VARCHAR(64) PRIMARY KEY, ");
+			sb.append(" REV_ NUMBER, ");
 			sb.append(" USERNAME VARCHAR(100), ");
 			sb.append(" LOGTIME TIMESTAMP(6) DEFAULT SYSDATE, ");
 			sb.append(" LOGTYPE VARCHAR(100), ");
 			sb.append(" BIZTYPE VARCHAR(500), ");
-			sb.append(" LOGCONTENT VARCHAR(8000));");
+			sb.append(" LOGCONTENT TEXT);");
 
 			conn = getConnection();
 			conn.createStatement().executeUpdate(sb.toString());
