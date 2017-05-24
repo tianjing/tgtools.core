@@ -291,6 +291,9 @@ public class DataTableSqlFactory {
 				}
 
 		}
+		else if (Types.BLOB == p_DataType && p_Value instanceof byte[]) {
+			return "0x"+ConverHelper.toHexString((byte[])p_Value);
+		}
 		else if(java.sql.Types.NULL == p_DataType)
 		{
 			return value;
