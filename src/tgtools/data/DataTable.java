@@ -244,10 +244,24 @@ public class DataTable implements Serializable {
     }
 
     /**
-     * 根据列索引获取列对象
-     * @param p_columnIndex
+     * 是否存在列
+     * @param p_columnName
      * @return
      */
+    public boolean hasColumn(String p_columnName) {
+        try {
+            return null!=this.getColumn(p_columnName);
+        }
+        catch (APPRuntimeException ex)
+        {
+        }
+        return false;
+    }
+        /**
+         * 根据列索引获取列对象
+         * @param p_columnIndex
+         * @return
+         */
     public DataColumn getColumn(int p_columnIndex) {
         return (DataColumn) this.columnIndexArray.get(p_columnIndex);
     }
