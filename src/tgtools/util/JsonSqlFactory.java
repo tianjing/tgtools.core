@@ -13,6 +13,14 @@ import java.util.List;
  */
 public class JsonSqlFactory {
 
+    /**
+     * 转换json 为 update sql语句
+     * @param p_Json json对象
+     * @param p_Keys 主键集合
+     * @param p_TableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
     public static String parseUpdateSql(JSONObject p_Json, List<String> p_Keys, String p_TableName) throws APPErrorException {
         String sql = "update ${tablename} set ${values} where ${filters}";
         String values = "";
@@ -24,11 +32,11 @@ public class JsonSqlFactory {
                 String value = p_Json.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     if (p_Keys.contains(key)) {
-                        filters+= key + "='" + value + "' and ";
+                        filters+= key + "='" + SqlStrHelper.escape(value) + "' and ";
                     }
                     else
                     {
-                        values += key + "='" + value + "',";
+                        values += key + "='" + SqlStrHelper.escape(value) + "',";
                     }
                 }
             } catch (Exception e) {
@@ -44,6 +52,13 @@ public class JsonSqlFactory {
         return sql;
     }
 
+    /**
+     * 转换json 为 insert sql语句
+     * @param p_Json json 对象
+     * @param p_TableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
     public static String parseInsertSql(JSONObject p_Json, String p_TableName) throws APPErrorException {
         String sql = "insert into ${tablename} (${keys}) values(${values})";
         String keys = "";
@@ -55,7 +70,7 @@ public class JsonSqlFactory {
                 String value = p_Json.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
-                    values += "'"+value + "',";
+                    values += "'"+SqlStrHelper.escape(value) + "',";
                 }
             } catch (Exception e) {
                 throw new APPErrorException("数据不完整");

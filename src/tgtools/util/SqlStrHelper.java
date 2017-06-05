@@ -62,11 +62,11 @@ public class SqlStrHelper {
         return escape(DataBaseFactory.getDefault().getDataBaseType(),p_ColumnValue);
     }
 
-
-    private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+    //private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+    private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
 
     /**
-     * SQL字符串替换，并验证参数是否存在特殊字符
+     * SQL字符串替换（先转义，并验证参数是否存在特殊字符，最后字符串替换）
      * @param p_SQL
      * @param p_Mark
      * @param p_Content
@@ -74,6 +74,7 @@ public class SqlStrHelper {
      * @throws APPErrorException
      */
     public static String replace(String p_SQL, String p_Mark, String p_Content) throws APPErrorException {
+        p_Content= escape(p_Content);
         validParam(p_Content);
         return StringUtil.replace(p_SQL, p_Mark, p_Content);
     }

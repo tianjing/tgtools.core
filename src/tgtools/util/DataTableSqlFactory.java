@@ -250,7 +250,7 @@ public class DataTableSqlFactory {
 				|| java.sql.Types.CHAR == p_DataType
 				|| java.sql.Types.CLOB == p_DataType
 				) {
-			return "'" + StringUtil.replace(p_Value.toString(), "'", "''")+ "'";
+			return "'" + SqlStrHelper.escape(p_Value.toString())+ "'";
 		} else if (java.sql.Types.INTEGER == p_DataType
 				|| java.sql.Types.BIGINT == p_DataType
 				|| java.sql.Types.NUMERIC == p_DataType

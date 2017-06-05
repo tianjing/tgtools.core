@@ -736,16 +736,7 @@ public class DataTable implements Serializable {
      * @return
      */
     public String toJson(boolean p_IgnoreNull, boolean p_UseLower) {
-        StringBuilder sb = new StringBuilder();
-        int count = this.rows.size();
-        for (int i = 0; i < count; i++) {
-            DataRow row = this.rows.get(i);
-            sb.append(row.toJson(p_IgnoreNull,p_UseLower));
-            if (i != count - 1) {
-                sb.append(",");
-            }
-        }
-        return "[" + sb.toString() + "]";
+         return this.getRows().toJson(p_IgnoreNull,p_UseLower);
     }
 
     /**
