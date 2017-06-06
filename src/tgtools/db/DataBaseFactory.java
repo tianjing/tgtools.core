@@ -94,11 +94,17 @@ public class DataBaseFactory {
 		if (getConnections().containsKey(p_Name)) {
 			return;
 		}
-		if (p_Name.toUpperCase().startsWith("DM")
+
+		if(p_Name.toUpperCase().startsWith("DM6")
+				|| p_Name.toUpperCase().startsWith("DAMENG6")) {
+			dataacc = new DM6DataAccess();
+			dataacc.init(params);
+		}else if (p_Name.toUpperCase().startsWith("DM")
 				|| p_Name.toUpperCase().startsWith("DAMENG")) {
 			dataacc = new DMDataAccess();
 			dataacc.init(params);
-		} else if (p_Name.toUpperCase().startsWith("DBCP")) {
+		}
+		else if (p_Name.toUpperCase().startsWith("DBCP")) {
 			dataacc = new DBCPDataAccess();
 			dataacc.init(params);
 		} else if (p_Name.toUpperCase().startsWith("SPRING")) {
