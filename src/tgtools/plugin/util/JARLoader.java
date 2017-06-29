@@ -1,16 +1,21 @@
 package tgtools.plugin.util;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
+import sun.misc.URLClassPath;
+import sun.net.www.ParseUtil;
+import tgtools.util.LogHelper;
+import tgtools.util.StringUtil;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.security.AccessControlContext;
+import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import tgtools.util.LogHelper;
-import tgtools.util.StringUtil;
 
 public class JARLoader extends ClassLoader {
 	List<String> jarFiles = new ArrayList<String>();
@@ -48,6 +53,7 @@ public class JARLoader extends ClassLoader {
 				for (int i = 0; i < files.length; i++) {
 					LogHelper.info("", "正在加载jar包："+files[i], "JARLoader.addPath");
 					this.jarFiles.add(files[i]);
+
 				}
 			}
 		}
@@ -56,7 +62,7 @@ public class JARLoader extends ClassLoader {
 			LogHelper.info("", "找不到路径："+file.getPath(), "JARLoader.addPath");
 		}
 	}
-
+	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 		String className = name.replace(".", "/") + ".class";
 		try {
@@ -102,5 +108,50 @@ public class JARLoader extends ClassLoader {
 		}
 
 		return super.findClass(name);
+	}
+	@Override
+	protected URL findResource(String name) {
+		for (String path : this.jarFiles) {
+			File f = new File(path);
+
+			if (f.exists()) {
+				ZipFile zipFile = null;
+				try {
+					zipFile = new ZipFile(new File(path), 1);
+
+					ZipEntry en = zipFile.getEntry(name);
+					if (en != null) {
+						return new URL("jar:file:/"+path+"!/"+name);
+
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				} finally {
+					if (zipFile != null)
+						try {
+							zipFile.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+				}
+			}
+
+		}
+		return null;
+	}
+
+	public static void main(String[]args)
+	{
+		JARLoader loader=new JARLoader(JARLoader.class.getClassLoader());
+		loader.addPath("C:\\Works\\DQ\\javademos\\PinyinPlugin\\out\\artifacts\\PinyinPlugin");
+		URL url=loader.findResource("tgtools/plugins/pinyin/data/mutil_pinyin.dict");
+		try {
+
+			URLConnection urlc = url.openConnection();
+			InputStream steam= urlc.getInputStream();
+			System.out.println("steam:"+steam);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

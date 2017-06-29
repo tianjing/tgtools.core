@@ -6,6 +6,10 @@
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="tgtools.core" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/common-logging.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/ehcache.xml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/log4j.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/plugin.xml" />
     </root>
   </artifact>
 </component>
