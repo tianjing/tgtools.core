@@ -30,13 +30,15 @@ public class JsonSqlFactory {
             try {
                 String key = names.getString(i);
                 String value = p_Json.getString(key);
+                value=p_Json.isNull(key)?"NULL":value;
                 if (!StringUtil.isNullOrEmpty(key)) {
                     if (p_Keys.contains(key)) {
                         filters+= key + "='" + SqlStrHelper.escape(value) + "' and ";
                     }
                     else
                     {
-                        values += key + "='" + SqlStrHelper.escape(value) + "',";
+                        if(p_Json.isNull(key)){values += key + "=NULL,";}else{
+                        values += key + "='" + SqlStrHelper.escape(value) + "',";}
                     }
                 }
             } catch (Exception e) {
@@ -70,7 +72,7 @@ public class JsonSqlFactory {
                 String value = p_Json.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
-                    values += "'"+SqlStrHelper.escape(value) + "',";
+                    values +=p_Json.isNull(key)?"NULL":"'"+SqlStrHelper.escape(value) + "',";
                 }
             } catch (Exception e) {
                 throw new APPErrorException("数据不完整");
