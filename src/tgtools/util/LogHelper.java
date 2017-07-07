@@ -1,12 +1,10 @@
 package tgtools.util;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-
 import tgtools.log.LogEntity;
 import tgtools.log.LoggerFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
 
 public class LogHelper {
 	private static boolean m_IsDebug=true;
@@ -29,6 +27,21 @@ public class LogHelper {
 		m_IsDebug=p_IsDebug;
 	}
 
+	/**
+	 * 打印信息 （无论是不是调试模式都会打印信息）
+	 * @param name 名称 比如用户名
+	 * @param message 信息
+	 * @param biztype 业务类型
+	 */
+	public static void infoForce(String name, String message, String biztype)
+	{
+		LogEntity entity = new LogEntity();
+		entity.setUsername(name);
+		entity.setBiztype(biztype);
+		entity.setLogtype("info");
+		entity.setLogcontent(message);
+		LoggerFactory.getDefault().info(entity);
+	}
 	/**
 	 * 打印信息 （调试模式下才会打印）
 	 * @param name 名称 比如用户名

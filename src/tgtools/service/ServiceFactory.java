@@ -48,31 +48,39 @@ public class ServiceFactory {
     {
         while (m_IsRun)
         {
-            if (!m_IsRun) { return; }
-            //if (null == m_Services || m_Services.size() < 1)
-            //{
-            //    return;
-            //}
-
-            for (BaseService service : m_Services.values())
-            {
-                if (!m_IsRun) { return; }
-                if (service.canRun())
-                {
-                    try
-                    {
-                        service.start();//.Run(null);
-                    }
-                    catch (Exception ex) {LogHelper.error("","服务出错：" + service.getName(),"ServiceFactory", ex); }
-                    service.setLastTime(DateUtil.getCurrentDate());
-                }
-            }
-            if (!m_IsRun) { return; }
             try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LogHelper.error("","服务出错：sleep" ,"ServiceFactory", e); 
-			}
+                if (!m_IsRun) {
+                    return;
+                }
+                //if (null == m_Services || m_Services.size() < 1)
+                //{
+                //    return;
+                //}
+
+                for (BaseService service : m_Services.values()) {
+                    if (!m_IsRun) {
+                        return;
+                    }
+                    if (service.canRun()) {
+                        try {
+                            service.start();//.Run(null);
+                        } catch (Throwable ex) {
+                            LogHelper.error("", "服务出错：" + service.getName(), "ServiceFactory", ex);
+                        }
+                        service.setLastTime(DateUtil.getCurrentDate());
+                    }
+                }
+                if (!m_IsRun) {
+                    return;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    LogHelper.error("", "服务出错：sleep", "ServiceFactory", e);
+                }
+            }catch (Throwable ex){
+                LogHelper.error("", "服务出错：原因："+ex.getMessage() , "ServiceFactory", ex);
+            }
         }
     }
     
