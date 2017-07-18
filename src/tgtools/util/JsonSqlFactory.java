@@ -72,7 +72,7 @@ public class JsonSqlFactory {
                 String value = p_Json.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
-                    values +=p_Json.isNull(key)?"NULL":"'"+SqlStrHelper.escape(value) + "',";
+                    values +=p_Json.isNull(key)?"NULL,":"'"+SqlStrHelper.escape(value) + "',";
                 }
             } catch (Exception e) {
                 throw new APPErrorException("数据不完整");
