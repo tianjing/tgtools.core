@@ -3,6 +3,7 @@ package tgtools.net;
 import tgtools.exceptions.APPErrorException;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,6 +120,17 @@ public interface IWebClient {
      */
     byte[] doInvokeAsByte(Map<String, String> params)throws APPErrorException;
 
+    /**
+     * 请求并返回字节集
+     * @param p_Input
+     * @return
+     * @throws APPErrorException
+     */
+    byte[] doInvokeAsByte (InputStream p_Input) throws APPErrorException;
 
-
+    /**
+     * 获取响应的头信息
+     * @return
+     */
+    public Map<String, List<String>> getResponseHeader();
 }

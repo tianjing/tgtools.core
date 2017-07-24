@@ -21,6 +21,8 @@ public class WebClient implements IWebClient {
     private String m_Method="POST";
     private Map<String, String> m_Head;
     private boolean m_GZip;
+    private Map<String, List<String>> m_ResponseHeader;
+
 
     private List<String> m_Cookies;
 
@@ -32,7 +34,14 @@ public class WebClient implements IWebClient {
         m_Head.put("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko");
         m_Head.put("Content-Type", "text/xml; charset=utf-8");
     }
+    @Override
+    public Map<String, List<String>> getResponseHeader() {
+        return m_ResponseHeader;
+    }
 
+    public void setResponseHeader(Map<String, List<String>> p_ResponseHeader) {
+        m_ResponseHeader = p_ResponseHeader;
+    }
 
     @Override
     public void setUrl(String p_Url) {
@@ -175,7 +184,18 @@ public class WebClient implements IWebClient {
             throw new APPErrorException("获取返回信息出错",e);
         }
     }
-
+    public InputStream doInvokeAsStream(InputStream p_Input) throws APPErrorException {
+        try {
+            return doInvoke(p_Input).getInputStream();
+        } catch (IOException e) {
+            throw new APPErrorException("获取返回信息出错", e);
+        }
+    }
+    @Override
+    public byte[] doInvokeAsByte(InputStream p_Input) throws APPErrorException {
+        InputStream is= doInvokeAsStream(p_Input);
+        return parseByte(is);
+    }
     /**
      * 请求并返回收到的字节
      * @param params 常规参数  params 会 拼接成 a=1&b=2 的形式
@@ -194,7 +214,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    private String parseGZipString(InputStream p_Stream,String p_Encoding) throws APPErrorException {
+    protected String parseGZipString(InputStream p_Stream,String p_Encoding) throws APPErrorException {
         GZIPInputStream gzin = null;
         try {
             gzin = new GZIPInputStream(p_Stream);
@@ -225,7 +245,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    private String parseString(InputStream p_Stream,String p_Encoding) throws APPErrorException {
+    protected String parseString(InputStream p_Stream,String p_Encoding) throws APPErrorException {
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         try {
@@ -257,7 +277,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    private byte[] parseByte(InputStream p_Stream) throws APPErrorException {
+    protected byte[] parseByte(InputStream p_Stream) throws APPErrorException {
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
@@ -290,7 +310,7 @@ public class WebClient implements IWebClient {
      * @param p_Paramss
      * @return
      */
-    private String getParamsString(Map<String, String> p_Paramss) {
+    protected String getParamsString(Map<String, String> p_Paramss) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> item : p_Paramss.entrySet()) {
             String key = item.getKey();
@@ -306,7 +326,7 @@ public class WebClient implements IWebClient {
      * 设置请求头
      * @param p_Conn
      */
-    private void setRequestHead(URLConnection p_Conn) {
+    protected void setRequestHead(URLConnection p_Conn) {
         for (Map.Entry<String, String> item : m_Head.entrySet()) {
             p_Conn.setRequestProperty(item.getKey(), item.getValue());
         }
@@ -327,7 +347,7 @@ public class WebClient implements IWebClient {
      * @param m_ReponseHead
      * @return
      */
-    private  String getResponseEncoding(Map<String,List<String>> m_ReponseHead)
+    protected  String getResponseEncoding(Map<String,List<String>> m_ReponseHead)
     {
         List<String> names= m_ReponseHead.get("Content-Type");
         for(int i=0;i<names.size();i++) {
@@ -347,31 +367,31 @@ public class WebClient implements IWebClient {
      * @param m_ReponseHead
      * @return
      */
-    private  boolean isGzip(Map<String,List<String>> m_ReponseHead)
+    protected  boolean isGzip(Map<String,List<String>> m_ReponseHead)
     {
         Object value= m_ReponseHead.get("content-encoding");
         String valuestr=null!=value?value.toString():"";
 
         return valuestr.indexOf("gzip")>-1;
     }
-
+    protected URLConnection doInvoke(String p_Param) throws APPErrorException {
+        try {
+            ByteArrayInputStream dd = new ByteArrayInputStream(p_Param.getBytes(m_Encoding));
+            return doInvoke(dd);
+        } catch (UnsupportedEncodingException e) {
+            throw new APPErrorException("参数转码失败；参数："+p_Param+";编码："+m_Encoding+";原因："+e.getMessage());
+        }
+    }
     /**
      * 请求
-     * @param p_Params
+     * @param p_Input
      * @return
      * @throws APPErrorException
      */
-    private URLConnection doInvoke(String p_Params) throws APPErrorException {
+    protected URLConnection doInvoke(InputStream p_Input) throws APPErrorException {
 
         String url = m_Url;
-        if ("POST".equals(m_Method.toUpperCase())) {
-
-        } else if ("GET".equals(m_Method.toUpperCase())&&!StringUtil.isNullOrEmpty(p_Params)) {
-            url += "?" + p_Params;
-        }
-
-
-        PrintWriter out = null;
+        OutputStream out = null;
         try {
 
 
@@ -388,9 +408,10 @@ public class WebClient implements IWebClient {
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
                 // 获取URLConnection对象对应的输te出流
-                out = new PrintWriter(conn.getOutputStream());
+                out = conn.getOutputStream();
                 // 发送请求参数
-                out.print(p_Params);
+                byte[] data =parseByte(p_Input);
+                out.write(data);
                 // flush输出流的缓冲
                 out.flush();
                 // 定义BufferedReader输入流来读取URL的响应
@@ -398,8 +419,9 @@ public class WebClient implements IWebClient {
             } else if ("GET".equals(m_Method.toUpperCase())) {
                 conn.connect();
             }
-            List<String> cookies= conn.getHeaderFields().get("Set-Cookie");
-            if(null!=cookies) {
+            List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
+            setResponseHeader(conn.getHeaderFields());
+            if (null != cookies) {
                 m_Cookies.addAll(cookies);
             }
             return conn;
