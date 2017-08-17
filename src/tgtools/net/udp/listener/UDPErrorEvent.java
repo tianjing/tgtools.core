@@ -16,10 +16,18 @@ public class UDPErrorEvent extends Event {
         m_Error = p_Error;
     }
 
+    /**
+     * 获取异常信息
+     * @return
+     */
     public Throwable getError() {
         return m_Error;
     }
 
+    /**
+     * 获取对象
+     * @return
+     */
     public Object getSender() {
         return m_Sender;
     }

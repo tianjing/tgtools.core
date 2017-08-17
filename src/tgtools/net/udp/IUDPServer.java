@@ -11,9 +11,29 @@ import tgtools.net.udp.listener.IUDPServerListener;
  * 时  间：13:35
  */
 public interface IUDPServer extends IDispose {
+    /**
+     * 设置超时时间
+     * @param p_TimeOut
+     */
     void setTimeOut(int p_TimeOut);
+
+    /**
+     * 设置缓冲
+     * @param p_BuffeSize
+     */
     void setBuffeSize(int p_BuffeSize);
+
+    /**
+     * 设置监听
+     * @param p_Listener
+     */
     void setListener(IUDPServerListener p_Listener);
+
+    /**
+     * 开始监听 (循环获取信息，阻塞当前线程)
+     * @param p_Port
+     * @throws APPErrorException
+     */
     void start(int p_Port) throws APPErrorException;
 
 }

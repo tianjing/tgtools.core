@@ -40,21 +40,38 @@ public class UDPServer implements IUDPServer {
         return m_Socket;
     }
 
+    /**
+     * 设置超时
+     * @param p_TimeOut
+     */
     @Override
     public void setTimeOut(int p_TimeOut) {
         m_BufferSize = p_TimeOut;
     }
 
+    /**
+     * 设置缓冲
+     * @param p_BuffeSize
+     */
     @Override
     public void setBuffeSize(int p_BuffeSize) {
         m_BufferSize=p_BuffeSize;
     }
 
+    /**
+     * 设置监听
+     * @param p_Listener
+     */
     @Override
     public void setListener(IUDPServerListener p_Listener) {
         m_Listener = p_Listener;
     }
 
+    /**
+     * 启动监听
+     * @param p_Port
+     * @throws APPErrorException
+     */
     @Override
     public void start(int p_Port) throws APPErrorException {
         m_Port = p_Port;
@@ -74,6 +91,9 @@ public class UDPServer implements IUDPServer {
         }
     }
 
+    /**
+     * 关闭
+     */
     protected void close() {
         onClose();
         if (null != m_Socket) {
@@ -82,18 +102,30 @@ public class UDPServer implements IUDPServer {
         }
     }
 
+    /**
+     * 释放
+     */
     @Override
     public void Dispose() {
         close();
         m_Listener = null;
     }
 
+    /**
+     *
+     */
     protected void onClose() {
         if (null != m_Listener) {
             m_Listener.onClose();
         }
     }
 
+    /**
+     *
+     * @param p_Data
+     * @param p_Address
+     * @param p_Port
+     */
     protected void onMessage(byte[] p_Data, InetAddress p_Address, int p_Port) {
         if (null != m_Listener) {
             UDPMessageEvent event = new UDPMessageEvent(this, p_Address, p_Port, p_Data);
@@ -101,6 +133,10 @@ public class UDPServer implements IUDPServer {
         }
     }
 
+    /**
+     *
+     * @param p_Error
+     */
     protected void onError(Throwable p_Error) {
         if (null != m_Listener) {
             UDPErrorEvent event = new UDPErrorEvent(this, p_Error);
@@ -108,6 +144,9 @@ public class UDPServer implements IUDPServer {
         }
     }
 
+    /**
+     *
+     */
     protected void onStart() {
         if (null != m_Listener) {
             m_Listener.onStart();
