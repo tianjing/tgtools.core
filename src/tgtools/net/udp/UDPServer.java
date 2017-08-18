@@ -4,6 +4,9 @@ import tgtools.exceptions.APPErrorException;
 import tgtools.net.udp.listener.IUDPServerListener;
 import tgtools.net.udp.listener.UDPErrorEvent;
 import tgtools.net.udp.listener.UDPMessageEvent;
+import tgtools.tasks.Task;
+import tgtools.tasks.TaskContext;
+import tgtools.util.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,7 +27,7 @@ public class UDPServer implements IUDPServer {
     protected IUDPServerListener m_Listener;
     protected int m_BufferSize = 2048;
     protected int m_TimeOut = 20000;
-
+    protected Task m_ListenTask;
 
     protected DatagramSocket getSocket() throws APPErrorException {
         if (null == m_Socket && m_Port > 0) {
@@ -74,23 +77,50 @@ public class UDPServer implements IUDPServer {
      */
     @Override
     public void start(int p_Port) throws APPErrorException {
+        validCanRun();
         m_Port = p_Port;
         onStart();
+        m_ListenTask=new UdpListenerTask(this);
+        m_ListenTask.run(null);
 
-        while (true) {
-            byte[] backbuf = new byte[m_BufferSize];
-            DatagramPacket backPacket = new DatagramPacket(backbuf, backbuf.length);
-            try {
-                getSocket().receive(backPacket);
-                ByteArrayOutputStream dd = new ByteArrayOutputStream();
-                dd.write(backPacket.getData(), 0, backPacket.getLength());
-                onMessage(dd.toByteArray(), backPacket.getAddress(), backPacket.getPort());
-            } catch (IOException e) {
-                onError(e);
-            }
-        }
     }
 
+    @Override
+    public void startWithThread(int p_Port) throws APPErrorException {
+        validCanRun();
+        m_Port = p_Port;
+        onStart();
+        m_ListenTask=new UdpListenerTask(this);
+        m_ListenTask.runThread(null);
+    }
+
+    @Override
+    public void stop() throws APPErrorException {
+        if(null==m_ListenTask)
+        {return;}
+        m_ListenTask.cancel();
+        close();
+        m_ListenTask=null;
+    }
+    protected void validCanRun() throws APPErrorException {
+        if(null!=m_ListenTask)
+        {
+            throw new APPErrorException("正在监听无法启动。");
+        }
+    }
+    protected void receive()throws APPErrorException
+    {
+        byte[] backbuf = new byte[m_BufferSize];
+        DatagramPacket backPacket = new DatagramPacket(backbuf, backbuf.length);
+        try {
+            getSocket().receive(backPacket);
+            ByteArrayOutputStream dd = new ByteArrayOutputStream();
+            dd.write(backPacket.getData(), 0, backPacket.getLength());
+            onMessage(dd.toByteArray(), backPacket.getAddress(), backPacket.getPort());
+        } catch (IOException e) {
+            onError(e);
+        }
+    }
     /**
      * 关闭
      */
@@ -180,9 +210,62 @@ public class UDPServer implements IUDPServer {
 
                 }
             });
-            server.start(60000);
+            server.startWithThread(60000);
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("停止监听");
+            server.stop();
+
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            System.out.println("启动监听");
+            server.startWithThread(60000);
+
         } catch (APPErrorException e) {
             e.printStackTrace();
         }
     }
+
+   private class UdpListenerTask extends tgtools.tasks.Task{
+        public UdpListenerTask(UDPServer p_Server){
+            m_Server=p_Server;
+        }
+        private UDPServer m_Server;
+       @Override
+       protected boolean canCancel() {
+           return true;
+       }
+
+       @Override
+       public void run(TaskContext p_Param) {
+           if(null==m_Server)
+           {
+               return;
+           }
+           while(true)
+           {
+               if(this.isCancel())
+               {return;}
+                try {
+                    m_Server.receive();
+                }catch (Throwable e)
+                {
+                    LogHelper.error("","接收信息错误；原因："+e.getMessage(),"UdpListenerTask",e);
+                }
+               if(this.isCancel())
+               {return;}
+
+           }
+       }
+   }
 }

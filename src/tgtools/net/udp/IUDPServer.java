@@ -35,5 +35,16 @@ public interface IUDPServer extends IDispose {
      * @throws APPErrorException
      */
     void start(int p_Port) throws APPErrorException;
+    /**
+     * 开始监听 (循环获取信息，使用线程)
+     * @param p_Port
+     * @throws APPErrorException
+     */
+    void startWithThread(int p_Port) throws APPErrorException;
 
+    /**
+     * 取消监听
+     * @throws APPErrorException
+     */
+    void stop() throws APPErrorException;;
 }
