@@ -102,6 +102,17 @@ public class UDPServer implements IUDPServer {
         close();
         m_ListenTask=null;
     }
+
+    @Override
+    public boolean isClosed() {
+        return m_Socket.isClosed();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return m_Socket.isConnected();
+    }
+
     protected void validCanRun() throws APPErrorException {
         if(null!=m_ListenTask)
         {

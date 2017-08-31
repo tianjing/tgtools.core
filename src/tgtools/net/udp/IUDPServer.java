@@ -46,5 +46,17 @@ public interface IUDPServer extends IDispose {
      * 取消监听
      * @throws APPErrorException
      */
-    void stop() throws APPErrorException;;
+    void stop() throws APPErrorException;
+
+    /**
+     * 是否关闭
+     * @return
+     */
+    boolean isClosed();
+
+    /**
+     * 是否已连接
+     * @return
+     */
+    boolean isConnected();
 }
