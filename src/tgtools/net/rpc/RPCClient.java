@@ -1,11 +1,10 @@
-package tgtools.rpc;
+package tgtools.net.rpc;
 
 import tgtools.exceptions.APPErrorException;
 import tgtools.net.WebClient;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -31,7 +30,7 @@ public class RPCClient {
 	 * @return 字符串结果
 	 * @throws APPErrorException
      */
-	public String invoke(RequestBody p_Body)throws APPErrorException
+	public String invoke(tgtools.net.rpc.RequestBody p_Body)throws APPErrorException
 	{
 		m_WebClient.setUrl(m_Url);
 		return m_WebClient.doInvokeAsString(parseRequest(p_Body));
@@ -45,7 +44,7 @@ public class RPCClient {
 	 * @return
 	 * @throws APPErrorException
      */
-	private InputStream doInvokeAsStream (RequestBody p_Body) throws APPErrorException {
+	private InputStream doInvokeAsStream (tgtools.net.rpc.RequestBody p_Body) throws APPErrorException {
 			m_WebClient.setUrl(m_Url);
 			return m_WebClient.doInvokeAsStream(parseRequest(p_Body));//doInvokeAsByte(p_Body).getResponseBodyAsStream();
 	}
@@ -56,7 +55,7 @@ public class RPCClient {
 	 * @return
 	 * @throws APPErrorException
      */
-	private  String doInvoke(RequestBody p_Body) throws APPErrorException
+	private  String doInvoke(tgtools.net.rpc.RequestBody p_Body) throws APPErrorException
 	{
 		try {
 			m_WebClient.setUrl(m_Url);
@@ -74,7 +73,7 @@ public class RPCClient {
 	 * @param <T>
 	 * @throws APPErrorException
      */
-	public <T extends ResponseBody> void invoke(RequestBody p_Body ,T p_Response)throws APPErrorException
+	public <T extends tgtools.net.rpc.ResponseBody> void invoke(tgtools.net.rpc.RequestBody p_Body , T p_Response)throws APPErrorException
 	{
 		p_Response.init(doInvokeAsStream(p_Body));
 		p_Response.parse();
@@ -89,15 +88,15 @@ public class RPCClient {
 	 * @param <T>
 	 * @throws APPErrorException
      */
-	public <T extends ResponseBody> void invoke(String method,Object[] param,T p_Response) throws APPErrorException
+	public <T extends tgtools.net.rpc.ResponseBody> void invoke(String method, Object[] param, T p_Response) throws APPErrorException
 	{
-		RequestBody body = new RequestBody();
+		tgtools.net.rpc.RequestBody body = new tgtools.net.rpc.RequestBody();
 		body.setMethod(method);
 		body.setParam(param);
 		invoke(body,p_Response);
 	}
 
-	private String parseRequest(RequestBody body) throws APPErrorException {
+	private String parseRequest(tgtools.net.rpc.RequestBody body) throws APPErrorException {
 		StringWriter ss = new StringWriter();
 		XMLStreamWriter write=null;
 		try {

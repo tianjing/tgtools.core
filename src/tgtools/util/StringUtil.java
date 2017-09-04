@@ -32,7 +32,9 @@ public final class StringUtil {
         }
     }
 
-
+    /**
+     * 驼峰拼写法 转换器
+     */
     private static final WordTokenizer CAMEL_CASE_TOKENIZER = new WordTokenizer() {
 
         protected void startSentence(StringBuffer buffer, char ch) {
@@ -67,7 +69,9 @@ public final class StringUtil {
                 buffer.append(ch);
         }
     };
-
+    /**
+     * 帕斯卡拼写法 转换器
+     */
     private static final WordTokenizer PASCAL_CASE_TOKENIZER = new WordTokenizer() {
         protected void startSentence(StringBuffer buffer, char ch) {
             buffer.append(Character.toUpperCase(ch));
@@ -260,7 +264,7 @@ public final class StringUtil {
     }
 
     /**
-     * 初始化为null的string
+     * 初始化string
      *
      * @param str 需要初始化的字符串
      * @return 如果是null返回"",不为null则原样返回
@@ -731,6 +735,8 @@ public final class StringUtil {
     }
 
     /**
+     * 将字符串的第一个字符大写，并将字符长度放在一位
+     * 如 thisismy  转换后 8Thisismy
      * @param str
      * @return
      */
@@ -742,6 +748,8 @@ public final class StringUtil {
     }
 
     /**
+     * 将字符串的第一个字符小写，并将字符长度放在一位
+     * 如 Thisismy  转换后 8thisismy
      * @param str
      * @return
      */
@@ -753,7 +761,7 @@ public final class StringUtil {
     }
 
     /**
-     * 字符串反转大小写，即大写该小写，小写改大写
+     * 字符串反转大小写，即大写改小写，小写改大写
      *
      * @param str 原字符串
      * @return 返回反转后的字符串
@@ -784,6 +792,7 @@ public final class StringUtil {
     }
 
     /**
+     * 将词组转换为 骆驼拼写法
      * @param str
      * @return
      */
@@ -792,6 +801,7 @@ public final class StringUtil {
     }
 
     /**
+     * 将词组转换为 帕斯卡拼写法
      * @param str
      * @return
      */
@@ -800,6 +810,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @return
      */
@@ -824,6 +835,7 @@ public final class StringUtil {
     }
 
     /**
+     * 分割字符串
      * @param str
      * @param separatorChar
      * @return
@@ -868,6 +880,7 @@ public final class StringUtil {
     }
 
     /**
+     * 分割字符串
      * @param str
      * @param separatorChars
      * @return
@@ -877,6 +890,7 @@ public final class StringUtil {
     }
 
     /**
+     * 分割字符串
      * @param str
      * @param separatorChars
      * @param max
@@ -972,6 +986,7 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接字符串
      * @param array
      * @return
      */
@@ -980,6 +995,7 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接字符串
      * @param array
      * @param separator
      * @return
@@ -1009,6 +1025,7 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接字符串
      * @param array
      * @param separator
      * @return
@@ -1046,8 +1063,10 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接固定长度的字符串
+     * 初始化长度 256
      * @param array
-     * @param sep
+     * @param sep 分割符
      * @return
      */
     public static String joinWithoutSpace(String[] array, String sep) {
@@ -1070,8 +1089,9 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接字符串
      * @param iterator
-     * @param separator
+     * @param separator 分割符
      * @return
      */
     public static String join(Iterator<?> iterator, char separator) {
@@ -1097,8 +1117,9 @@ public final class StringUtil {
     }
 
     /**
+     * 拼接字符串
      * @param iterator
-     * @param separator
+     * @param separator 分割符
      * @return
      */
     public static String join(Iterator<?> iterator, String separator) {
@@ -1124,8 +1145,9 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符所在字符串的位置
      * @param str
-     * @param searchChar
+     * @param searchChar 要查找的字符
      * @return
      */
     public static int indexOf(String str, char searchChar) {
@@ -1137,9 +1159,10 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符所在字符串的位置
      * @param str
-     * @param searchChar
-     * @param startPos
+     * @param searchChar 要查找的字符
+     * @param startPos 起点位置
      * @return
      */
     public static int indexOf(String str, char searchChar, int startPos) {
@@ -1151,8 +1174,9 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符所在字符串的位置
      * @param str
-     * @param searchStr
+     * @param searchStr 要查找的字符
      * @return
      */
     public static int indexOf(String str, String searchStr) {
@@ -1164,9 +1188,10 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符所在字符串的位置
      * @param str
-     * @param searchStr
-     * @param startPos
+     * @param searchStr 要查找的字符
+     * @param startPos 开始查找的位置
      * @return
      */
     public static int indexOf(String str, String searchStr, int startPos) {
@@ -1182,8 +1207,9 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符数组中第一个匹配到的所在的位置
      * @param str
-     * @param searchChars
+     * @param searchChars 要查找的字符
      * @return
      */
     public static int indexOfAny(String str, char[] searchChars) {
@@ -1206,8 +1232,9 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符数组中第一个匹配到的所在的位置
      * @param str
-     * @param searchChars
+     * @param searchChars 要查找的字符
      * @return
      */
     public static int indexOfAny(String str, String searchChars) {
@@ -1230,8 +1257,9 @@ public final class StringUtil {
     }
 
     /**
+     * 找到字符数组中第一个匹配到的所在的位置
      * @param str
-     * @param searchStrs
+     * @param searchStrs 要查找的字符
      * @return
      */
     public static int indexOfAny(String str, String[] searchStrs) {
@@ -1265,6 +1293,9 @@ public final class StringUtil {
     }
 
     /**
+     * 查找当前字符串中没有匹配的第一个字符的位置
+     * 如：字符串：123456  查找字符 [1,2] 结果2
+     *
      * @param str
      * @param searchChars
      * @return
@@ -1293,6 +1324,8 @@ public final class StringUtil {
     }
 
     /**
+     * 查找当前字符串中没有匹配的第一个字符的位置
+     * 如：字符串：123456  查找字符 12 结果2
      * @param str
      * @param searchChars
      * @return
@@ -1313,6 +1346,7 @@ public final class StringUtil {
     }
 
     /**
+     * 从结尾开始查找，匹配到的第一字符所在的索引
      * @param str
      * @param searchChar
      * @return
@@ -1326,6 +1360,7 @@ public final class StringUtil {
     }
 
     /**
+     * 从结尾开始查找，匹配到的第一字符所在的索引
      * @param str
      * @param searchChar
      * @param startPos
@@ -1340,6 +1375,7 @@ public final class StringUtil {
     }
 
     /**
+     * 从结尾开始查找，匹配到的第一字符所在的索引
      * @param str
      * @param searchStr
      * @return
@@ -1353,6 +1389,7 @@ public final class StringUtil {
     }
 
     /**
+     * 从结尾开始查找，匹配到的第一字符所在的索引
      * @param str
      * @param searchStr
      * @param startPos
@@ -1367,6 +1404,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param searchStrs
      * @return
@@ -1397,6 +1435,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param searchChar
      * @return
@@ -1410,6 +1449,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param searchStr
      * @return
@@ -1423,6 +1463,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param valid
      * @return
@@ -1444,6 +1485,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param valid
      * @return
@@ -1457,6 +1499,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param invalid
      * @return
@@ -1483,6 +1526,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param invalidChars
      * @return
@@ -1496,6 +1540,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param subStr
      * @return
@@ -1518,6 +1563,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param start
      * @return
@@ -1543,6 +1589,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param start
      * @param end
@@ -1581,6 +1628,9 @@ public final class StringUtil {
     }
 
     /**
+     * 从头开始保留指定长度的字符串
+     *
+     *
      * @param str
      * @param len
      * @return
@@ -1601,6 +1651,8 @@ public final class StringUtil {
     }
 
     /**
+     * 从结尾开始保留指定长度的字符串
+     * 如：abcdefghijk 长度4 结果：hijk
      * @param str
      * @param len
      * @return
@@ -1621,6 +1673,7 @@ public final class StringUtil {
     }
 
     /**
+     *
      * @param str
      * @param pos
      * @param len

@@ -1,22 +1,22 @@
 package tgtools.plugin.util;
 
-import sun.misc.URLClassPath;
-import sun.net.www.ParseUtil;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLConnection;
-import java.security.AccessControlContext;
-import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * jar 加载器
+ * 通过新建classloader加载jar包
+ * 继承现有运行环境的jar
+ *
+ */
 public class JARLoader extends ClassLoader {
 	List<String> jarFiles = new ArrayList<String>();
 
@@ -26,7 +26,7 @@ public class JARLoader extends ClassLoader {
 
 	/**
 	 * 添加jar包如"c:/1.jar;c:/2.jar"
-	 * 
+	 *
 	 * @param paths
 	 */
 	public void addFiles(String paths) {
@@ -39,10 +39,14 @@ public class JARLoader extends ClassLoader {
 			if (!StringUtil.isNullOrEmpty(pathToAdds[i])){
 				LogHelper.info("", "正在加载jar包："+pathToAdds[i], "JARLoader.addPath");
 				this.jarFiles.add(pathToAdds[i]);
-			
+
 			}
 	}
 
+	/**
+	 * 添加jar包如"c:/jar/path"
+	 * @param path
+	 */
 	public void addPath(String path) {
 		File file = new File(path);
 		if (file.exists()) {

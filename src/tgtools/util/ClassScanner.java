@@ -34,6 +34,7 @@ public class ClassScanner {
     }
 
     /**
+     * 获取指定路径下 class 数量
      * @param basePath    包所在的根路径
      * @param packagePath 目标包路径
      * @return Integer 被扫描到的类的数量
@@ -53,6 +54,7 @@ public class ClassScanner {
     }
 
     /**
+     * 获取指定路径下 class 数量
      * @param packagePath 包路径
      * @param recursive   是否扫描子包
      * @return Integer 类数量
@@ -87,6 +89,7 @@ public class ClassScanner {
     }
 
     /**
+     * 扫描Jar包下所有class
      * @param url       jar-url路径
      * @param recursive 是否递归遍历子包
      * @throws IOException
@@ -116,6 +119,7 @@ public class ClassScanner {
     }
 
     /**
+     * 执行扫描
      * @param dir Java包文件夹
      * @throws ClassNotFoundException
      * @Title: scan0
@@ -135,6 +139,7 @@ public class ClassScanner {
     }
 
     /**
+     * 获取包中所有类
      * @return Map<String,Class<?>> K:类全名, V:Class字节码
      * @Title: getClasses
      * @Description 获取包中所有类
@@ -144,6 +149,7 @@ public class ClassScanner {
     }
 
     /**
+     * 通过指定文件获取类全名
      * @Title: getPackageByPath
      * @Description 通过指定文件获取类全名
      * @param classFile 类文件

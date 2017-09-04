@@ -1,7 +1,7 @@
 package tgtools.db.pi3000;
 
 import tgtools.data.DataTable;
-import tgtools.rpc.ResponseBody;
+import tgtools.net.rpc.ResponseBody;
 import tgtools.util.StringUtil;
 
 import javax.xml.stream.XMLStreamException;

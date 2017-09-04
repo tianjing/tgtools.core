@@ -1,4 +1,4 @@
-package tgtools.rpc;
+package tgtools.net.rpc;
 
 
 
