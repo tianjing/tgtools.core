@@ -26,7 +26,7 @@ public class UDPServer implements IUDPServer {
     protected int m_Port;
     protected IUDPServerListener m_Listener;
     protected int m_BufferSize = 2048;
-    protected int m_TimeOut = 20000;
+    protected int m_TimeOut = 0;
     protected Task m_ListenTask;
 
     protected DatagramSocket getSocket() throws APPErrorException {
@@ -34,7 +34,11 @@ public class UDPServer implements IUDPServer {
             try {
                 m_Socket = new DatagramSocket(m_Port);
                 m_Socket.setReceiveBufferSize(m_BufferSize);
-                m_Socket.setSoTimeout(m_TimeOut);
+
+                if(m_TimeOut>0) {
+                    m_Socket.setSoTimeout(m_TimeOut);
+                }
+
                 return m_Socket;
             } catch (Exception ex) {
                 throw new APPErrorException("创建Udp对象出错，原因：" + ex.getMessage());
@@ -49,7 +53,7 @@ public class UDPServer implements IUDPServer {
      */
     @Override
     public void setTimeOut(int p_TimeOut) {
-        m_BufferSize = p_TimeOut;
+        m_TimeOut = p_TimeOut;
     }
 
     /**
