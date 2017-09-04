@@ -5,17 +5,11 @@
     <bookmark url="file://$PROJECT_DIR$/src/tgtools/data/DataRow.java" line="270" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="修复 set中BUG">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/tgtools/rpc/RPCClient.java" afterPath="$PROJECT_DIR$/src/tgtools/net/rpc/RPCClient.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/tgtools/rpc/RequestBody.java" afterPath="$PROJECT_DIR$/src/tgtools/net/rpc/RequestBody.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/tgtools/rpc/ResponseBody.java" afterPath="$PROJECT_DIR$/src/tgtools/net/rpc/ResponseBody.java" />
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/db/pi3000/RPCDataAccess.java" afterPath="$PROJECT_DIR$/src/tgtools/db/pi3000/RPCDataAccess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/db/pi3000/WsDsResult.java" afterPath="$PROJECT_DIR$/src/tgtools/db/pi3000/WsDsResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/plugin/util/JARLoader.java" afterPath="$PROJECT_DIR$/src/tgtools/plugin/util/JARLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/util/ClassScanner.java" afterPath="$PROJECT_DIR$/src/tgtools/util/ClassScanner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/util/StringUtil.java" afterPath="$PROJECT_DIR$/src/tgtools/util/StringUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/build.property" afterPath="$PROJECT_DIR$/src/META-INF/build.property" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -186,8 +180,8 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1913" />
-    <option name="y" value="2" />
+    <option name="x" value="2645" />
+    <option name="y" value="64" />
     <option name="width" value="1932" />
     <option name="height" value="1045" />
   </component>
@@ -258,17 +252,6 @@
             <path>
               <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
               <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -910,14 +893,7 @@
       <workItem from="1503988488525" duration="34000" />
       <workItem from="1504167471575" duration="804000" />
       <workItem from="1504488761194" duration="693000" />
-      <workItem from="1504494684159" duration="8475000" />
-    </task>
-    <task id="LOCAL-00052" summary="修改自定义属性类文件">
-      <created>1489377525437</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1489377525437</updated>
+      <workItem from="1504494684159" duration="9543000" />
     </task>
     <task id="LOCAL-00053" summary="更新&#10;增加数据库查询转实体类">
       <created>1489554218588</created>
@@ -1255,11 +1231,18 @@
       <option name="project" value="LOCAL" />
       <updated>1504489280450</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="调整代码&#10;增加注释">
+      <created>1504512421421</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1504512421421</updated>
+    </task>
+    <option name="localTasksCounter" value="102" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="368606000" />
+    <option name="totallyTimeSpent" value="369674000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1370,7 +1353,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="增加dbcp数据源驱动" />
     <MESSAGE value="调整DataTable 取消强制列名大写" />
     <MESSAGE value="调整DataTable 强制列名大写" />
     <MESSAGE value="调整tojson" />
@@ -1395,7 +1377,8 @@
     <MESSAGE value="增加 udp 客户端代码" />
     <MESSAGE value="增加 udp 客户端代码和注释" />
     <MESSAGE value="修复 set中BUG" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复 set中BUG" />
+    <MESSAGE value="调整代码&#10;增加注释" />
+    <option name="LAST_COMMIT_MESSAGE" value="调整代码&#10;增加注释" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
