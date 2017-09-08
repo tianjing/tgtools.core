@@ -3,6 +3,7 @@ package tgtools.plugin;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Set;
 
 import tgtools.util.LogHelper;
@@ -16,15 +17,21 @@ public class PluginFactory {
 	private static Hashtable<PluginInfo, Pluginloader> m_Plugins;
 	private static boolean m_IsStartup;
 
-	public static void  delPlugin(String p_Name)
+	public static synchronized void  delPlugin(String p_Name)
 	{
 		unloadPlugin(p_Name);
-		for(PluginInfo item :m_Plugins.keySet())
-		{
-			if(item.getName().equals(p_Name))
-			{
-				m_Plugins.remove(item);
-			}
+//		for(PluginInfo item :m_Plugins.keySet())
+//		{
+//			if(item.getName().equals(p_Name))
+//			{
+//				m_Plugins.remove(item);
+//			}
+//		}
+		Iterator<PluginInfo> it = m_Plugins.keySet().iterator();
+		while(it.hasNext()) {
+			PluginInfo item = it.next();
+			if (item.getName().equals(p_Name))
+				it.remove();
 		}
 	}
 	public static boolean addPlugin(String p_Path)
@@ -108,7 +115,7 @@ public class PluginFactory {
 	/**
 	 * 根据名称卸载一个插件
 	 * 
-	 * @param p_Path
+	 * @param p_Name
 	 * @return
 	 */
 	public static boolean unloadPlugin(String p_Name) {
