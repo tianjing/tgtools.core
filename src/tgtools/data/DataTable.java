@@ -74,7 +74,7 @@ public class DataTable implements Serializable {
 
             cols = rsmd.getColumnCount();
             for (int i = 1; i <= cols; i++) {
-                String colName = rsmd.getColumnName(i);
+                String colName = rsmd.getColumnLabel(i);
 
                 DataColumn column = appendColumn(colName);
 
@@ -102,7 +102,7 @@ public class DataTable implements Serializable {
             while (p_resultSet.next()) {
                 DataRow row = appendRow();
                 for (int i = 1; i <= cols; i++) {
-                    String colName = rsmd.getColumnName(i);
+                    String colName = rsmd.getColumnLabel(i);
                     Object value = p_resultSet.getObject(i);
                     if ((value instanceof Date)) {
                         row.setValue(colName, p_resultSet.getTimestamp(i),
@@ -184,14 +184,14 @@ public class DataTable implements Serializable {
         String sql2 = "SELECT convert(DECIMAL(7,2),1)as res FROM DUAL";
         String sql3 = "SELECT convert(DECIMAL(7,2),52.32)as res FROM DUAL";
         String sql4 = "select REV_,ID_,KEY_,ID_ as \"id\",KEY_ as \"key\" from BQ_SYS.ACT_DATADICTIONARY";
-        tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
-        DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sql4);
+        //tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
+        tgtools.db.DataBaseFactory.add("DBCP", "jdbc:h2:file:C:\\tianjing\\Desktop\\mydb;DB_CLOSE_DELAY=1000;INIT=CREATE SCHEMA IF NOT EXISTS BQ_SYS\\;SET SCHEMA BQ_SYS;", "BQ_SYS123", "BQ_SYS","org.h2.Driver");
+        String sqls="WITH RECURSIVE r(ID_,PARENTID_) AS (  SELECT ID_,PARENTID_ FROM act_om_menu WHERE ID_ IN(select menu_id_  from act_om_rolemenu  where group_id_ in  (select group_id_  from act_id_membership  where user_id_ = '5DD4F0B7-C167-959F-0CEA-61AE48223A89') ) union   ALL   SELECT act_om_menu.ID_,act_om_menu.PARENTID_  FROM  act_om_menu, r WHERE act_om_menu.ID_ = r.PARENTID_  )      select ID_ AS ID ,APP_ID_ AS APPID , URL_ AS URL,PAGE_TARGET_ AS TARGET  ,(case when parentid_='0' then '' else parentid_ end) as PID ,title_ as TEXT,img_ as img , ICONPOSITION_ as iconPosition from act_om_menu where id_ in (   SELECT distinct id_ FROM r  ) order by parentid_,number_ ;";
+        DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sqls);
         dt.toJson();
         //dt.setCaseSensitive(true);
         System.out.println("JSONArray::"+ new JSONArray(dt.toJson()));
         System.out.println("JSONObject::"+ new JSONObject(dt.getRow(0).toJson()));
-        dt.changeColumnName("REV_","rev_");
-        System.out.println("rows.size:" + dt.toJson());
     }
 
     /**
