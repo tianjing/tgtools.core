@@ -10,7 +10,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/build.property" afterPath="$PROJECT_DIR$/src/META-INF/build.property" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/data/DataTable.java" afterPath="$PROJECT_DIR$/src/tgtools/data/DataTable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tgtools/util/ZipStringUtil.java" afterPath="$PROJECT_DIR$/src/tgtools/util/ZipStringUtil.java" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,31 +37,7 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="DataTable.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/tgtools/data/DataTable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2068">
-              <caret line="82" column="48" lean-forward="false" selection-start-line="82" selection-start-column="48" selection-end-line="82" selection-end-column="48" />
-              <folding>
-                <element signature="e#5074#5101#0" expanded="true" />
-                <element signature="e#13805#13814#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServiceFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tgtools/service/ServiceFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3432">
-              <caret line="173" column="12" lean-forward="false" selection-start-line="173" selection-start-column="12" selection-end-line="173" selection-end-column="106" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -99,10 +75,10 @@
       <find>isbound</find>
       <find>bound</find>
       <find>CAMEL_CASE_TOKENIZER</find>
-      <find>main</find>
       <find>outproject</find>
       <find>dbcp</find>
       <find>getColumnName</find>
+      <find>main</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -134,7 +110,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/tgtools/db/DMDataAccess.java" />
         <option value="$PROJECT_DIR$/src/tgtools/util/MyData.java" />
         <option value="$PROJECT_DIR$/src/tgtools/util/JsonParseHelper.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/DataColumn.java" />
@@ -185,6 +160,7 @@
         <option value="$PROJECT_DIR$/src/tgtools/plugin/Pluginloader.java" />
         <option value="$PROJECT_DIR$/src/tgtools/plugin/PluginFactory.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/DataTable.java" />
+        <option value="$PROJECT_DIR$/src/tgtools/util/ZipStringUtil.java" />
       </list>
     </option>
   </component>
@@ -205,10 +181,9 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2099" />
-    <option name="y" value="51" />
-    <option name="width" value="1932" />
-    <option name="height" value="1045" />
+    <option name="x" value="1912" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -268,7 +243,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -294,12 +271,17 @@
               <item name="tgtools" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -339,7 +321,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.DataTable">
+  <component name="RunManager" selected="Application.ZipStringUtil">
     <configuration name="DataTable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -397,14 +379,14 @@
       <module name="tgtools.core" />
       <envs />
     </configuration>
-    <configuration name="UDPSender" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="UDPServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="tgtools.net.udp.listener.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="tgtools.net.udp.UDPSender" />
+      <option name="MAIN_CLASS_NAME" value="tgtools.net.udp.UDPServer" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -416,14 +398,14 @@
       <module name="tgtools.core" />
       <envs />
     </configuration>
-    <configuration name="UDPServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="ZipStringUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="tgtools.net.udp.listener.*" />
+          <option name="PATTERN" value="tgtools.util.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="tgtools.net.udp.UDPServer" />
+      <option name="MAIN_CLASS_NAME" value="tgtools.util.ZipStringUtil" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -645,18 +627,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.DataTable" />
-      <item index="1" class="java.lang.String" itemvalue="Application.UDPSender" />
-      <item index="2" class="java.lang.String" itemvalue="Application.UDPClient" />
-      <item index="3" class="java.lang.String" itemvalue="Application.UDPServer" />
-      <item index="4" class="java.lang.String" itemvalue="Application.StringUtil" />
+      <item index="1" class="java.lang.String" itemvalue="Application.UDPClient" />
+      <item index="2" class="java.lang.String" itemvalue="Application.UDPServer" />
+      <item index="3" class="java.lang.String" itemvalue="Application.StringUtil" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ZipStringUtil" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.DataTable" />
-        <item index="1" class="java.lang.String" itemvalue="Application.StringUtil" />
-        <item index="2" class="java.lang.String" itemvalue="Application.UDPServer" />
-        <item index="3" class="java.lang.String" itemvalue="Application.UDPClient" />
-        <item index="4" class="java.lang.String" itemvalue="Application.UDPSender" />
+        <item index="0" class="java.lang.String" itemvalue="Application.ZipStringUtil" />
+        <item index="1" class="java.lang.String" itemvalue="Application.DataTable" />
+        <item index="2" class="java.lang.String" itemvalue="Application.StringUtil" />
+        <item index="3" class="java.lang.String" itemvalue="Application.UDPServer" />
+        <item index="4" class="java.lang.String" itemvalue="Application.UDPClient" />
       </list>
     </recent_temporary>
   </component>
@@ -942,14 +924,8 @@
       <workItem from="1504857472028" duration="1229000" />
       <workItem from="1505177311498" duration="22000" />
       <workItem from="1505372315783" duration="305000" />
-      <workItem from="1505372741930" duration="502000" />
-    </task>
-    <task id="LOCAL-00056" summary="增加消息实现（beta）">
-      <created>1489922291863</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1489922291863</updated>
+      <workItem from="1505372741930" duration="558000" />
+      <workItem from="1505446407364" duration="1018000" />
     </task>
     <task id="LOCAL-00057" summary="增加消息实现（beta）">
       <created>1489974131816</created>
@@ -1287,11 +1263,18 @@
       <option name="project" value="LOCAL" />
       <updated>1504860926531</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="修复DataTable 不能正确获取列别名问题">
+      <created>1505373278405</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1505373278414</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="372918000" />
+    <option name="totallyTimeSpent" value="373992000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1310,15 +1293,15 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3085847" sideWeight="0.40836012" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45842957" sideWeight="0.5916399" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20116279" sideWeight="0.48120302" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20116279" sideWeight="0.48120302" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32792583" sideWeight="0.49785638" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19796138" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11319742" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12808146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18991417" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1362661" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1362661" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2895349" sideWeight="0.48778626" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1402,7 +1385,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="调整tojson" />
     <MESSAGE value="调整tojson 字段顺序" />
     <MESSAGE value="调整 Task同步属性到BaseService" />
     <MESSAGE value="更新DataTable 支持 大小写敏感" />
@@ -1427,7 +1409,8 @@
     <MESSAGE value="调整代码&#10;增加注释" />
     <MESSAGE value="修复平台加载和卸载插件不执行接口方法的问题" />
     <MESSAGE value="修复插件删除时可能出现的错误" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复插件删除时可能出现的错误" />
+    <MESSAGE value="修复DataTable 不能正确获取列别名问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复DataTable 不能正确获取列别名问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1459,13 +1442,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/URLConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1357">
-          <caret line="596" column="35" lean-forward="false" selection-start-line="596" selection-start-column="11" selection-end-line="596" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tgtools/net/IWebClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
@@ -1803,22 +1779,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tgtools/service/ServiceFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3432">
-          <caret line="173" column="12" lean-forward="false" selection-start-line="173" selection-start-column="12" selection-end-line="173" selection-end-column="106" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tgtools/data/DataTable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2068">
           <caret line="82" column="48" lean-forward="false" selection-start-line="82" selection-start-column="48" selection-end-line="82" selection-end-column="48" />
           <folding>
             <element signature="e#5074#5101#0" expanded="true" />
-            <element signature="e#13805#13814#0" expanded="true" />
+            <element signature="e#13805#13814#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tgtools/service/ServiceFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="173" column="12" lean-forward="false" selection-start-line="173" selection-start-column="12" selection-end-line="173" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tgtools/util/ZipStringUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="218" column="9" lean-forward="true" selection-start-line="218" selection-start-column="9" selection-end-line="218" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>

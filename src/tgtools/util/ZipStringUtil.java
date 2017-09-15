@@ -65,7 +65,10 @@ public class ZipStringUtil {
 		}
 
 		byte[] compressed = null;
-
+		if(compressedStr.contains(" "))
+		{
+			compressedStr=StringUtil.replace(compressedStr," ","+");
+		}
 		try {
 			compressed =org.apache.commons.codec.binary.Base64.decodeBase64(compressedStr);
 			return gunzip(compressed);
@@ -218,10 +221,10 @@ public class ZipStringUtil {
 	}
 
 	public static void main(String[] arg) throws IOException {
-		String ss="H4sIAAAAAAAAAHNKqqhIyswrTi0q0XnaO/3JrjU6T5cufbJ38tP GToVFRUASB0fniAAAAA=";
+		String ss="H4sIAAAAAAAAACupLEi1zcxLy1dLzs8rSc0rsU3MyXHOLypwzk9JBYoVFfgl5qbaPtu84en2eU/2zX4 ZevT1jVP 3cAAPF7TLg5AAAA";
 		String ss1="Bbxxbinsert,南京,奥体变,xxx";
-		//String res= gunzip(ss);
-		System.out.println("gzip:"+gzip(ss1));
+		String res= gunzip(ss);
+		//System.out.println("gzip:"+gzip(ss1));
 		System.out.println(gunzip(ss));
 	}
 }
