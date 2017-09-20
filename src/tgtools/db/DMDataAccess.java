@@ -122,9 +122,8 @@ public class DMDataAccess implements IDataAccess {
             close(conn);
         }
     }
-
     @Override
-    public DataTable Query(String sql) throws APPErrorException {
+    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
@@ -132,7 +131,7 @@ public class DMDataAccess implements IDataAccess {
             conn = getConnection();
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
-            return new DataTable(rs, sql);
+            return new DataTable(rs, sql,p_BlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {
@@ -141,6 +140,13 @@ public class DMDataAccess implements IDataAccess {
             close(conn);
         }
     }
+    @Override
+    public DataTable Query(String sql) throws APPErrorException {
+        return Query(sql,false);
+    }
+
+
+
 
     @Override
     public int executeUpdate(String sql) throws APPErrorException {

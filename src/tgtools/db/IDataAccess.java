@@ -40,13 +40,21 @@ public interface IDataAccess {
 	 */
 	ResultSet executeQuery(String sql)throws APPErrorException;
 	/**
-	 * 查询并返回table对象（推荐）
+	 * 查询并返回table对象（推荐，Blob 字段 使用byte[] 适合小文件数据获取）
 	 * @param sql
 	 * @return
 	 * @throws APPErrorException
 	 */
 	DataTable Query(String sql)throws APPErrorException;
 
+	/**
+	 * 查询并返回table对象（Blob 字段 使用stream 适合大文件数据获取）
+	 * @param sql
+	 * @param p_BlobUseStream Blob字段是否使用stream
+	 * @return
+	 * @throws APPErrorException
+	 */
+	DataTable Query(String sql,boolean p_BlobUseStream)throws APPErrorException;
 	/**
 	 * 查询并返回table对象
 	 * @param sql

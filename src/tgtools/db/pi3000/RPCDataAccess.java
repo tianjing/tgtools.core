@@ -68,6 +68,12 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
 			
 		}
 	}
+
+	@Override
+	public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+		throw new APPErrorException("Query流没有实现");
+	}
+
 	@Override
 	public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
 		Object obj = JsonParseHelper.parseToObject(Query(sql),p_Class,true);

@@ -82,6 +82,11 @@ public class SpringDataAccess implements IDataAccess {
 
 	@Override
 	public DataTable Query(String sql) throws APPErrorException {
+		return Query(sql,false);
+	}
+
+	@Override
+	public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
 		Connection conn = null;
 		ResultSet rs = null;
 		Statement statement = null;

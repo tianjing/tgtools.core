@@ -70,7 +70,7 @@ public class DataRow  implements IXmlSerializable, Cloneable, Serializable{
 	    if ((!p_ignoreReadOnly) && (column.isReadOnly())) {
 	      throw new DataAccessException(String.format("无法向只读字段[%1$s]设置数值。", new Object[] { p_columnName }));
 	    }
-	    Object obj=DbTypeConverter.toCommonType(p_value, column.getColumnType());
+	    Object obj=DbTypeConverter.toCommonType(p_value, column.getColumnType(),this.getTable().getBolbUseStream());
 	    this.data.set(column.getIndexInColList(), obj);
 	  }
 

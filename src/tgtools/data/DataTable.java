@@ -17,6 +17,8 @@ import tgtools.xml.XmlSerializeException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -38,7 +40,7 @@ public class DataTable implements Serializable {
     private DataRowCollection rows;
     private String m_Sql;
     private boolean m_CaseSensitive=false;
-
+    private boolean m_BolbUseStream=false;
     /**
      * 构造一个没有行和列的DataTable
      */
@@ -57,14 +59,15 @@ public class DataTable implements Serializable {
         this.rows = new DataRowCollection();
     }
 
-    /**
-     * 构造  通过数据库查询结果添加到DataTable
-     * @param p_resultSet
-     * @param currentSql
-     * @param rowLimit
-     */
-    public DataTable(ResultSet p_resultSet, String currentSql, int rowLimit) {
+           /**
+         * 构造  通过数据库查询结果添加到DataTable
+         * @param p_resultSet
+         * @param currentSql
+         * @param rowLimit
+         */
+    public DataTable(ResultSet p_resultSet, String currentSql, int rowLimit,boolean p_BolbUseStream) {
         this();
+        m_BolbUseStream=p_BolbUseStream;
         ResultSetMetaData rsmd = null;
         this.m_Sql = currentSql;
         // int readedRows = 0;
@@ -129,14 +132,22 @@ public class DataTable implements Serializable {
             throw new APPRuntimeException("获取ResultSet的数据时发生异常。", e);
         }
     }
-
+    /**
+     * 构造  通过数据库查询结果添加到DataTable
+     * @param p_resultSet
+     * @param currentSql
+     * @param p_BolbUseStream 大字段是否使用流
+     */
+    public DataTable(ResultSet p_resultSet, String currentSql,boolean p_BolbUseStream) {
+        this(p_resultSet, currentSql, -1,p_BolbUseStream);
+    }
     /**
      * 构造  通过数据库查询结果添加到DataTable
      * @param p_resultSet
      * @param currentSql
      */
     public DataTable(ResultSet p_resultSet, String currentSql) {
-        this(p_resultSet, currentSql, -1);
+        this(p_resultSet, currentSql, -1,false);
     }
 
     /**
@@ -184,11 +195,16 @@ public class DataTable implements Serializable {
         String sql2 = "SELECT convert(DECIMAL(7,2),1)as res FROM DUAL";
         String sql3 = "SELECT convert(DECIMAL(7,2),52.32)as res FROM DUAL";
         String sql4 = "select REV_,ID_,KEY_,ID_ as \"id\",KEY_ as \"key\" from BQ_SYS.ACT_DATADICTIONARY";
-        //tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "SYSDBA", "SYSDBA"});
-        tgtools.db.DataBaseFactory.add("DBCP", "jdbc:h2:file:C:\\tianjing\\Desktop\\mydb;DB_CLOSE_DELAY=1000;INIT=CREATE SCHEMA IF NOT EXISTS BQ_SYS\\;SET SCHEMA BQ_SYS;", "BQ_SYS123", "BQ_SYS","org.h2.Driver");
+        String filesql="select top 1 * from ACT_OM_FILE;";
+        tgtools.db.DataBaseFactory.add("DM", new Object[]{"jdbc:dm://192.168.88.128:5235/dqmis", "BQ_SYS", "BQ_SYS123"});
+        //tgtools.db.DataBaseFactory.add("DBCP", "jdbc:h2:file:C:\\tianjing\\Desktop\\mydb;DB_CLOSE_DELAY=1000;INIT=CREATE SCHEMA IF NOT EXISTS BQ_SYS\\;SET SCHEMA BQ_SYS;", "BQ_SYS123", "BQ_SYS","org.h2.Driver");
         String sqls="WITH RECURSIVE r(ID_,PARENTID_) AS (  SELECT ID_,PARENTID_ FROM act_om_menu WHERE ID_ IN(select menu_id_  from act_om_rolemenu  where group_id_ in  (select group_id_  from act_id_membership  where user_id_ = '5DD4F0B7-C167-959F-0CEA-61AE48223A89') ) union   ALL   SELECT act_om_menu.ID_,act_om_menu.PARENTID_  FROM  act_om_menu, r WHERE act_om_menu.ID_ = r.PARENTID_  )      select ID_ AS ID ,APP_ID_ AS APPID , URL_ AS URL,PAGE_TARGET_ AS TARGET  ,(case when parentid_='0' then '' else parentid_ end) as PID ,title_ as TEXT,img_ as img , ICONPOSITION_ as iconPosition from act_om_menu where id_ in (   SELECT distinct id_ FROM r  ) order by parentid_,number_ ;";
-        DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(sqls);
-        dt.toJson();
+        DataTable dt = tgtools.db.DataBaseFactory.getDefault().Query(filesql);
+        Object obj= dt.getRow(0).getValue("VALUE_");
+        if(obj instanceof InputStream)
+        {
+
+        }
         //dt.setCaseSensitive(true);
         System.out.println("JSONArray::"+ new JSONArray(dt.toJson()));
         System.out.println("JSONObject::"+ new JSONObject(dt.getRow(0).toJson()));
@@ -431,6 +447,10 @@ public class DataTable implements Serializable {
             this.columnIndexArray.get(i).setCaseSensitive(p_CaseSensitive);
             this.columns.put(this.columnIndexArray.get(i).getColumnName(),this.columnIndexArray.get(i));
         }
+    }
+
+    public boolean getBolbUseStream() {
+        return m_BolbUseStream;
     }
 
     /**
