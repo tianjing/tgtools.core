@@ -213,7 +213,37 @@ public final class FileUtil {
     public static void writeFile(String p_FileName, String p_Data) throws APPErrorException {
         writeFile(p_FileName, p_Data, "UTF-8");
     }
-
+    /**
+     * 将流写入到文件 (写入完成后关闭InputStream)
+     *
+     * @param p_FileName 文件
+     * @param p_Data     内容
+     * @throws APPErrorException
+     */
+    public static void writeFile(String p_FileName, InputStream p_Data) throws APPErrorException {
+        FileOutputStream fop =null;
+        try {
+            File file = new File(p_FileName);
+            fop = new FileOutputStream(file);
+            byte[] data=new byte[10*1024];
+            int length=0;
+            while((length=p_Data.read(data))>0)
+            {
+                fop.write(data,0,length);
+            }
+        } catch (Exception e) {
+            throw new APPErrorException("文件写入失败:" + p_FileName, e);
+        } finally {
+                try {
+                    fop.close();
+                } catch (IOException e) {
+                }
+            try {
+                p_Data.close();
+            } catch (IOException e) {
+            }
+        }
+    }
     /**
      * 将文本写入到文件 默认：字符集UTF-8
      * @param p_FileName 文件及全路径

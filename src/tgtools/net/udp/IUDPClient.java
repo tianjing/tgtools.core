@@ -58,4 +58,30 @@ public interface IUDPClient extends IDispose{
      * @throws APPErrorException
      */
     void send(byte[] p_Data) throws APPErrorException;
+
+    /**
+     * 多包发送（如果数据长度超出限制则分包发送）
+     * @param p_Data 数据
+     * @throws APPErrorException
+     */
+    void multiSend(byte[] p_Data) throws APPErrorException;
+
+    /**
+     * 多包发送（如果数据长度超出限制则分包发送）
+     * @param p_Target 目标IP
+     * @param p_TargetPort 目标端口
+     * @param p_Data 数据
+     * @throws APPErrorException
+     */
+    void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException;
+
+    /**
+     * 多包发送（如果数据长度超出限制则分包发送）
+     * @param p_Target 目标IP
+     * @param p_TargetPort 目标端口
+     * @param p_Data 数据
+     * @param p_Length 单包长度
+     * @throws APPErrorException
+     */
+    void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data,int p_Length) throws APPErrorException;
 }
