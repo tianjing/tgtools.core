@@ -24,43 +24,31 @@ public class UDPClient implements IUDPClient {
     protected IUDPClientListener m_Listener;
     protected int m_BufferSize = 500;
     protected int m_TimeOut = 20000;
-    protected int m_BufferPacketSize=8100;
+    protected int m_BufferPacketSize = 8192;
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    private static void main(String[] args) throws UnsupportedEncodingException {
         String data = "扫积分卡的拉萨积分考拉打扫接口拉菲克";
-String fdsaf="fdsafadskljfkdsajfkldsa1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111klfjkladsjfkljdslajfkladsjfkldasklfjkladsjfadsklfjadskljfkldsjaklfjadskl";
-        fdsaf+=fdsaf;
-        fdsaf+=fdsaf;
-        fdsaf+=fdsaf;
+        String fdsaf = "fdsafadskljfkdsajfkldsa1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111klfjkladsjfkljdslajfkladsjfkldasklfjkladsjfadsklfjadskljfkldsjaklfjadskl";
+        fdsaf += fdsaf;
+        fdsaf += fdsaf;
+        fdsaf += fdsaf;
         data += "fkdjasklfjdlasjfjadsl;jfkl;adsjkl;fewijfkldjafkljadskl;fjkldjskl;afjkladsjfkl;jdsaklfjkl;adsjfkladskl;fjkl;adsjfkladsjklfjkladsjfkladsjfkldjasklewiofjdklajklfajldjklf";
         data += data;
         data += data;
         data += data;
         data += data;
         data += data;
-        data+=fdsaf;
+        data += fdsaf;
         data += data;
         data += data;
         byte[] da = data.getBytes("GBK");
 
         UDPClient client = new UDPClient();
         try {
-            //for (int i = 0; i < 10000000; i++) {
             client.setTargetAddress(InetAddress.getByName("192.168.88.128"));
             client.setTargetPort(6000);
-            client.send(da);
-            //DatagramSocket m_Socket = new DatagramSocket();
-            //DatagramPacket dataGramPacket = new DatagramPacket(da,0, da.length, InetAddress.getByName("192.168.88.128"), 45454);
-            //m_Socket.send(dataGramPacket);
-         //   try {
-             //   Thread.sleep(5000);
-                System.out.println("111");
-                // System.out.println("111"+m_Socket.getSendBufferSize()+";;;aa;;;;:"+da.length);
-            //} catch (InterruptedException e) {
-        //        e.printStackTrace();
-         //   }
-            // }
-
+            client.multiSend(da);
+            System.out.println("111");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -209,52 +197,56 @@ String fdsaf="fdsafadskljfkdsajfkldsa1111111111111111111111111111111111111111111
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
+     *
      * @param p_Data 数据
      * @throws APPErrorException
      */
     @Override
     public void multiSend(byte[] p_Data) throws APPErrorException {
-        multiSend(m_TargetAddress,m_TargetPort, p_Data,-1);
+        multiSend(m_TargetAddress, m_TargetPort, p_Data, -1);
     }
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
-     * @param p_Target 目标IP
+     *
+     * @param p_Target     目标IP
      * @param p_TargetPort 目标端口
-     * @param p_Data 数据
+     * @param p_Data       数据
      * @throws APPErrorException
      */
     @Override
     public void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException {
-        multiSend(p_Target,p_TargetPort, p_Data,-1);
+        multiSend(p_Target, p_TargetPort, p_Data, -1);
     }
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
-     * @param p_Target 目标IP
+     *
+     * @param p_Target     目标IP
      * @param p_TargetPort 目标端口
-     * @param p_Data 数据
-     * @param p_Length 单包长度
+     * @param p_Data       数据
+     * @param p_Length     单包长度
      * @throws APPErrorException
      */
     @Override
     public void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data, int p_Length) throws APPErrorException {
-        int packetsize=p_Length;
-        if(packetsize<1)
-        {packetsize=m_BufferPacketSize;}
+        int packetsize = p_Length;
+        if (packetsize < 1) {
+            packetsize = m_BufferPacketSize;
+        }
 
         try {
-            onMessage(p_Data,p_Target,p_TargetPort);
-            int count=(p_Data.length/packetsize)+1;
-            int off=0;
-            for(int i=0;i<count;i++) {
-                if(off>=p_Data.length)break;
-                int length=p_Data.length-off>packetsize?packetsize:p_Data.length-off;
-                DatagramPacket dataGramPacket = new DatagramPacket(p_Data,off, length, p_Target, p_TargetPort);
+            onMessage(p_Data, p_Target, p_TargetPort);
+            int count = (p_Data.length / packetsize) + 1;
+            int off = 0;
+            for (int i = 0; i < count; i++) {
+                if (off >= p_Data.length) break;
+                int length = p_Data.length - off > packetsize ? packetsize : p_Data.length - off;
+                DatagramPacket dataGramPacket = new DatagramPacket(p_Data, off, length, p_Target, p_TargetPort);
                 getSocket().send(dataGramPacket);
-                off=off+length;
+                off = off + length;
             }
-        }  catch (IOException e) {
+        } catch (IOException e) {
             onError(e);
         }
     }
