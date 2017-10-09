@@ -34,19 +34,24 @@ public class PluginFactory {
 				it.remove();
 		}
 	}
+
 	public static boolean addPlugin(String p_Path)
 	{
-		return addPlugin(new File(p_Path));
+		return addPlugin(new File(p_Path),true);
 	}
+
 	/**
 	 * 加载指定路径中的一个插件
 	 * 
 	 * @param p_Path
 	 * @return
 	 */
-	private static boolean addPlugin(File p_Path) {
+	private static boolean addPlugin(File p_Path,boolean p_IgnoreIsLoad) {
 		if (p_Path.isDirectory()) {
 			PluginInfo info = loadInfo(p_Path);
+			if(!p_IgnoreIsLoad&&info.isIsload())
+			{return false;}
+
 			if (!m_Plugins.containsKey(info)) {
 				Pluginloader plugin = createPlugin(info);
 				if (null != plugin) {
@@ -57,6 +62,7 @@ public class PluginFactory {
 		}
 		return false;
 	}
+
 	/**
 	 * 获取所有插件信息
 	 * @author tian.jing
@@ -193,7 +199,7 @@ public class PluginFactory {
 		File[] files = tgtools.util.FileUtil.listAll(p_Path);
 		for (int i = 0; i < files.length; i++) {
 			try {
-				addPlugin(files[i]);
+				addPlugin(files[i],false);
 			} catch (Exception e) {
 			}
 		}
