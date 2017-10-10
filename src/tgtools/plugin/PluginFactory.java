@@ -49,7 +49,7 @@ public class PluginFactory {
 	private static boolean addPlugin(File p_Path,boolean p_IgnoreIsLoad) {
 		if (p_Path.isDirectory()) {
 			PluginInfo info = loadInfo(p_Path);
-			if(!p_IgnoreIsLoad&&info.isIsload())
+			if(!p_IgnoreIsLoad&&!info.isIsload())
 			{return false;}
 
 			if (!m_Plugins.containsKey(info)) {
