@@ -12,7 +12,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * 名  称：
+ * 名  称：扫描jar包 的class
  * 编写者：田径
  * 功  能：
  * 时  间：21:24

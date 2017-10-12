@@ -1,4 +1,5 @@
 package tgtools.data;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,9 @@ import javax.xml.stream.XMLStreamWriter;
 import tgtools.xml.IXmlSerializable;
 import tgtools.xml.XmlSerializeException;
 import tgtools.xml.XmlSerializeHelper;
-public class DataColumn implements IXmlSerializable{
+public class DataColumn implements IXmlSerializable,Serializable {
+	private static final long serialVersionUID = -1245393580144288826L;
+
 	protected DataTable table;
 	  protected String columnName;
 	  protected String caption;
