@@ -1,6 +1,7 @@
 package tgtools.json;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-public class JSONArray {
+public class JSONArray implements Serializable {
 	 private ArrayList<Object> myArrayList;
 
 	  public JSONArray()

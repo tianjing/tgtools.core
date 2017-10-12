@@ -1,5 +1,6 @@
 package tgtools.json;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 @SuppressWarnings("unchecked")
-public class JSONObject
+public class JSONObject implements Serializable
 {
 
   private Map map;
