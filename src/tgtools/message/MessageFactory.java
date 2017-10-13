@@ -24,7 +24,7 @@ public class MessageFactory {
     private static boolean m_IsRun;
 
     static{
-        m_MessageStroe = new MessageLocalStore();
+        m_MessageStroe = new MessageEhcacheStore();
     }
 
     /**

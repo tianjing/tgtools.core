@@ -4,6 +4,7 @@ import tgtools.util.DateUtil;
 import tgtools.util.GUID;
 import tgtools.util.StringUtil;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * 功  能：
  * 时  间：15:24
  */
-public class Message {
+public class Message implements Serializable {
     public Message()
     {
         m_CreateTime= DateUtil.getCurrentDate();
