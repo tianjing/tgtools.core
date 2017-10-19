@@ -23,6 +23,7 @@ public final class StringUtil {
             (byte) 0xbf};
     public static final String EMPTY_STRING = "";
     public static final String NEW_LINE = System.getProperty("line.separator", "\n");
+    public static final String NEW_LINE_WINDOWS = "\r\n";
 
     public static String addUTF8Bom(String value) {
         try {

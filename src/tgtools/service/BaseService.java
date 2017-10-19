@@ -5,15 +5,23 @@ import java.util.Date;
 import tgtools.tasks.Task;
 import tgtools.util.DateUtil;
 
+/**
+* @Title 
+* @Description 
+* @author 田径
+* @date 2017-10-18 10:22
+*/
 public abstract class BaseService extends Task {
 
     public BaseService()
     {
     	m_IsStop = false;
     }
-    /// <summary>
-    /// Milliseconds 
-    /// </summary>
+
+    /**
+     * Milliseconds
+     * @return
+     */
     protected abstract int getInterval();
     protected abstract Date getEndTime();
 
@@ -48,10 +56,11 @@ public abstract class BaseService extends Task {
         m_IsStop = true;
     }
 
-    /// <summary>
-    /// 是否可以运行
-    /// </summary>
-    /// <returns></returns>
+    /**
+     * 是否可以运行
+     * @return
+     */
+    @Override
     public boolean canRun()
     {
         if (m_IsStop)
