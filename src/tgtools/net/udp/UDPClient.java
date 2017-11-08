@@ -18,6 +18,12 @@ import java.net.InetAddress;
  * 时  间：13:42
  */
 public class UDPClient implements IUDPClient {
+    public UDPClient(){}
+    public UDPClient(int pPort)
+    {
+        m_SelfPort =pPort;
+    }
+    protected int m_SelfPort=0;
     protected int m_TargetPort;
     protected InetAddress m_TargetAddress;
     protected DatagramSocket m_Socket = null;
@@ -59,11 +65,15 @@ public class UDPClient implements IUDPClient {
     protected DatagramSocket getSocket() throws APPErrorException {
         if (null == m_Socket) {
             try {
-                m_Socket = new DatagramSocket();
+                if(m_SelfPort>0)
+                {
+                    m_Socket = new DatagramSocket(m_SelfPort);
+                }
+                else {
+                    m_Socket = new DatagramSocket();
+                }
                 m_Socket.setSendBufferSize(m_BufferSize);
                 m_Socket.setSoTimeout(m_TimeOut);
-                m_Socket.setSoTimeout(10000);
-
                 return m_Socket;
             } catch (Exception ex) {
                 throw new APPErrorException("创建Udp对象出错，原因：" + ex.getMessage());
@@ -240,7 +250,7 @@ public class UDPClient implements IUDPClient {
             int count = (p_Data.length / packetsize) + 1;
             int off = 0;
             for (int i = 0; i < count; i++) {
-                if (off >= p_Data.length) break;
+                if (off >= p_Data.length) {break;}
                 int length = p_Data.length - off > packetsize ? packetsize : p_Data.length - off;
                 DatagramPacket dataGramPacket = new DatagramPacket(p_Data, off, length, p_Target, p_TargetPort);
                 getSocket().send(dataGramPacket);

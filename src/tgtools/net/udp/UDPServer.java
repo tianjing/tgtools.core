@@ -10,9 +10,11 @@ import tgtools.util.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * 名  称：
@@ -34,7 +36,7 @@ public class UDPServer implements IUDPServer {
             try {
                 m_Socket = new DatagramSocket(m_Port);
                 m_Socket.setReceiveBufferSize(m_BufferSize);
-
+                m_Socket.setSendBufferSize(m_BufferSize);
                 if(m_TimeOut>0) {
                     m_Socket.setSoTimeout(m_TimeOut);
                 }
@@ -197,9 +199,17 @@ public class UDPServer implements IUDPServer {
             m_Listener.onStart();
         }
     }
+    public void send(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException {
+        try {
+            DatagramPacket dataGramPacket = new DatagramPacket(p_Data, 0, p_Data.length, p_Target, p_TargetPort);
+            getSocket().send(dataGramPacket);
 
+        } catch (IOException e) {
+            onError(e);
+        }
+    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException, UnsupportedEncodingException {
         UDPServer server = new UDPServer();
         try {
             server.setListener(new IUDPServerListener() {
@@ -225,12 +235,18 @@ public class UDPServer implements IUDPServer {
 
                 }
             });
-            server.startWithThread(60000);
+
+            server.startWithThread(6000);
+
+            InetAddress add=InetAddress.getByName("192.168.88.128");
+            server.send(add,45454,"你好".getBytes("GBK"));
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+
 
             System.out.println("停止监听");
             server.stop();
