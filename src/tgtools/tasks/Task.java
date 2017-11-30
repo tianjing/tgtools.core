@@ -118,7 +118,9 @@ public abstract class Task {
 	public boolean isCancel() {
 		return m_IsCancel;
 	}
-
+	public void resetCancel() {
+		m_IsCancel=false;
+	}
 	/**
 	 * 取消当前任务
 	 */

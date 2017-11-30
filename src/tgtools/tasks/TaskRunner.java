@@ -1,6 +1,10 @@
 package tgtools.tasks;
 
+import tgtools.interfaces.IDispose;
+import tgtools.util.StringUtil;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -9,31 +13,13 @@ import java.util.List;
  * 功  能：
  * 时  间：14:44
  */
-public class TaskRunner<T extends Task> {
+public class TaskRunner<E extends Task>  extends  ArrayList<E> implements IDispose{
 
-    private ArrayList<T> tasks=new ArrayList<T>();
-
-    /**
-     * 添加任务
-     * @param p_Task
-     */
-    public void add(T p_Task)
-    {
-        tasks.add(p_Task);
-    }
-
-    /**
-     * 添加所有任务
-     * @param p_Tasks
-     */
-    public void addAll(List<T> p_Tasks)
-    {
-        tasks.addAll(p_Tasks);
-    }
 
     /**
      * 运行所有任务直到全部结束（一个任务一个线程）
      */
+    @Deprecated
     public void runThreanTillEnd()
     {
         runThreanTillEnd(new TaskContext());
@@ -41,16 +27,33 @@ public class TaskRunner<T extends Task> {
     /**
      * 运行所有任务直到全部结束（一个任务一个线程）
      */
+    public void runThreadTillEnd()
+    {
+        runThreadTillEnd(new TaskContext());
+    }
+
+    /**
+     * 运行所有任务直到全部结束（一个任务一个线程）
+     */
+    @Deprecated
     public void runThreanTillEnd(TaskContext p_TaskContext)
     {
-        for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).runThreadWait(p_TaskContext);
+        runThreadTillEnd(p_TaskContext);
+    }
+    /**
+     * 运行所有任务直到全部结束（一个任务一个线程）
+     */
+    public void runThreadTillEnd(TaskContext p_TaskContext)
+    {
+        restCancel();
+        for (int i = 0; i < this.size(); i++) {
+            this.get(i).runThreadWait(p_TaskContext);
         }
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).isBusy()) {
-                synchronized (tasks.get(i)) {
+        for (int i = 0; i < this.size(); i++) {
+            if (this.get(i).isBusy()) {
+                synchronized (this.get(i)) {
                     try {
-                        tasks.get(i).wait();
+                        this.get(i).wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -61,18 +64,54 @@ public class TaskRunner<T extends Task> {
     /**
      * 运行所有任务 不等待 （一个任务一个线程）
      */
+    public void runThread(TaskContext p_TaskContext)
+    {
+        restCancel();
+        for (int i = 0; i < this.size(); i++) {
+            this.get(i).runThread(p_TaskContext);
+        }
+    }
+    /**
+     * 一个任务一个任务的执行（不使用线程）
+     */
+    public void run(TaskContext p_TaskContext)
+    {
+        restCancel();
+        for (int i = 0; i < this.size(); i++) {
+            try {
+                this.get(i).run(p_TaskContext);
+            }
+            catch (Exception ex)
+            {
+                this.get(i).onError(ex);
+            }
+        }
+    }
+
+    /**
+     * 运行所有任务 不等待 （一个任务一个线程）
+     */
+    @Deprecated
     public void runThrean()
     {
         runThrean(new TaskContext());
     }
+
     /**
      * 运行所有任务 不等待 （一个任务一个线程）
      */
+    public void runThread()
+    {
+        runThrean(new TaskContext());
+    }
+
+    /**
+     * 运行所有任务 不等待 （一个任务一个线程）
+     */
+    @Deprecated
     public void runThrean(TaskContext p_TaskContext)
     {
-        for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).runThread(p_TaskContext);
-        }
+        runThread(p_TaskContext);
     }
 
     /**
@@ -83,19 +122,46 @@ public class TaskRunner<T extends Task> {
         run(new TaskContext());
     }
 
+
+
     /**
-     * 一个任务一个任务的执行（不使用线程）
+     * 通过任务名称查找任务是否存在
+     * @param p_TaskName
+     * @return
      */
-    public void run(TaskContext p_TaskContext)
+    public boolean hasTask(String p_TaskName)
     {
-        for (int i = 0; i < tasks.size(); i++) {
-            try {
-                tasks.get(i).run(p_TaskContext);
-            }
-            catch (Exception ex)
+        if(StringUtil.isNullOrEmpty(p_TaskName))
+        {
+            return false;
+        }
+        for(int i=0;i<this.size();i++)
+        {
+            if(p_TaskName.equals(this.get(i).getName()))
             {
-                tasks.get(i).onError(ex);
+                return true;
             }
         }
+        return false;
     }
+
+    public void cancel()
+    {
+        for(int i=0;i<this.size();i++)
+        {
+          this.get(i).cancel();
+        }
+    }
+    public void restCancel()
+    {
+        for(int i=0;i<this.size();i++)
+        {
+            this.get(i).resetCancel();
+        }
+    }
+    @Override
+    public void Dispose() {
+        this.clear();
+    }
+
 }

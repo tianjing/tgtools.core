@@ -112,7 +112,12 @@ public class WebClient implements IWebClient {
     public Map<String, String> getHead() {
         return m_Head;
     }
-
+    public void setContentType(String p_Type)
+    {
+        if(!StringUtil.isNullOrEmpty(p_Type)) {
+            getHead().put("Content-Type", p_Type);
+        }
+    }
     /**
      * 请求并返回收到的流
      * @param params 输入的参数 可以是任意字符 如常规 a=1&b=2 或json xml
@@ -251,8 +256,8 @@ public class WebClient implements IWebClient {
         try {
             byte[] data = new byte[4096];
             int count = -1;
-            while ((count = p_Stream.read(data, 0, 4096)) != -1)
-                outStream.write(data, 0, count);
+            while ((count = p_Stream.read(data, 0, 4096)) != -1){
+                outStream.write(data, 0, count);}
 
             return new String(outStream.toByteArray(), p_Encoding);
 
@@ -285,8 +290,8 @@ public class WebClient implements IWebClient {
         try {
             int count = -1;
 
-            while ((count = p_Stream.read(data, 0, 4096)) != -1)
-                outStream.write(data, 0, count);
+            while ((count = p_Stream.read(data, 0, 4096)) != -1){
+                outStream.write(data, 0, count);}
 
             data = null;
             return outStream.toByteArray();
@@ -349,6 +354,8 @@ public class WebClient implements IWebClient {
      */
     protected  String getResponseEncoding(Map<String,List<String>> m_ReponseHead)
     {
+        if(null==m_ReponseHead||m_ReponseHead.size()<1||!m_ReponseHead.containsKey("Content-Type"))
+        {return m_Encoding;}
         List<String> names= m_ReponseHead.get("Content-Type");
         for(int i=0;i<names.size();i++) {
             String name =names.get(i);
@@ -419,11 +426,14 @@ public class WebClient implements IWebClient {
             } else if ("GET".equals(m_Method.toUpperCase())) {
                 conn.connect();
             }
-            List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
-            setResponseHeader(conn.getHeaderFields());
-            if (null != cookies) {
-                m_Cookies.addAll(cookies);
+            if(null!=conn.getHeaderFields()&&conn.getHeaderFields().size()>0&&conn.getHeaderFields().containsKey("Set-Cookie")) {
+                List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
+                setResponseHeader(conn.getHeaderFields());
+                if (null != cookies) {
+                    m_Cookies.addAll(cookies);
+                }
             }
+
             return conn;
 
         } catch (Exception e) {
