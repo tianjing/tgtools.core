@@ -385,7 +385,7 @@ public class WebClient implements IWebClient {
      */
     protected void setRequestHead(URLConnection p_Conn) {
         for (Map.Entry<String, String> item : m_Head.entrySet()) {
-            p_Conn.setRequestProperty(item.getKey(), item.getValue());
+            p_Conn.setRequestProperty(item.getKey(), null==item.getValue()?"":item.getValue());
         }
         if (m_Cookies.size() > 0) {
             StringBuilder sb = new StringBuilder();
