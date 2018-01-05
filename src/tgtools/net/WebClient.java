@@ -4,6 +4,7 @@ import tgtools.exceptions.APPErrorException;
 import tgtools.util.StringUtil;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public class WebClient implements IWebClient {
     private String m_Method = "POST";
     private Map<String, String> m_Head;
     private boolean m_GZip;
-    private Map<String, List<String>> m_ResponseHeader;
+    private Map<String, List<String>> m_ResponseHeader=new HashMap<String, List<String>>();
+    private int mResponseCode;
 
 
     private List<String> m_Cookies;
@@ -38,14 +40,24 @@ public class WebClient implements IWebClient {
     public static void main(String[] args) {
         WebClient client = new WebClient();
         client.setMethod("GET");
-        client.setUrl("http://127.0.0.1:8080/EmptyProject/views/1.docx");
+        client.setUrl("http://172.17.3.106/dfd/dd.html");
         try {
-            client.doInvokeAsStream(new ByteArrayInputStream(new byte[0]));
-            System.out.println("");
+            //InputStream is= client.doInvokeAsStream(new ByteArrayInputStream(new byte[0]));
+           // String sd=StringUtil.parseInputStream(is,"UTF-8");
+            String sd = client.doInvokeAsString("");
+            System.out.println(sd);
         } catch (APPErrorException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public int getResponseCode() {
+        return mResponseCode;
+    }
+
+    public void setResponseCode(int pResponseCode) {
+        mResponseCode = pResponseCode;
     }
 
     @Override
@@ -54,9 +66,13 @@ public class WebClient implements IWebClient {
     }
 
     public void setResponseHeader(Map<String, List<String>> p_ResponseHeader) {
-        m_ResponseHeader = p_ResponseHeader;
+        m_ResponseHeader.clear();
+        m_ResponseHeader.putAll(p_ResponseHeader);
     }
-
+    public void clearResponseHeader()
+    {
+        m_ResponseHeader.clear();
+    }
     @Override
     public String getUrl() {
         return m_Url;
@@ -149,7 +165,7 @@ public class WebClient implements IWebClient {
     @Override
     public InputStream doInvokeAsStream(String params) throws APPErrorException {
         try {
-            return doInvoke(params).getInputStream();
+            return getResponseStream(doInvoke(params));
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         }
@@ -185,9 +201,9 @@ public class WebClient implements IWebClient {
             boolean isgzip = isGzip(conn.getHeaderFields());
             String encoding = getResponseEncoding(conn.getHeaderFields());
             if (isgzip) {
-                return parseGZipString(conn.getInputStream(), m_Encoding);
+                return parseGZipString(getResponseStream(conn), m_Encoding);
             }
-            return parseString(conn.getInputStream(), m_Encoding);
+            return parseString(getResponseStream(conn), m_Encoding);
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         }
@@ -219,15 +235,39 @@ public class WebClient implements IWebClient {
     @Override
     public byte[] doInvokeAsByte(String params) throws APPErrorException {
         try {
-            return parseByte(doInvoke(params).getInputStream());
+            return parseByte(getResponseStream(doInvoke(params)));
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         }
     }
+    protected InputStream getResponseStream(URLConnection pURLConnection) throws IOException {
+        sun.net.www.protocol.http.HttpURLConnection conn1=null;
+        if(pURLConnection instanceof sun.net.www.protocol.http.HttpURLConnection)
+        {
+            conn1=(sun.net.www.protocol.http.HttpURLConnection)pURLConnection;
+        }
+        if(mResponseCode== HttpURLConnection.HTTP_BAD_METHOD||mResponseCode==HttpURLConnection.HTTP_BAD_REQUEST
+                ||mResponseCode==HttpURLConnection.HTTP_NOT_FOUND||mResponseCode==HttpURLConnection.HTTP_BAD_GATEWAY||
+                mResponseCode==HttpURLConnection.HTTP_INTERNAL_ERROR)
+        {
+            if(null!=conn1)
+            {
+                return conn1.getErrorStream();
+            }
+            else
+            {
+                return pURLConnection.getInputStream();
+            }
+        }
+        else {
+            return pURLConnection.getInputStream();
+        }
 
+    }
     public InputStream doInvokeAsStream(InputStream p_Input) throws APPErrorException {
         try {
-            return doInvoke(p_Input).getInputStream();
+            URLConnection conn= doInvoke(p_Input);
+            return  getResponseStream(conn);
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         }
@@ -461,6 +501,8 @@ public class WebClient implements IWebClient {
         OutputStream out = null;
         try {
 
+            setResponseCode(0);
+            clearResponseHeader();
 
             URL realUrl = new URL(url);
 
@@ -493,7 +535,11 @@ public class WebClient implements IWebClient {
                     m_Cookies.addAll(cookies);
                 }
             }
-
+            if(conn instanceof sun.net.www.protocol.http.HttpURLConnection)
+            {
+                sun.net.www.protocol.http.HttpURLConnection conn1=( sun.net.www.protocol.http.HttpURLConnection)conn;
+                setResponseCode(conn1.getResponseCode());
+            }
             return conn;
 
         } catch (Exception e) {
