@@ -15,7 +15,11 @@ public class CacheFactory {
 	private static CacheManager m_Manager;
     public static final String TimerCache="TimerCache";
     public static final String EverCache="EverCache";
-    
+
+    public static CacheManager getCacheManager()
+	{
+		return m_Manager;
+	}
 	public static void init() {
 		URL url = CacheFactory.class.getResource("/ehcache.xml");
 

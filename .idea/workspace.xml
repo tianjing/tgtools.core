@@ -8,12 +8,12 @@
     <bookmark url="file://$PROJECT_DIR$/src/tgtools/data/DataRow.java" line="270" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="修复WebClient 的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" />
       <change beforePath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" />
       <change beforePath="$PROJECT_DIR$/src/META-INF/build.property" afterPath="$PROJECT_DIR$/src/META-INF/build.property" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/net/WebClient.java" afterPath="$PROJECT_DIR$/src/tgtools/net/WebClient.java" />
+      <change beforePath="$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java" afterPath="$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +40,21 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="CacheFactory.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="550">
+              <caret line="30" column="7" lean-forward="false" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
+              <folding>
+                <element signature="e#410#411#0" expanded="true" />
+                <element signature="e#433#434#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -53,7 +67,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>m_BufferSize</find>
       <find>SEND</find>
       <find>Run</find>
       <find>send</find>
@@ -83,6 +96,7 @@
       <find>conn.get</find>
       <find>getInput</find>
       <find>.getInputStream()</find>
+      <find>configuration</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -138,7 +152,6 @@
         <option value="$PROJECT_DIR$/src/tgtools/data/DataColumn.java" />
         <option value="$PROJECT_DIR$/src/tgtools/json/JSONObject.java" />
         <option value="$PROJECT_DIR$/src/tgtools/json/JSONArray.java" />
-        <option value="$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java" />
         <option value="$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/Cache.class" />
         <option value="$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/store/Store.class" />
         <option value="$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/store/AbstractStore.class" />
@@ -166,6 +179,7 @@
         <option value="$PROJECT_DIR$/src/tgtools/tasks/TaskRunner.java" />
         <option value="$PROJECT_DIR$/src/tgtools/util/NetHelper.java" />
         <option value="$PROJECT_DIR$/src/tgtools/net/WebClient.java" />
+        <option value="$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java" />
       </list>
     </option>
   </component>
@@ -179,8 +193,8 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="169" />
-    <option name="y" value="12" />
+    <option name="x" value="17" />
+    <option name="y" value="80" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -248,7 +262,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -272,7 +285,7 @@
               <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="tgtools" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="cache" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
@@ -340,6 +353,7 @@
       </pane>
       <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1093,14 +1107,10 @@
       <workItem from="1514940473142" duration="111000" />
       <workItem from="1514943720954" duration="18000" />
       <workItem from="1515040518290" duration="1869000" />
-      <workItem from="1515117340716" duration="2379000" />
-    </task>
-    <task id="LOCAL-00074" summary="调整tojson 字段顺序">
-      <created>1493727242714</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1493727242714</updated>
+      <workItem from="1515117340716" duration="3046000" />
+      <workItem from="1515652204891" duration="7000" />
+      <workItem from="1516177247439" duration="1924000" />
+      <workItem from="1516180519132" duration="669000" />
     </task>
     <task id="LOCAL-00075" summary="调整 Task同步属性到BaseService">
       <created>1494214227492</created>
@@ -1438,7 +1448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515041796790</updated>
     </task>
-    <option name="localTasksCounter" value="123" />
+    <task id="LOCAL-00123" summary="修复WebClient 的BUG">
+      <created>1515120269682</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1515120269682</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1474,7 +1491,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="458872000" />
+    <option name="totallyTimeSpent" value="462139000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1487,6 +1504,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1498,13 +1516,13 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32712457" sideWeight="0.49785638" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24356224" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12808146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17489271" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17703862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13572961" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27473807" sideWeight="0.48778626" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27473807" sideWeight="0.48778626" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Jindent" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2255814" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1586,7 +1604,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="json转sql 增加对NULL的支持" />
     <MESSAGE value="调整服务错误处理&#10;增加了强制打印info信息的方法 infoForce" />
     <MESSAGE value="修复json to sql  insert bug" />
     <MESSAGE value="webclient 增加方法" />
@@ -1611,7 +1628,8 @@
     <MESSAGE value="NetHelper增加获取mac地址" />
     <MESSAGE value="调整WebClient 获取responseheader问题" />
     <MESSAGE value="修复WebClient set header 的BUG" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复WebClient set header 的BUG" />
+    <MESSAGE value="修复WebClient 的BUG" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复WebClient 的BUG" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1723,6 +1741,17 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#410#411#0" expanded="true" />
+            <element signature="e#433#434#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/tgtools/net/WebClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1735,13 +1764,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2508">
           <caret line="190" column="17" lean-forward="false" selection-start-line="190" selection-start-column="17" selection-end-line="190" selection-end-column="17" />
-          <folding>
-            <marker date="1381840581724" expanded="true" signature="32942:49771" ph="{...}" />
-            <marker date="1381840581724" expanded="true" signature="49841:50377" ph="{...}" />
-            <marker date="1381840581724" expanded="false" signature="49998:50104" ph="run() → {" />
-            <marker date="1381840581724" expanded="false" signature="50221:50240" ph="}" />
-            <marker date="1381840581724" expanded="true" signature="50419:50715" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1749,7 +1771,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2926">
           <caret line="168" column="22" lean-forward="false" selection-start-line="168" selection-start-column="22" selection-end-line="168" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1757,7 +1778,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1034">
           <caret line="73" column="30" lean-forward="false" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1940,7 +1960,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2926">
           <caret line="168" column="22" lean-forward="false" selection-start-line="168" selection-start-column="22" selection-end-line="168" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1948,13 +1967,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
           <caret line="190" column="17" lean-forward="false" selection-start-line="190" selection-start-column="17" selection-end-line="190" selection-end-column="17" />
-          <folding>
-            <marker date="1381840581724" expanded="true" signature="32942:49771" ph="{...}" />
-            <marker date="1381840581724" expanded="true" signature="49841:50377" ph="{...}" />
-            <marker date="1381840581724" expanded="false" signature="49998:50104" ph="run() → {" />
-            <marker date="1381840581724" expanded="false" signature="50221:50240" ph="}" />
-            <marker date="1381840581724" expanded="true" signature="50419:50715" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1962,7 +1974,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3497">
           <caret line="776" column="28" lean-forward="false" selection-start-line="776" selection-start-column="28" selection-end-line="776" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1970,7 +1981,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1">
           <caret line="2695" column="25" lean-forward="false" selection-start-line="2695" selection-start-column="25" selection-end-line="2695" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1979,6 +1989,31 @@
         <state relative-caret-position="174">
           <caret line="262" column="50" lean-forward="false" selection-start-line="262" selection-start-column="33" selection-end-line="262" selection-end-column="50" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/config/Configuration.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="34" column="19" lean-forward="false" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/CacheManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="656" column="56" lean-forward="true" selection-start-line="656" selection-start-column="56" selection-end-line="656" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="30" column="7" lean-forward="false" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
+          <folding>
+            <element signature="e#410#411#0" expanded="true" />
+            <element signature="e#433#434#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
