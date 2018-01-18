@@ -6,6 +6,7 @@ import tgtools.data.DataRow;
 
 public abstract class Condition
 {
+
   public abstract boolean isValid(DataRow paramDataRow);
 
   public abstract String toSQL(DataParameterCollection paramDataParameterCollection);

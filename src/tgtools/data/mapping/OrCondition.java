@@ -6,6 +6,7 @@ import tgtools.data.DataRow;
 
 public class OrCondition extends CompositeCondition
 {
+  @Override
   public boolean isValid(DataRow p_row)
   {
     for (Condition condition : this.conditions)
@@ -14,7 +15,7 @@ public class OrCondition extends CompositeCondition
     }
     return this.conditions.size() == 0;
   }
-
+  @Override
   public String toSQL(DataParameterCollection p_params)
   {
     if (this.conditions.size() == 0) return "";

@@ -6,7 +6,7 @@ public class AscOrder extends Order
   {
     super(p_fieldName);
   }
-
+  @Override
   public String toSQL()
   {
     return this.fieldName + " asc";

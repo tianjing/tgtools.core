@@ -19,7 +19,7 @@ public class EqualCondition extends Condition
     this.dataType = p_dataType;
     this.fieldValue = DbTypeConverter.toCommonType(p_fieldValue, this.dataType);
   }
-
+  @Override
   public boolean isValid(DataRow p_row)
   {
     if ((this.fieldValue == null) || ((this.fieldValue instanceof DbNull)))
@@ -28,7 +28,7 @@ public class EqualCondition extends Condition
     }
     return this.fieldValue.equals(p_row.getValue(this.fieldName));
   }
-
+  @Override
   public String toSQL(DataParameterCollection p_params)
   {
     if ((this.fieldValue == null) || ((this.fieldValue instanceof DbNull)))

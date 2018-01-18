@@ -12,12 +12,12 @@ public class NotCondition extends Condition
   {
     this.innerCondition = p_condition;
   }
-
+  @Override
   public boolean isValid(DataRow p_row)
   {
     return !this.innerCondition.isValid(p_row);
   }
-
+  @Override
   public String toSQL(DataParameterCollection p_params)
   {
     String sql = this.innerCondition.toSQL(p_params);

@@ -26,14 +26,14 @@ public class LikeCondition extends Condition
     this.likeExpression = p_expression;
     this.likeExpressionPattern = null;
   }
-
+  @Override
   public boolean isValid(DataRow p_row)
   {
     Object fv = p_row.getValue(this.fieldName);
     if (fv == null) return false;
     return getLikeExpressionPattern(this.likeExpression).matcher(fv.toString()).matches();
   }
-
+  @Override
   public String toSQL(DataParameterCollection p_params)
   {
     return String.format("%1$s like '%2$s'", new Object[] { this.fieldName, this.likeExpression });

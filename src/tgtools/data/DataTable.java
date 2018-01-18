@@ -720,6 +720,7 @@ public class DataTable implements Serializable {
      * 克隆一个新的DataTable 包含列和行
      * @return
      */
+    @Override
     public DataTable clone() {
         DataTable temp = this.cloneTableStructure();
         DataRowCollection rows = this.getRows();
@@ -767,6 +768,45 @@ public class DataTable implements Serializable {
     public String toJson() {
         return toJson(true);
     }
+
+
+
+    /**
+     * 转换成json格式
+     *
+     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+     * @return
+     */
+    public JSONArray toJSONArray(boolean p_IgnoreNull, boolean p_UseLower) {
+        JSONArray array =new JSONArray();
+        for(int i=0;i<this.getRowCount();i++)
+        {
+            array.put(this.getRow(i).toJSONObject(p_IgnoreNull,p_UseLower));
+        }
+        return array;
+    }
+    /**
+     * 转换成json格式
+     *
+     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @return
+     */
+    public JSONArray toJSONArray(boolean p_IgnoreNull) {
+        return toJSONArray(p_IgnoreNull, false);
+    }
+
+    /**
+     * 转换成json格式,并忽略null 参看 toJson(true)
+     *
+     * @return
+     */
+    public JSONArray toJSONArray() {
+        return toJSONArray(true);
+    }
+
+
+
 
 
 

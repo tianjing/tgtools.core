@@ -24,8 +24,8 @@ public abstract class CompositeCondition extends Condition
   {
     return Collections.unmodifiableList(this.conditions);
   }
-
+  @Override
   public abstract boolean isValid(DataRow paramDataRow);
-
+  @Override
   public abstract String toSQL(DataParameterCollection paramDataParameterCollection);
 }

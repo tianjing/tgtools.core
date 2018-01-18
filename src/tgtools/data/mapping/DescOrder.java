@@ -9,12 +9,12 @@ public class DescOrder extends Order
   {
     super(p_fieldName);
   }
-
+  @Override
   public int compare(DataRow p_row1, DataRow p_row2)
   {
     return -super.compare(p_row1, p_row2);
   }
-
+  @Override
   public String toSQL()
   {
     return this.fieldName + " desc";
