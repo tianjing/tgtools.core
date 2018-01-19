@@ -535,9 +535,9 @@ public class WebClient implements IWebClient {
                     m_Cookies.addAll(cookies);
                 }
             }
-            if(conn instanceof sun.net.www.protocol.http.HttpURLConnection)
+            if(conn instanceof java.net.HttpURLConnection)
             {
-                sun.net.www.protocol.http.HttpURLConnection conn1=( sun.net.www.protocol.http.HttpURLConnection)conn;
+                java.net.HttpURLConnection conn1=(java.net.HttpURLConnection)conn;
                 setResponseCode(conn1.getResponseCode());
             }
             return conn;

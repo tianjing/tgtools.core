@@ -8,23 +8,12 @@
     <bookmark url="file://$PROJECT_DIR$/src/tgtools/data/DataRow.java" line="258" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="增加方法&#10;并修正 覆写注释没有的问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.javadoc.jar" />
       <change beforePath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" afterPath="$PROJECT_DIR$/build/tgtools.core.optimize.jar" />
       <change beforePath="$PROJECT_DIR$/src/META-INF/build.property" afterPath="$PROJECT_DIR$/src/META-INF/build.property" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/DataColumn.java" afterPath="$PROJECT_DIR$/src/tgtools/data/DataColumn.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/DataRow.java" afterPath="$PROJECT_DIR$/src/tgtools/data/DataRow.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/DataTable.java" afterPath="$PROJECT_DIR$/src/tgtools/data/DataTable.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/AndCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/AndCondition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/AscOrder.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/AscOrder.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/CompositeCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/CompositeCondition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/Condition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/Condition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/DescOrder.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/DescOrder.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/EqualCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/EqualCondition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/LikeCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/LikeCondition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/NotCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/NotCondition.java" />
-      <change beforePath="$PROJECT_DIR$/src/tgtools/data/mapping/OrCondition.java" afterPath="$PROJECT_DIR$/src/tgtools/data/mapping/OrCondition.java" />
+      <change beforePath="$PROJECT_DIR$/src/tgtools/net/WebClient.java" afterPath="$PROJECT_DIR$/src/tgtools/net/WebClient.java" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,7 +40,18 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375" />
+    <leaf>
+      <file leaf-file-name="WebClient.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/tgtools/net/WebClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="451">
+              <caret line="540" column="53" lean-forward="false" selection-start-line="540" selection-start-column="38" selection-end-line="540" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -64,7 +64,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Run</find>
       <find>send</find>
       <find>setTimeOut</find>
       <find>setBuffeSize</find>
@@ -94,6 +93,7 @@
       <find>.getInputStream()</find>
       <find>configuration</find>
       <find>tojson</find>
+      <find>getResponseCode</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -163,7 +163,6 @@
         <option value="$PROJECT_DIR$/src/tgtools/tasks/Task.java" />
         <option value="$PROJECT_DIR$/src/tgtools/tasks/TaskRunner.java" />
         <option value="$PROJECT_DIR$/src/tgtools/util/NetHelper.java" />
-        <option value="$PROJECT_DIR$/src/tgtools/net/WebClient.java" />
         <option value="$PROJECT_DIR$/src/tgtools/cache/CacheFactory.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/DataRow.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/DataTable.java" />
@@ -177,6 +176,7 @@
         <option value="$PROJECT_DIR$/src/tgtools/data/mapping/LikeCondition.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/mapping/NotCondition.java" />
         <option value="$PROJECT_DIR$/src/tgtools/data/mapping/OrCondition.java" />
+        <option value="$PROJECT_DIR$/src/tgtools/net/WebClient.java" />
       </list>
     </option>
   </component>
@@ -261,6 +261,7 @@
     <panes>
       <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -272,7 +273,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1030,14 +1030,8 @@
       <workItem from="1515652204891" duration="7000" />
       <workItem from="1516177247439" duration="1924000" />
       <workItem from="1516180519132" duration="703000" />
-      <workItem from="1516237039979" duration="1708000" />
-    </task>
-    <task id="LOCAL-00076" summary="更新DataTable 支持 大小写敏感">
-      <created>1494398462417</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1494398462417</updated>
+      <workItem from="1516237039979" duration="2408000" />
+      <workItem from="1516328323879" duration="360000" />
     </task>
     <task id="LOCAL-00077" summary="更新DataTable 支持 大小写敏感">
       <created>1494401366186</created>
@@ -1375,7 +1369,14 @@
       <option name="project" value="LOCAL" />
       <updated>1516181970525</updated>
     </task>
-    <option name="localTasksCounter" value="125" />
+    <task id="LOCAL-00125" summary="增加方法&#10;并修正 覆写注释没有的问题">
+      <created>1516238840646</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1516238840647</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1411,7 +1412,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="463881000" />
+    <option name="totallyTimeSpent" value="464941000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1435,7 +1436,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32712457" sideWeight="0.49785638" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25375536" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25751072" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12808146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17703862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1523,7 +1524,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="调整服务错误处理&#10;增加了强制打印info信息的方法 infoForce" />
     <MESSAGE value="修复json to sql  insert bug" />
     <MESSAGE value="webclient 增加方法" />
     <MESSAGE value="增加 udp 客户端代码" />
@@ -1548,7 +1548,8 @@
     <MESSAGE value="修复WebClient set header 的BUG" />
     <MESSAGE value="修复WebClient 的BUG" />
     <MESSAGE value="增加方法" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加方法" />
+    <MESSAGE value="增加方法&#10;并修正 覆写注释没有的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加方法&#10;并修正 覆写注释没有的问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1801,35 +1802,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/URLConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2926">
-          <caret line="168" column="22" lean-forward="false" selection-start-line="168" selection-start-column="22" selection-end-line="168" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://F:/Java/jdk1.7.0_40/jre/lib/rt.jar!/sun/net/www/protocol/http/HttpURLConnection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="190" column="17" lean-forward="false" selection-start-line="190" selection-start-column="17" selection-end-line="190" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/HttpURLConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3497">
-          <caret line="776" column="28" lean-forward="false" selection-start-line="776" selection-start-column="28" selection-end-line="776" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tgtools/net/WebClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="262" column="50" lean-forward="false" selection-start-line="262" selection-start-column="33" selection-end-line="262" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/config/Configuration.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -1848,7 +1820,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="78">
           <caret line="2657" column="47" lean-forward="false" selection-start-line="2657" selection-start-column="47" selection-end-line="2657" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1856,24 +1827,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-851">
           <caret line="5" column="35" lean-forward="false" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
-          <folding>
-            <element signature="e#410#411#0" expanded="false" />
-            <element signature="e#433#434#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tgtools/data/DataRow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="325" column="34" lean-forward="false" selection-start-line="325" selection-start-column="22" selection-end-line="325" selection-end-column="34" />
-          <folding>
-            <element signature="method#toJson#2;class#DataRow#0" expanded="false" />
-            <element signature="docComment;method#getJsonValue#0;class#DataRow#0" expanded="false" />
-            <element signature="method#getJsonValue#0;class#DataRow#0" expanded="false" />
-            <element signature="e#10428#10429#0" expanded="false" />
-            <element signature="e#10484#10485#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1881,10 +1834,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
           <caret line="784" column="76" lean-forward="false" selection-start-line="784" selection-start-column="76" selection-end-line="784" selection-end-column="76" />
-          <folding>
-            <element signature="e#24331#24332#0" expanded="false" />
-            <element signature="e#24371#24372#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1892,7 +1841,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1900,7 +1848,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1716">
           <caret line="237" column="13" lean-forward="false" selection-start-line="237" selection-start-column="13" selection-end-line="237" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1908,7 +1855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1916,7 +1862,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-631">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1924,7 +1869,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1932,7 +1876,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
           <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1940,7 +1883,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-257">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1948,7 +1890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1956,7 +1897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3865">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1964,7 +1904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="236">
           <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1972,7 +1911,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1980,7 +1918,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="28" column="11" lean-forward="false" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1988,7 +1925,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1996,7 +1932,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2004,7 +1939,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="16" column="11" lean-forward="false" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2012,7 +1946,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
           <caret line="30" column="11" lean-forward="false" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2020,7 +1953,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="517">
           <caret line="35" column="11" lean-forward="false" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2028,7 +1960,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
           <caret line="19" column="11" lean-forward="false" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2036,7 +1967,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
           <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2044,6 +1974,49 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tgtools/data/DataRow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="325" column="34" lean-forward="false" selection-start-line="325" selection-start-column="22" selection-end-line="325" selection-end-column="34" />
+          <folding>
+            <element signature="method#toJson#2;class#DataRow#0" expanded="false" />
+            <element signature="docComment;method#getJsonValue#0;class#DataRow#0" expanded="false" />
+            <element signature="method#getJsonValue#0;class#DataRow#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Java/jdk1.7.0_40/jre/lib/rt.jar!/sun/net/www/protocol/http/HttpURLConnection.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="74" column="65" lean-forward="true" selection-start-line="74" selection-start-column="39" selection-end-line="74" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/URLConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="168" column="22" lean-forward="false" selection-start-line="168" selection-start-column="22" selection-end-line="168" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/HttpURLConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="56" column="53" lean-forward="true" selection-start-line="56" selection-start-column="53" selection-end-line="56" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tgtools/net/WebClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="540" column="53" lean-forward="false" selection-start-line="540" selection-start-column="38" selection-end-line="540" selection-end-column="53" />
           <folding />
         </state>
       </provider>
