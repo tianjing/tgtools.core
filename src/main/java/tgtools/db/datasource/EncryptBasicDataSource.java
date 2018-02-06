@@ -21,7 +21,7 @@ public class EncryptBasicDataSource extends org.apache.commons.dbcp.BasicDataSou
         if(passwd.startsWith("DEC"))
         {
             try {
-                passwd=tgtools.util.EncrpytionUtil.decryptString(password.substring(3));
+                passwd= tgtools.util.EncrpytionUtil.decryptString(password.substring(3));
                 passwd= StringUtil.replace(passwd,"BINFO==","");
                 setPassword(passwd);
             } catch (APPWarningException e) {
