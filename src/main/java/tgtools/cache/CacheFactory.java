@@ -20,6 +20,12 @@ public class CacheFactory {
 	{
 		return m_Manager;
 	}
+
+	public static void  setCacheManager(CacheManager pCacheManager)
+	{
+		m_Manager=pCacheManager;
+	}
+
 	public static void init() {
 		URL url = CacheFactory.class.getResource("/ehcache.xml");
 
