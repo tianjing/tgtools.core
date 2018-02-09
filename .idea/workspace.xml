@@ -8,14 +8,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/tgtools/data/DataRow.java" line="258" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="修改编译脚本">
-      <change beforePath="$PROJECT_DIR$/.idea/ant.xml" afterPath="" />
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tgtools/cache/CacheFactory.java" afterPath="$PROJECT_DIR$/src/main/java/tgtools/cache/CacheFactory.java" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,7 +43,18 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -61,7 +67,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getSocket</find>
       <find>数据转换</find>
       <find>stop</find>
       <find>m_IsCancel</find>
@@ -91,6 +96,7 @@
       <find>System</find>
       <find>System.</find>
       <find>optimize</find>
+      <find>init</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -285,8 +291,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -294,11 +300,37 @@
               <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
               <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1073,14 +1105,12 @@
       <workItem from="1517918007371" duration="3042000" />
       <workItem from="1517921351161" duration="9000" />
       <workItem from="1517921514975" duration="22000" />
-      <workItem from="1517965586841" duration="1478000" />
-    </task>
-    <task id="LOCAL-00079" summary="添加文件">
-      <created>1494575981534</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1494575981535</updated>
+      <workItem from="1517965586841" duration="1515000" />
+      <workItem from="1517967798584" duration="162000" />
+      <workItem from="1518070113702" duration="114000" />
+      <workItem from="1518072647141" duration="266000" />
+      <workItem from="1518079203018" duration="57000" />
+      <workItem from="1518156713623" duration="295000" />
     </task>
     <task id="LOCAL-00080" summary="json 增加 tomap方法">
       <created>1494900648053</created>
@@ -1418,7 +1448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1516328966379</updated>
     </task>
-    <option name="localTasksCounter" value="128" />
+    <task id="LOCAL-00128" summary="修改编译脚本">
+      <created>1517967084429</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1517967084430</updated>
+    </task>
+    <option name="localTasksCounter" value="129" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1454,7 +1491,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="474973000" />
+    <option name="totallyTimeSpent" value="475904000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1467,6 +1504,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1477,7 +1515,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38416764" sideWeight="0.44635195" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19903433" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21244635" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1276824" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17703862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1684,27 +1722,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/SocketImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3024">
-          <caret line="43" column="22" lean-forward="false" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/URLStreamHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="52" column="22" lean-forward="false" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://F:/Java/jdk1.7.0_40/src.zip!/java/net/URL.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="1142" column="61" lean-forward="false" selection-start-line="1142" selection-start-column="53" selection-end-line="1142" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/message/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
@@ -2028,19 +2045,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="e#410#411#0" expanded="false" />
-            <element signature="e#433#434#0" expanded="false" />
-            <element signature="e#502#503#0" expanded="false" />
-            <element signature="e#532#533#0" expanded="false" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataBaseFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="107" column="30" lean-forward="true" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DBCPDataAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1332">
+          <caret line="233" column="47" lean-forward="false" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/log/LoggerFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1474">
-          <caret line="105" column="28" lean-forward="false" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+        <state relative-caret-position="110">
+          <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
           <folding />
         </state>
       </provider>
