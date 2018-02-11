@@ -37,6 +37,7 @@ public class SqlStrHelper {
 
     /**
      * sql中字段值特殊符号转义，执行sql前对sql中字段值进行转义确保sql正确执行
+     * （只对 单个'进行转换 如果出现2个就不会处理了）
      * @param p_DBType
      * @param p_ColumnValue
      * @return
@@ -47,6 +48,25 @@ public class SqlStrHelper {
         }
         else if(DataBaseFactory.DBTYPE_ORACLE.equals(p_DBType))
         {
+            p_ColumnValue = tgtools.util.RegexHelper.replace(p_ColumnValue, "''", "chr(39)");
+        }
+
+        return p_ColumnValue;
+    }
+    /**
+     * sql中字段值特殊符号转义，执行sql前对sql中字段值进行转义确保sql正确执行
+     * (对所有'处理为'')
+     * @param p_DBType
+     * @param p_ColumnValue
+     * @return
+     */
+    public static String escapeAll(String p_DBType,String p_ColumnValue) {
+        if (DataBaseFactory.DBTYPE_DM6.equals(p_DBType) || DataBaseFactory.DBTYPE_DM7.equals(p_DBType)||DataBaseFactory.DBTYPE_MYSQL.equals(p_DBType)) {
+            p_ColumnValue = tgtools.util.StringUtil.replace(p_ColumnValue, "'", "''");
+        }
+        else if(DataBaseFactory.DBTYPE_ORACLE.equals(p_DBType))
+        {
+            p_ColumnValue = tgtools.util.StringUtil.replace(p_ColumnValue, "'", "''");
             p_ColumnValue = tgtools.util.RegexHelper.replace(p_ColumnValue, "''", "chr(39)");
         }
 
@@ -63,7 +83,7 @@ public class SqlStrHelper {
     }
 
     //private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
-    private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+      private static String m_SpecialStrReg = "(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(frame|<frame|iframe|<iframe|img|<img|JavaScript|<javascript|script|<script|alert|select|update|and|or|delete|insert|trancate|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
 
     /**
      * SQL字符串替换（先转义，并验证参数是否存在特殊字符，最后字符串替换）
