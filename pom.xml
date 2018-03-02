@@ -6,7 +6,7 @@
 <!--source https://github.com/tianjing/tgtools.core.git -->
     <groupId>tgtools</groupId>
     <artifactId>tgtools.core</artifactId>
-    <version>1.0.272</version>
+    <version>1.0.273</version>
 
 
     <properties>
@@ -64,6 +64,15 @@
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
             <version>1.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <!-- 默认的版本为3.8.1，修改为4.x,因为3.x使用的为编程的方式，4.x为注解的形式。 -->
+            <version>4.12</version>
+            <!-- 表示这个依赖的作用域范围为test -->
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <repositories>

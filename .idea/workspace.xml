@@ -9,11 +9,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/test/java/tgtools/util/JsonSqlFactoryTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java" afterPath="$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" afterPath="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" />
       <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
+      <change beforePath="$PROJECT_DIR$/tgtools.core.iml" afterPath="$PROJECT_DIR$/tgtools.core.iml" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,7 +48,38 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="JsonSqlFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="484">
+              <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JsonSqlFactoryTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/tgtools/util/JsonSqlFactoryTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="4" column="24" lean-forward="false" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="75" column="21" lean-forward="false" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -59,8 +92,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>URL</find>
-      <find>getHEA</find>
       <find>getHeaderFields</find>
       <find>handlers</find>
       <find>openConnection</find>
@@ -89,6 +120,8 @@
       <find>parseInsertSql</find>
       <find>com.fasterxml.jackson.databind</find>
       <find>SqlStrHelper</find>
+      <find>ReflectUtil</find>
+      <find>junit</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -121,8 +154,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/CacheManager.class" />
-        <option value="$PROJECT_DIR$/src/tgtools/log/DefaultLoger.java" />
         <option value="$PROJECT_DIR$/src/tgtools/json/JSONObject.java" />
         <option value="$PROJECT_DIR$/src/tgtools/json/JSONArray.java" />
         <option value="$PROJECT_DIR$/lib/ehcache-2.10.1.jar!/net/sf/ehcache/Cache.class" />
@@ -171,6 +202,8 @@
         <option value="$PROJECT_DIR$/src/main/java/tgtools/util/SqlStrHelper.java" />
         <option value="$PROJECT_DIR$/src/test/java/tgtools/util/JsonSqlFactoryTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/tgtools/util/JsonParseHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
@@ -215,8 +248,8 @@
     <option name="jreName" value="1.8" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1912" />
-    <option name="y" value="-8" />
+    <option name="x" value="1942" />
+    <option name="y" value="106" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -284,6 +317,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -302,13 +338,64 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1106,14 +1193,12 @@
       <workItem from="1518167276364" duration="334000" />
       <workItem from="1518310228432" duration="1108000" />
       <workItem from="1518354673296" duration="2276000" />
-      <workItem from="1518395819237" duration="4242000" />
-    </task>
-    <task id="LOCAL-00082" summary="增加 DataRow tojson">
-      <created>1495098660713</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1495098660713</updated>
+      <workItem from="1518395819237" duration="4281000" />
+      <workItem from="1519890178387" duration="402000" />
+      <workItem from="1519890769833" duration="640000" />
+      <workItem from="1519900421879" duration="546000" />
+      <workItem from="1519955654417" duration="193000" />
+      <workItem from="1519961085595" duration="1398000" />
     </task>
     <task id="LOCAL-00083" summary="增加 DataRow tojson">
       <created>1495098690449</created>
@@ -1451,7 +1536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518311227411</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="增加json 转换 sql 功能扩展">
+      <created>1518411985458</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1518411985460</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1487,7 +1579,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="484128000" />
+    <option name="totallyTimeSpent" value="487346000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1510,7 +1602,7 @@
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38416764" sideWeight="0.44635195" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22317597" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23927039" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1276824" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17703862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1563,7 +1655,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修复 set中BUG" />
     <MESSAGE value="调整代码&#10;增加注释" />
     <MESSAGE value="修复平台加载和卸载插件不执行接口方法的问题" />
     <MESSAGE value="修复插件删除时可能出现的错误" />
@@ -1588,7 +1679,8 @@
     <MESSAGE value="修改编译脚本" />
     <MESSAGE value="修改pom" />
     <MESSAGE value="增加sql 转义 功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加sql 转义 功能" />
+    <MESSAGE value="增加json 转换 sql 功能扩展" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加json 转换 sql 功能扩展" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1696,20 +1788,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/StringUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="2657" column="47" lean-forward="false" selection-start-line="2657" selection-start-column="47" selection-end-line="2657" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/data/DataTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="784" column="76" lean-forward="false" selection-start-line="784" selection-start-column="76" selection-end-line="784" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/data/DataAccessException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -1998,7 +2076,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="590">
           <caret line="283" column="27" lean-forward="false" selection-start-line="283" selection-start-column="27" selection-end-line="283" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2013,60 +2090,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="12" column="80" lean-forward="false" selection-start-line="12" selection-start-column="80" selection-end-line="12" selection-end-column="80" />
-          <folding>
-            <marker date="1517496798578" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1517496798578" expanded="false" signature="159:302" ph="..." />
-            <marker date="1517496798578" expanded="false" signature="518:529" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="554:560" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="630:641" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="651:657" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="823:834" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="871:877" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="919:930" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="968:974" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1012:1023" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1059:1065" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1121:1132" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1175:1181" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1233:1244" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1286:1292" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1345:1356" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1398:1404" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1455:1466" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1508:1514" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1566:1577" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1619:1625" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1683:1694" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1736:1742" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1795:1806" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1848:1854" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1908:1919" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1961:1967" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2025:2036" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2078:2084" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2134:2145" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2187:2193" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2244:2255" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2297:2303" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2356:2367" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2409:2415" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2465:2476" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2518:2524" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2575:2586" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2628:2634" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2686:2697" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2739:2745" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2794:2805" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2845:2851" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="2904:2915" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2957:2963" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="3037:3107" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="3157:3168" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="3208:3214" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="3220:3238" ph="/**...*/" />
-            <marker date="1517496798578" expanded="false" signature="3302:3313" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="3363:3369" ph=" }" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2074,93 +2097,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="24" column="42" lean-forward="false" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
-          <folding>
-            <marker date="1517496798578" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1517496798578" expanded="false" signature="159:744" ph="..." />
-            <marker date="1517496798578" expanded="false" signature="929:940" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="952:958" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="993:1320" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="1359:1370" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1397:1403" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1435:1446" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1476:1482" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1505:1516" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1545:1551" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1593:1604" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1646:1652" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1687:1698" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1710:1716" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1754:1765" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1807:1813" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1855:1866" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1908:1914" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="1950:1961" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="1994:2000" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="2040:2183" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="2238:2249" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="2293:2299" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="2341:2868" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="2914:3436" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="3481:3939" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="4012:4509" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="4584:5108" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="5156:5606" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="5680:6167" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="6284:6629" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="6775:7158" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="7212:7355" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="7412:7778" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="7824:7899" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="7957:8096" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="8139:8204" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="8261:8338" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="8392:8531" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="8572:8583" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="8628:8634" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="8690:8767" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="8803:8863" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="8919:8930" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="8955:8961" ph=" }" />
-            <marker date="1517496798578" expanded="false" signature="9006:9017" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="9042:9048" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="9104:9181" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="9227:9238" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="9290:9296" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="9341:9452" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="9499:9612" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="9670:9753" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="9798:9877" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="9930:10015" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="10068:10268" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="10319:10404" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="10459:10659" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="10711:10796" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="10848:11048" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="11101:11186" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="11239:11439" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="11493:11578" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="11632:11832" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="11890:12067" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="12121:12296" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="12351:12437" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="12492:12693" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="12747:12947" ph="{...}" />
-            <marker date="1517496798578" expanded="true" signature="12988:13253" ph="{...}" />
-            <marker date="1517496798578" expanded="false" signature="13280:13291" ph=" { " />
-            <marker date="1517496798578" expanded="false" signature="13324:13330" ph=" }" />
-            <marker date="1517496798578" expanded="true" signature="13361:13954" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/tgtools/util/JsonSqlFactoryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
-          <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#682#690#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2172,18 +2108,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="133" selection-end-column="21" />
+        <state relative-caret-position="231">
+          <caret line="75" column="6" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/JsonParseHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-396">
+          <caret line="20" column="24" lean-forward="false" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1298">
+        <state relative-caret-position="484">
           <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/tgtools/util/JsonSqlFactoryTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="24" lean-forward="false" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="75" column="21" lean-forward="false" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
           <folding />
         </state>
       </provider>
