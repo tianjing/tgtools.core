@@ -8,13 +8,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/tgtools/data/DataRow.java" line="258" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="增加反射方法">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java" />
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="增加反射方法&#10;增加数据源对象">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tgtools/db/SpringDataAccess.java" afterPath="$PROJECT_DIR$/src/main/java/tgtools/db/SpringDataAccess.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" afterPath="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,10 +67,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataSourceDataAccess.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataSourceDataAccess.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1294">
+            <state relative-caret-position="-224">
               <caret line="174" column="24" lean-forward="false" selection-start-line="174" selection-start-column="24" selection-end-line="174" selection-end-column="24" />
               <folding>
                 <element signature="e#583#584#0" expanded="true" />
@@ -87,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="20" lean-forward="false" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+            <state relative-caret-position="231">
+              <caret line="149" column="31" lean-forward="false" selection-start-line="149" selection-start-column="31" selection-end-line="149" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -220,9 +216,9 @@
         <option value="$PROJECT_DIR$/src/main/java/tgtools/util/JsonSqlFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/tgtools/util/JsonParseHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/tgtools/db/SpringDataAccess.java" />
         <option value="$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -1204,14 +1200,7 @@
       <workItem from="1520059090770" duration="792000" />
       <workItem from="1520218787304" duration="125000" />
       <workItem from="1520389579505" duration="337000" />
-      <workItem from="1521086272013" duration="1676000" />
-    </task>
-    <task id="LOCAL-00086" summary="DataTableToSQL增加对 blob类型的支持">
-      <created>1495613590879</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1495613590879</updated>
+      <workItem from="1521086272013" duration="1762000" />
     </task>
     <task id="LOCAL-00087" summary="DataTableToSQL增加对 blob类型的支持">
       <created>1495698767376</created>
@@ -1549,7 +1538,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520389907458</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="增加反射方法&#10;增加数据源对象">
+      <created>1521087987654</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1521087987654</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1585,7 +1581,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="490818000" />
+    <option name="totallyTimeSpent" value="490904000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1661,7 +1657,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修复平台加载和卸载插件不执行接口方法的问题" />
     <MESSAGE value="修复插件删除时可能出现的错误" />
     <MESSAGE value="修复DataTable 不能正确获取列别名问题" />
     <MESSAGE value="解决base64 编解码问题" />
@@ -1686,7 +1681,8 @@
     <MESSAGE value="增加sql 转义 功能" />
     <MESSAGE value="增加json 转换 sql 功能扩展" />
     <MESSAGE value="增加获取jar包资源的方法" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加获取jar包资源的方法" />
+    <MESSAGE value="增加反射方法&#10;增加数据源对象" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加反射方法&#10;增加数据源对象" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2135,14 +2131,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="20" lean-forward="false" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/SpringDataAccess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -2153,7 +2141,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1294">
+        <state relative-caret-position="-224">
           <caret line="174" column="24" lean-forward="false" selection-start-line="174" selection-start-column="24" selection-end-line="174" selection-end-column="24" />
           <folding>
             <element signature="e#583#584#0" expanded="true" />
@@ -2162,6 +2150,14 @@
             <element signature="e#1532#1533#0" expanded="true" />
             <element signature="e#1558#1559#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="149" column="31" lean-forward="false" selection-start-line="149" selection-start-column="31" selection-end-line="149" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
