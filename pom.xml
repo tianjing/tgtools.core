@@ -6,7 +6,7 @@
 <!--source https://github.com/tianjing/tgtools.core.git -->
     <groupId>tgtools</groupId>
     <artifactId>tgtools.core</artifactId>
-    <version>1.0.274</version>
+    <version>1.0.275</version>
 
 
     <properties>

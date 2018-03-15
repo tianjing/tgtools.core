@@ -39,6 +39,24 @@ public class ReflectionUtil {
     }
 
     /**
+     * 通过放射查找方法
+     * @param pClass
+     * @param pMethodName
+     * @return
+     */
+    public static Method findMethod(Class pClass, String pMethodName, Class<?>... pParameterTypes) {
+        if (StringUtil.isNullOrEmpty(pMethodName)) {return null;}
+
+        try {
+            return pClass.getDeclaredMethod(pMethodName,pParameterTypes);
+        } catch (NoSuchMethodException e) {
+            if (null != pClass.getSuperclass()) {
+                return findMethod(pClass.getSuperclass(), pMethodName,pParameterTypes);
+            }
+        }
+        return null;
+    }
+    /**
      * 执行对象中的方法（反射）
      * 如：invokeMethod("get",new JSONObject(),new Class[]{String.class},new Object[]{"dd	"})
      *
