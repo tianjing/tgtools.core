@@ -8,9 +8,10 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/tgtools/data/DataRow.java" line="258" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="增加反射方法&#10;增加数据源对象">
+    <list default="true" id="37811533-39e0-4943-8109-8478920e8ad8" name="Default" comment="更新pom">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
     </list>
     <ignored path="tgtools.core.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,51 +44,12 @@
     <favorites_list name="tgtools.core" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ReflectionUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="27" />
-              <folding>
-                <element signature="method#invokeMethod#0;class#ReflectionUtil#0" expanded="false" />
-                <element signature="method#instanceSimpleClass#0;class#ReflectionUtil#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SpringDataAccess.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/SpringDataAccess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="31" lean-forward="false" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataSourceDataAccess.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-224">
-              <caret line="174" column="24" lean-forward="false" selection-start-line="174" selection-start-column="24" selection-end-line="174" selection-end-column="24" />
-              <folding>
-                <element signature="e#583#584#0" expanded="true" />
-                <element signature="e#619#620#0" expanded="true" />
-                <element signature="method#getUrl#0;class#DataSourceDataAccess#0" expanded="false" />
-                <element signature="e#1532#1533#0" expanded="true" />
-                <element signature="e#1558#1559#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="149" column="31" lean-forward="false" selection-start-line="149" selection-start-column="31" selection-end-line="149" selection-end-column="31" />
+            <state relative-caret-position="-346">
+              <caret line="184" column="20" lean-forward="true" selection-start-line="184" selection-start-column="20" selection-end-line="184" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -106,12 +68,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>openConnection</find>
-      <find>getResponseEncoding</find>
-      <find>doInvokeAsString</find>
-      <find>getAllLocalHostIP</find>
-      <find>setRequestHead</find>
-      <find>conn</find>
       <find>IllegalArgumentException</find>
       <find>setRequestProperty</find>
       <find>main</find>
@@ -136,6 +92,12 @@
       <find>DataSourceDataAccess</find>
       <find>init</find>
       <find>init(</find>
+      <find>nexus-staging-maven-plugin</find>
+      <find>activeByDefault</find>
+      <find>&gt;maven-gpg-plugin</find>
+      <find>1000</find>
+      <find>maven-release-plugin</find>
+      <find>autoReleaseAfterClose</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Works\GitHub\tgtools.core\src</dir>
@@ -247,11 +209,11 @@
       <expand>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="tgtools.core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="com.github.tianjing:tgtools.core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="tgtools.core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="com.github.tianjing:tgtools.core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
       </expand>
@@ -332,6 +294,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -360,36 +324,13 @@
             <path>
               <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
               <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
-              <item name="db" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tgtools.core" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tgtools.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tgtools" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1200,14 +1141,10 @@
       <workItem from="1520059090770" duration="792000" />
       <workItem from="1520218787304" duration="125000" />
       <workItem from="1520389579505" duration="337000" />
-      <workItem from="1521086272013" duration="1762000" />
-    </task>
-    <task id="LOCAL-00087" summary="DataTableToSQL增加对 blob类型的支持">
-      <created>1495698767376</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1495698767376</updated>
+      <workItem from="1521086272013" duration="1782000" />
+      <workItem from="1521088237145" duration="33000" />
+      <workItem from="1521088588364" duration="121000" />
+      <workItem from="1521163517534" duration="7400000" />
     </task>
     <task id="LOCAL-00088" summary="扩展sql帮助类">
       <created>1496631894427</created>
@@ -1545,7 +1482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521087987654</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="更新pom">
+      <created>1521088062186</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1521088062186</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1581,7 +1525,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="490904000" />
+    <option name="totallyTimeSpent" value="498478000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1594,17 +1538,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38416764" sideWeight="0.55364805" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20761803" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19441211" sideWeight="0.49785638" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38416764" sideWeight="0.44635195" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32363212" sideWeight="0.49785638" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4621653" sideWeight="0.44635195" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26341203" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13680257" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1276824" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17703862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1657,7 +1602,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修复插件删除时可能出现的错误" />
     <MESSAGE value="修复DataTable 不能正确获取列别名问题" />
     <MESSAGE value="解决base64 编解码问题" />
     <MESSAGE value="增加数据查询大字段方法" />
@@ -1682,7 +1626,8 @@
     <MESSAGE value="增加json 转换 sql 功能扩展" />
     <MESSAGE value="增加获取jar包资源的方法" />
     <MESSAGE value="增加反射方法&#10;增加数据源对象" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加反射方法&#10;增加数据源对象" />
+    <MESSAGE value="更新pom" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新pom" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2085,7 +2030,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1672">
           <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2100,7 +2044,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1408">
           <caret line="76" column="39" lean-forward="false" selection-start-line="76" selection-start-column="39" selection-end-line="76" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2108,18 +2051,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="386">
           <caret line="2129" column="43" lean-forward="false" selection-start-line="2129" selection-start-column="22" selection-end-line="2129" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="27" />
-          <folding>
-            <element signature="method#invokeMethod#0;class#ReflectionUtil#0" expanded="false" />
-            <element signature="method#instanceSimpleClass#0;class#ReflectionUtil#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2127,7 +2058,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3256">
+          <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+          <folding>
+            <element signature="e#583#584#0" expanded="false" />
+            <element signature="e#619#620#0" expanded="false" />
+            <element signature="method#getUrl#0;class#DataSourceDataAccess#0" expanded="false" />
+            <element signature="e#1532#1533#0" expanded="false" />
+            <element signature="e#1558#1559#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2139,24 +2083,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/db/DataSourceDataAccess.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/tgtools/util/ReflectionUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-224">
-          <caret line="174" column="24" lean-forward="false" selection-start-line="174" selection-start-column="24" selection-end-line="174" selection-end-column="24" />
+        <state relative-caret-position="0">
+          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="27" />
           <folding>
-            <element signature="e#583#584#0" expanded="true" />
-            <element signature="e#619#620#0" expanded="true" />
-            <element signature="method#getUrl#0;class#DataSourceDataAccess#0" expanded="false" />
-            <element signature="e#1532#1533#0" expanded="true" />
-            <element signature="e#1558#1559#0" expanded="true" />
+            <element signature="method#invokeMethod#0;class#ReflectionUtil#0" expanded="false" />
+            <element signature="method#instanceSimpleClass#0;class#ReflectionUtil#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="149" column="31" lean-forward="false" selection-start-line="149" selection-start-column="31" selection-end-line="149" selection-end-column="31" />
+        <state relative-caret-position="-346">
+          <caret line="184" column="20" lean-forward="true" selection-start-line="184" selection-start-column="20" selection-end-line="184" selection-end-column="20" />
           <folding />
         </state>
       </provider>
