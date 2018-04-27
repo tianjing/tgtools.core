@@ -1,37 +1,39 @@
 package tgtools.log;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
+/**
+ * slf4j 默认的logger
+ */
 public class DefaultLoger implements ILoger{
 
-	public DefaultLoger(String p_Name)
+	public DefaultLoger(String pName)
 	{
-		m_Name=p_Name;
+		m_Name=pName;
 	}
 	private String m_Name;
 	@Override
-	public void error( Object p_Message, Throwable p_Error) {
-		getLoger().error(p_Message, p_Error);
+	public void error(Object pMessage, Throwable pError) {
+		getLoger().error(MarkerFactory.getMarker("error"),"{}",pMessage, pError);
 	}
 	@Override
-	public void warn( Object p_Message) {
-		getLoger().warn(p_Message);
+	public void warn(Object pMessage) {
+		getLoger().warn("{}",pMessage);
 	}
 	@Override
-	public void warn(Object p_Message, Throwable p_Error) {
-		getLoger().info(p_Message, p_Error);
+	public void warn(Object pMessage, Throwable pError) {
+		getLoger().warn(MarkerFactory.getMarker("warn"),"{}",pMessage, pError);
 	}
+	
 	@Override
-	public void info( Object p_Message) {
-		getLoger().info(p_Message);
-	}
-	@Override
-	public void info( Object p_Message, Throwable p_Error) {
-		getLoger().info(p_Message, p_Error);
+	public void info(Object pMessage) {
+		getLoger().info("{}",pMessage);
 	}
 
 	private Logger getLoger() {
-		return Logger.getLogger(m_Name);
+		return LoggerFactory.getLogger(m_Name);
 	}
 
 }
