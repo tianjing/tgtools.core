@@ -1,5 +1,6 @@
 package tgtools.message;
 
+import tgtools.cache.CacheFactory;
 import tgtools.exceptions.APPErrorException;
 import tgtools.threads.ThreadPoolFactory;
 import tgtools.util.LogHelper;
@@ -23,8 +24,8 @@ public class MessageFactory {
     private static IMessageStore m_MessageStroe=null;
     private static boolean m_IsRun;
 
-    static{
-        m_MessageStroe = new MessageEhcacheStore();
+    public static void setMessageStroe(IMessageStore pMessageStroe) {
+        m_MessageStroe = pMessageStroe;
     }
 
     /**
@@ -42,11 +43,18 @@ public class MessageFactory {
     private static void setIsRun(boolean m_IsRun) {
         MessageFactory.m_IsRun = m_IsRun;
     }
-
     /**
      * 启动消息处理器
      */
-    public static void start() {
+    public static void start(boolean pUseCache) {
+        if(!pUseCache)
+        {
+            m_MessageStroe =new MessageLocalStore();
+        }
+        else
+        {
+            m_MessageStroe = new MessageEhcacheStore();
+        }
         m_IsRun = true;
         ThreadPoolFactory.addTask(new Runnable() {
 
@@ -55,6 +63,12 @@ public class MessageFactory {
                 processMesage();
             }
         });
+    }
+    /**
+     * 启动消息处理器
+     */
+    public static void start() {
+        start(true);
     }
     public static void stop()
     {
