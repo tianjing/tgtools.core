@@ -12,6 +12,17 @@ import java.util.Map;
 public interface IWebClient {
 
     /**
+     * 设置连接超时
+     * @param pTimeOut
+     */
+    void setConnectTimeout(int pTimeOut);
+
+    /**
+     * 设置响应超时
+     * @param pTimeOut
+     */
+    void setReadTimeout(int pTimeOut);
+    /**
      * 设置url
      * @param p_Url
      */
