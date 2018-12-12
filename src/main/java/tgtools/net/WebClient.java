@@ -28,12 +28,13 @@ public class WebClient implements IWebClient {
     private int mConnectTimeout = -1;
     private int mReadTimeout = -1;
 
+    public HashMap<String, List<HttpCookie>> getCookies() {
+        return mCookies;
+    }
 
-    private List<String> m_Cookies;
     private HashMap<String, List<HttpCookie>> mCookies;
 
     public WebClient() {
-        m_Cookies = new ArrayList<String>();
         mCookies = new HashMap<String, List<HttpCookie>>();
         m_Head = new HashMap<String, String>();
         m_Head.put("accept", "*/*");
@@ -445,27 +446,6 @@ public class WebClient implements IWebClient {
         if (sb.length() > 1) {
             p_Conn.setRequestProperty("Cookie", sb.toString());
         }
-//        if (mCookies.containsKey(domain)) {
-//            List<HttpCookie> cookies = mCookies.get(domain);
-//            StringBuilder sb = new StringBuilder();
-//            for (HttpCookie cookie : cookies) {
-//                if ("/".equals(cookie.getPath()) || path.equals(cookie.getPath())) {
-//                    sb.append(cookie.toString() + "; ");
-//                }
-//            }
-//            p_Conn.setRequestProperty("Cookie", sb.toString());
-//        } else if (mCookies.size() < 1 && m_Cookies.size() > 0) {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < m_Cookies.size(); i++) {
-//                if (i == 0) {
-//                    sb.append(m_Cookies.get(i));
-//                    continue;
-//                }
-//                sb.append("; " + m_Cookies.get(i));
-//
-//            }
-//            p_Conn.setRequestProperty("Cookie", sb.toString());
-//        }
     }
 
     /**
@@ -564,10 +544,10 @@ public class WebClient implements IWebClient {
                 conn.connect();
             }
             setResponseHeader(conn.getHeaderFields());
+            //处理 cookie
             if (null != getResponseHeader() && getResponseHeader().size() > 0 && getResponseHeader().containsKey("Set-Cookie")) {
                 List<String> cookies = getResponseHeader().get("Set-Cookie");
                 if (null != cookies) {
-                    m_Cookies.addAll(cookies);
                     for (int i = 0, size = cookies.size(); i < size; i++) {
                         String cookie = cookies.get(i);
                         URL resultUrl = conn.getURL();
@@ -593,7 +573,7 @@ public class WebClient implements IWebClient {
                 java.net.HttpURLConnection conn1 = (java.net.HttpURLConnection) conn;
                 setResponseCode(conn1.getResponseCode());
             }
-
+            //302 自动跳转
             if (302 == getResponseCode()) {
                 String urlRedirect = conn.getHeaderField("Location");
                 if (!StringUtil.isNullOrEmpty(urlRedirect)) {
