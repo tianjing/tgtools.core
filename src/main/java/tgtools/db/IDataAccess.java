@@ -113,6 +113,15 @@ public interface IDataAccess {
 	 */
 	int executeUpdate(String sql,Object[] p_Params) throws APPErrorException;
 	/**
+	 * 执行一个sql 如 update insert
+	 * @param sql (如  update table set sex=? ,name=? whwere id=? )
+	 * @p_Params (如 数组第一个值对应 sql 第一个 ? 以此类推)
+	 * @pUseSetInputStream 是否使用 setInputStream 方法处理流 有的驱动不支持
+	 * @return
+	 * @throws APPErrorException
+	 */
+	int executeUpdate(String sql,Object[] p_Params,boolean pUseSetInputStream) throws APPErrorException;
+	/**
 	 * 更新大字段
 	 * @param sql （update 之类）
 	 * @param p_Params 二进制数据

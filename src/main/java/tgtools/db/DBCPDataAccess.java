@@ -11,6 +11,7 @@ import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
 import javax.sql.DataSource;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.Properties;
@@ -283,11 +284,20 @@ public class DBCPDataAccess implements IDataAccess {
         }
     }
 
-    private void setParams(PreparedStatement p_Statement, Object[] p_Params)
+
+    protected void setParams(PreparedStatement p_Statement, Object[] p_Params, boolean pUseSetInputStream)
             throws SQLException {
         if (null != p_Params) {
             for (int i = 0; i < p_Params.length; i++) {
-                p_Statement.setObject(i + 1, p_Params[i]);
+                if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
+                    try {
+                        p_Statement.setBinaryStream(i + 1, (InputStream)p_Params[i], ((InputStream) p_Params[i]).available());
+                    } catch (Exception ex) {
+                        throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
+                    }
+                } else {
+                    p_Statement.setObject(i + 1, p_Params[i]);
+                }
             }
         }
     }
@@ -301,7 +311,7 @@ public class DBCPDataAccess implements IDataAccess {
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params);
+            setParams(statement, p_Params,false);
             rs = statement.executeQuery();
             return new DataTable(rs, sql);
         } catch (Exception e) {
@@ -323,7 +333,7 @@ public class DBCPDataAccess implements IDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params);
+                setParams(statement, p_Params,false);
                 return statement.executeUpdate();
                 // rs.close();
             }
@@ -334,6 +344,28 @@ public class DBCPDataAccess implements IDataAccess {
             close(conn);
         }
         return -1;
+    }
+
+    @Override
+    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+        Connection conn = null;
+        try {
+
+            conn = getConnection();
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                setParams(statement, p_Params,pUseSetInputStream);
+                return statement.executeUpdate();
+                // rs.close();
+            }
+
+        } catch (SQLException e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(conn);
+        }
+        return -1;
+
     }
 
     @Override

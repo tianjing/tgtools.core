@@ -142,6 +142,11 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     }
 
     @Override
+    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+        throw new APPErrorException("executeUpdate 没有实现");
+    }
+
+    @Override
     public int executeBlob(String sql, byte[] p_Params)
             throws APPErrorException {
         throw new APPErrorException("executeBlob 没有实现");

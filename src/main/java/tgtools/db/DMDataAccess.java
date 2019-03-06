@@ -8,6 +8,7 @@ import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
 import javax.sql.DataSource;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.*;
 
@@ -19,7 +20,6 @@ public class DMDataAccess implements IDataAccess {
     protected Connection m_Conn;
     protected String m_DataBaseType = "";
     private DataSource m_DataSource;
-
 
 
     protected Connection getConnection() throws APPErrorException, SQLException {
@@ -43,8 +43,7 @@ public class DMDataAccess implements IDataAccess {
                 setValue(clazz, source, "setUser", m_UserName);
                 setValue(clazz, source, "setPassword", m_Password);
                 m_DataSource = source;
-            }
-            else {
+            } else {
                 throw new APPErrorException("没有找到DmdbDataSource");
             }
         } catch (Exception e) {
@@ -64,21 +63,22 @@ public class DMDataAccess implements IDataAccess {
     }
 
     @Override
-    public void setDataBaseType(String p_DataBaseType) {
-        m_DataBaseType=p_DataBaseType;
-    }
-
-    @Override
     public String getDataBaseType() {
         if (!StringUtil.isNullOrEmpty(m_DataBaseType)) {
             return m_DataBaseType;
         }
         String url = getUrl();
         if (!StringUtil.isNullOrEmpty(url)) {
-            m_DataBaseType=url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
+            m_DataBaseType = url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
         }
         return m_DataBaseType;
     }
+
+    @Override
+    public void setDataBaseType(String p_DataBaseType) {
+        m_DataBaseType = p_DataBaseType;
+    }
+
     @Override
     public String getUrl() {
         if (null != m_DataSource) {
@@ -122,6 +122,7 @@ public class DMDataAccess implements IDataAccess {
             close(conn);
         }
     }
+
     @Override
     public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
         Connection conn = null;
@@ -131,7 +132,7 @@ public class DMDataAccess implements IDataAccess {
             conn = getConnection();
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
-            return new DataTable(rs, sql,p_BlobUseStream);
+            return new DataTable(rs, sql, p_BlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {
@@ -140,12 +141,11 @@ public class DMDataAccess implements IDataAccess {
             close(conn);
         }
     }
+
     @Override
     public DataTable Query(String sql) throws APPErrorException {
-        return Query(sql,false);
+        return Query(sql, false);
     }
-
-
 
 
     @Override
@@ -168,9 +168,9 @@ public class DMDataAccess implements IDataAccess {
             conn = getConnection();
             Statement statment = getConnection().createStatement();
 
-            for (String sql : sqls)
+            for (String sql : sqls) {
                 statment.addBatch(sql);
-
+            }
             return statment.executeBatch();
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：", e);
@@ -222,8 +222,9 @@ public class DMDataAccess implements IDataAccess {
     @Override
     public void close() {
         try {
-            if (null != m_Conn)
+            if (null != m_Conn) {
                 m_Conn.close();
+            }
         } catch (Exception e) {
         }
         m_Conn = null;
@@ -239,11 +240,19 @@ public class DMDataAccess implements IDataAccess {
         }
     }
 
-    private void setParams(PreparedStatement p_Statement, Object[] p_Params)
+    protected void setParams(PreparedStatement p_Statement, Object[] p_Params, boolean pUseSetInputStream)
             throws SQLException {
         if (null != p_Params) {
             for (int i = 0; i < p_Params.length; i++) {
-                p_Statement.setObject(i + 1, p_Params[i]);
+                if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
+                    try {
+                        p_Statement.setBinaryStream(i + 1, (InputStream)p_Params[i], ((InputStream) p_Params[i]).available());
+                    } catch (Exception ex) {
+                        throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
+                    }
+                } else {
+                    p_Statement.setObject(i + 1, p_Params[i]);
+                }
             }
         }
     }
@@ -257,7 +266,7 @@ public class DMDataAccess implements IDataAccess {
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params);
+            setParams(statement, p_Params,false);
             rs = statement.executeQuery();
             return new DataTable(rs, sql);
         } catch (Exception e) {
@@ -268,10 +277,12 @@ public class DMDataAccess implements IDataAccess {
             close(conn);
         }
     }
+
     @Override
     public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(Query(sql),p_Class,true);
+        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
     }
+
     @Override
     public int executeUpdate(String sql, Object[] p_Params)
             throws APPErrorException {
@@ -282,7 +293,29 @@ public class DMDataAccess implements IDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params);
+                setParams(statement, p_Params,false);
+                return statement.executeUpdate();
+                // rs.close();
+            }
+
+        } catch (SQLException e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(conn);
+        }
+        return -1;
+    }
+
+    @Override
+    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+        Connection conn = null;
+
+        try {
+
+            conn = getConnection();
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                setParams(statement, p_Params,false);
                 return statement.executeUpdate();
                 // rs.close();
             }

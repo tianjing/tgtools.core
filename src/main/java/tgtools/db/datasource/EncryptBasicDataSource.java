@@ -22,7 +22,7 @@ public class EncryptBasicDataSource extends org.apache.commons.dbcp.BasicDataSou
         {
             try {
                 passwd= tgtools.util.EncrpytionUtil.decryptString(password.substring(3));
-                passwd= StringUtil.replace(passwd,"BINFO==","");
+                passwd= StringUtil.replace(passwd,"TGTOOLS==","");
                 setPassword(passwd);
             } catch (APPWarningException e) {
                 LogHelper.error("","解码失败，密码："+passwd,"",e);
