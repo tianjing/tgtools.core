@@ -400,11 +400,11 @@ public class DMDataAccess implements IDataAccess {
 
     @Override
     public DataTable query(String sql) throws APPErrorException {
-        return Query(sql, false);
+        return query(sql, false);
     }
 
     @Override
     public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
+        return (T) JsonParseHelper.parseToObject(query(sql), p_Class, true);
     }
 }
