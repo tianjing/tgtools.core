@@ -68,28 +68,6 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
 
     }
 
-    @Override
-    public DataTable Query(String sql) throws APPErrorException {
-        WsDsResult result = new WsDsResult();
-        m_Client.invoke("executeQuery", new Object[]{sql}, result);
-        if (result.isSuccessful()) {
-            return result.getTable();
-        } else {
-            throw new APPErrorException("查询数据失败！原因：" + result.getResultHint());
-
-        }
-    }
-
-    @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
-        throw new APPErrorException("Query流没有实现");
-    }
-
-    @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        Object obj = JsonParseHelper.parseToObject(Query(sql), p_Class, true);
-        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
-    }
 
     @Override
     public int executeUpdate(String sql) throws APPErrorException {
@@ -129,11 +107,6 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
         throw new APPErrorException("createConnection 没有实现");
     }
 
-    @Override
-    public DataTable Query(String sql, Object[] p_Params)
-            throws APPErrorException {
-        throw new APPErrorException("Query 没有实现");
-    }
 
     @Override
     public int executeUpdate(String sql, Object[] p_Params)
@@ -160,5 +133,55 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     @Override
     public boolean executeBatchByTransaction(String[] sqls, int level) throws APPErrorException {
         throw new APPErrorException("executeBatchByTransaction 未实现");
+    }
+
+    @Override
+    public DataTable Query(String sql) throws APPErrorException {
+        return query(sql);
+    }
+
+    @Override
+    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        throw new APPErrorException("Query流没有实现");
+    }
+
+    @Override
+    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+        return query(sql, p_Class);
+    }
+
+    @Override
+    public DataTable Query(String sql, Object[] p_Params)
+            throws APPErrorException {
+        throw new APPErrorException("Query 没有实现");
+    }
+
+
+    @Override
+    public DataTable query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        throw new APPErrorException("Query 没有实现");
+    }
+
+    @Override
+    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+        throw new APPErrorException("Query 没有实现");
+    }
+
+    @Override
+    public DataTable query(String sql) throws APPErrorException {
+        WsDsResult result = new WsDsResult();
+        m_Client.invoke("executeQuery", new Object[]{sql}, result);
+        if (result.isSuccessful()) {
+            return result.getTable();
+        } else {
+            throw new APPErrorException("查询数据失败！原因：" + result.getResultHint());
+
+        }
+    }
+
+    @Override
+    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
+        Object obj = JsonParseHelper.parseToObject(Query(sql), p_Class, true);
+        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
     }
 }

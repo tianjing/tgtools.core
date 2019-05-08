@@ -152,34 +152,7 @@ public class DBCPDataAccess implements IDataAccess {
         return null;
     }
 
-    @Override
-    public DataTable Query(String sql) throws APPErrorException {
-        return Query(sql,false);
-    }
 
-    @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
-        Connection conn = null;
-        ResultSet rs = null;
-        Statement statement = null;
-        try {
-            conn = getConnection();
-            statement = conn.createStatement();
-            rs = statement.executeQuery(sql);
-            return new DataTable(rs, sql,p_BlobUseStream);
-        } catch (Exception e) {
-            throw new APPErrorException("sql执行失败：" + sql, e);
-        } finally {
-            close(rs);
-            close(statement);
-            close(conn);
-        }
-    }
-
-    @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
-    }
 
     @Override
     public int executeUpdate(String sql) throws APPErrorException {
@@ -302,26 +275,7 @@ public class DBCPDataAccess implements IDataAccess {
         }
     }
 
-    @Override
-    public DataTable Query(String sql, Object[] p_Params)
-            throws APPErrorException {
-        Connection conn = null;
-        ResultSet rs = null;
-        PreparedStatement statement = null;
-        try {
-            conn = getConnection();
-            statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params,false);
-            rs = statement.executeQuery();
-            return new DataTable(rs, sql);
-        } catch (Exception e) {
-            throw new APPErrorException("sql执行失败：" + sql, e);
-        } finally {
-            close(rs);
-            close(statement);
-            close(conn);
-        }
-    }
+
 
     @Override
     public int executeUpdate(String sql, Object[] p_Params)
@@ -430,6 +384,77 @@ public class DBCPDataAccess implements IDataAccess {
         } finally {
             close(conn);
         }
+    }
+
+
+    @Override
+    public DataTable Query(String sql, Object[] p_Params)
+            throws APPErrorException {
+        return query(sql,p_Params);
+    }
+    @Override
+    public DataTable Query(String sql) throws APPErrorException {
+        return query(sql);
+    }
+
+    @Override
+    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        return query(sql,p_BlobUseStream);
+    }
+
+    @Override
+    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+       return query(sql,p_Class);
+    }
+
+
+    @Override
+    public DataTable query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+        try {
+            conn = getConnection();
+            statement = conn.createStatement();
+            rs = statement.executeQuery(sql);
+            return new DataTable(rs, sql,p_BlobUseStream);
+        } catch (Exception e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(rs);
+            close(statement);
+            close(conn);
+        }
+    }
+
+    @Override
+    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement statement = null;
+        try {
+            conn = getConnection();
+            statement = conn.prepareStatement(sql);
+            setParams(statement, p_Params,false);
+            rs = statement.executeQuery();
+            return new DataTable(rs, sql);
+        } catch (Exception e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(rs);
+            close(statement);
+            close(conn);
+        }
+    }
+
+    @Override
+    public DataTable query(String sql) throws APPErrorException {
+        return Query(sql,false);
+    }
+
+    @Override
+    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
+        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
     }
 
 }

@@ -80,35 +80,6 @@ public class DataSourceDataAccess implements IDataAccess {
         }
     }
 
-    @Override
-    public DataTable Query(String sql) throws APPErrorException {
-        return Query(sql, false);
-    }
-
-    @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
-        Connection conn = null;
-        ResultSet rs = null;
-        Statement statement = null;
-        try {
-            conn = getConnection();
-            statement = conn.createStatement();
-            rs = statement.executeQuery(sql);
-            LogHelper.info("", sql, "SpringDataAccess.Query");
-            return new DataTable(rs, sql);
-        } catch (Exception e) {
-            throw new APPErrorException("sql执行失败：" + sql, e);
-        } finally {
-            close(rs);
-            close(statement);
-            close(conn);
-        }
-    }
-
-    @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
-    }
 
     @Override
     public int executeUpdate(String sql) throws APPErrorException {
@@ -216,7 +187,7 @@ public class DataSourceDataAccess implements IDataAccess {
             for (int i = 0; i < p_Params.length; i++) {
                 if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
                     try {
-                        p_Statement.setBinaryStream(i + 1, (InputStream)p_Params[i], ((InputStream) p_Params[i]).available());
+                        p_Statement.setBinaryStream(i + 1, (InputStream) p_Params[i], ((InputStream) p_Params[i]).available());
                     } catch (Exception ex) {
                         throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
                     }
@@ -227,27 +198,6 @@ public class DataSourceDataAccess implements IDataAccess {
         }
     }
 
-    @Override
-    public DataTable Query(String sql, Object[] p_Params)
-            throws APPErrorException {
-        Connection conn = null;
-        ResultSet rs = null;
-        PreparedStatement statement = null;
-        try {
-            conn = getConnection();
-            statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params,false);
-            rs = statement.executeQuery();
-            LogHelper.info("", sql, "SpringDataAccess.Query");
-            return new DataTable(rs, sql);
-        } catch (Exception e) {
-            throw new APPErrorException("sql执行失败：" + sql, e);
-        } finally {
-            close(rs);
-            close(statement);
-            close(conn);
-        }
-    }
 
     @Override
     public int executeUpdate(String sql, Object[] p_Params)
@@ -259,7 +209,7 @@ public class DataSourceDataAccess implements IDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params,false);
+                setParams(statement, p_Params, false);
                 return statement.executeUpdate();
                 // rs.close();
             }
@@ -281,7 +231,7 @@ public class DataSourceDataAccess implements IDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params,pUseSetInputStream);
+                setParams(statement, p_Params, pUseSetInputStream);
                 return statement.executeUpdate();
                 // rs.close();
             }
@@ -361,6 +311,80 @@ public class DataSourceDataAccess implements IDataAccess {
         } finally {
             close(conn);
         }
+    }
+
+
+    @Override
+    public DataTable Query(String sql, Object[] p_Params)
+            throws APPErrorException {
+        return query(sql, p_Params);
+    }
+
+
+    @Override
+    public DataTable Query(String sql) throws APPErrorException {
+        return query(sql);
+    }
+
+    @Override
+    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        return query(sql, p_BlobUseStream);
+    }
+
+    @Override
+    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
+        return query(sql, p_Class);
+    }
+
+    @Override
+    public DataTable query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+        try {
+            conn = getConnection();
+            statement = conn.createStatement();
+            rs = statement.executeQuery(sql);
+            LogHelper.info("", sql, "SpringDataAccess.Query");
+            return new DataTable(rs, sql);
+        } catch (Exception e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(rs);
+            close(statement);
+            close(conn);
+        }
+    }
+
+    @Override
+    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement statement = null;
+        try {
+            conn = getConnection();
+            statement = conn.prepareStatement(sql);
+            setParams(statement, p_Params, false);
+            rs = statement.executeQuery();
+            LogHelper.info("", sql, "SpringDataAccess.Query");
+            return new DataTable(rs, sql);
+        } catch (Exception e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(rs);
+            close(statement);
+            close(conn);
+        }
+    }
+
+    @Override
+    public DataTable query(String sql) throws APPErrorException {
+        return query(sql, false);
+    }
+
+    @Override
+    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
+        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
     }
 
 }
