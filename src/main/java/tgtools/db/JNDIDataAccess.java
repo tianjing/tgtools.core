@@ -21,15 +21,12 @@ import java.util.Map;
  * 时  间：22:06
  */
 public class JNDIDataAccess extends DMDataAccess {
-    private DataSource m_DataSource;
+
     private String m_JNDI;
     private String m_WeblogicUrl;
     private final static String INITIAL_CONTEXT_FACTORY="weblogic.jndi.WLInitialContextFactory";
     private Hashtable<String,String> m_Param=new Hashtable<String,String>();
-    @Override
-    public DataSource getDataSource() {
-        return m_DataSource;
-    }
+
     public JNDIDataAccess()
     {}
     public JNDIDataAccess(Hashtable<String,String > p_Param)

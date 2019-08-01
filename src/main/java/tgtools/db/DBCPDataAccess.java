@@ -16,15 +16,14 @@ import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.Properties;
 
-public class DBCPDataAccess implements IDataAccess {
+public class DBCPDataAccess extends AbstractDataAccess {
     // private static String driver = "net.sourceforge.jtds.jdbc.Driver"; // 驱动
     private static String url = ""; // URL
     private static String name = "sa"; // 用户名
     private static String password = ""; // 密码
     private static ObjectPool<?> connectionPool = null;
     private static String poolname = "";
-    private String m_DataBaseType = "";
-    private DataSource m_DataSource;
+
 
     /**
      * 连接池启动
@@ -66,40 +65,6 @@ public class DBCPDataAccess implements IDataAccess {
         }
     }
 
-    @Override
-    public String getDataBaseType() {
-        if (!StringUtil.isNullOrEmpty(m_DataBaseType)) {
-            return m_DataBaseType;
-        }
-        String url = getUrl();
-        if (!StringUtil.isNullOrEmpty(url)) {
-            m_DataBaseType = url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
-        }
-        return m_DataBaseType;
-    }
-
-    @Override
-    public void setDataBaseType(String p_DataBaseType) {
-        m_DataBaseType = p_DataBaseType;
-    }
-
-    @Override
-    public String getUrl() {
-        if (null != m_DataSource) {
-            try {
-                Method method = m_DataSource.getClass().getDeclaredMethod("getUrl", new Class[]{});
-                if (null == method) {
-                    LogHelper.info("", "无法获取getUrl方法。", "DMDataAccess.getUrl");
-                }
-                Object obj = method.invoke(m_DataSource, new Object[]{});
-                return null == obj ? StringUtil.EMPTY_STRING : obj.toString();
-            } catch (Exception e) {
-                LogHelper.error("", "获取数据库连接出错。", "DMDataAccess.getUrl", e);
-            }
-        }
-        return StringUtil.EMPTY_STRING;
-    }
-
     /**
      * 取得连接池中的连接
      *
@@ -118,11 +83,6 @@ public class DBCPDataAccess implements IDataAccess {
         } catch (Exception e) {
         }
 
-    }
-
-    @Override
-    public DataSource getDataSource() {
-        return m_DataSource;
     }
 
     @Override

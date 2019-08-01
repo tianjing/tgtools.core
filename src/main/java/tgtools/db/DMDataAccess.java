@@ -12,14 +12,13 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.*;
 
-public class DMDataAccess implements IDataAccess {
+public class DMDataAccess extends AbstractDataAccess {
     // jdbc:dm://URL:PORT/DATABASE
     protected String m_ConnStr;
     protected String m_UserName;
     protected String m_Password;
     protected Connection m_Conn;
-    protected String m_DataBaseType = "";
-    private DataSource m_DataSource;
+
 
 
     protected Connection getConnection() throws APPErrorException, SQLException {
@@ -60,45 +59,6 @@ public class DMDataAccess implements IDataAccess {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String getDataBaseType() {
-        if (!StringUtil.isNullOrEmpty(m_DataBaseType)) {
-            return m_DataBaseType;
-        }
-        String url = getUrl();
-        if (!StringUtil.isNullOrEmpty(url)) {
-            m_DataBaseType = url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
-        }
-        return m_DataBaseType;
-    }
-
-    @Override
-    public void setDataBaseType(String p_DataBaseType) {
-        m_DataBaseType = p_DataBaseType;
-    }
-
-    @Override
-    public String getUrl() {
-        if (null != m_DataSource) {
-            try {
-                Method method = m_DataSource.getClass().getDeclaredMethod("getURL", new Class[]{});
-                if (null == method) {
-                    LogHelper.info("", "无法获取getUrl方法。", "DMDataAccess.getURL");
-                }
-                Object obj = method.invoke(m_DataSource, new Object[]{});
-                return null == obj ? StringUtil.EMPTY_STRING : obj.toString();
-            } catch (Exception e) {
-                LogHelper.error("", "获取数据库连接出错。", "DMDataAccess.getUrl", e);
-            }
-        }
-        return StringUtil.EMPTY_STRING;
-    }
-
-    @Override
-    public DataSource getDataSource() {
-        return m_DataSource;
     }
 
     @Override
