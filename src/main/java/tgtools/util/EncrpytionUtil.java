@@ -219,7 +219,7 @@ public class EncrpytionUtil {
         }
     }
 
-    private static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             String passwod = encryptString("BQ_SYS123" + "BINFO==");
 
