@@ -86,6 +86,15 @@ public class WebClient implements IWebClient {
         mReadTimeout = pTimeOut;
     }
 
+    public int getConnectTimeout() {
+        return mConnectTimeout;
+    }
+
+    public int getReadTimeout() {
+        return mReadTimeout;
+    }
+
+
     /**
      * 获取字符编码
      */

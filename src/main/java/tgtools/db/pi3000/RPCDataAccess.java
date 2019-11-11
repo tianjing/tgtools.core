@@ -19,6 +19,8 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     public RPCDataAccess() {
     }
 
+
+
     public RPCDataAccess(String p_Url) {
         m_Url = p_Url;
         try {
@@ -41,6 +43,22 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
         }
 
     }
+    public int getConnectTimeout() {
+        return m_Client.getConnectTimeout();
+    }
+
+    public void setConnectTimeout(int pTimeOut) {
+        m_Client.setConnectTimeout(pTimeOut);
+    }
+
+    public int getReadTimeout() {
+        return m_Client.getReadTimeout();
+    }
+
+    public void setReadTimeout(int pTimeOut) {
+        m_Client.setReadTimeout(pTimeOut);
+    }
+
 
     @Override
     public String getDataBaseType() {
