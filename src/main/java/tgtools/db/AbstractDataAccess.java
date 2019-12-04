@@ -52,7 +52,7 @@ public abstract class AbstractDataAccess implements IDataAccess {
 
     @Override
     public DataSource getDataSource() {
-        return null;
+        return m_DataSource;
     }
 
     public void setDataSource(DataSource p_DataSource) {
