@@ -27,12 +27,8 @@ public class WebClient implements IWebClient {
     private int mResponseCode;
     private int mConnectTimeout = -1;
     private int mReadTimeout = -1;
-
-    public HashMap<String, List<HttpCookie>> getCookies() {
-        return mCookies;
-    }
-
     private HashMap<String, List<HttpCookie>> mCookies;
+    private boolean useAutoRedirect = true;
 
     public WebClient() {
         mCookies = new HashMap<String, List<HttpCookie>>();
@@ -43,6 +39,9 @@ public class WebClient implements IWebClient {
         m_Head.put("Content-Type", "text/xml; charset=utf-8");
     }
 
+    public HashMap<String, List<HttpCookie>> getCookies() {
+        return mCookies;
+    }
 
     public int getResponseCode() {
         return mResponseCode;
@@ -50,6 +49,14 @@ public class WebClient implements IWebClient {
 
     public void setResponseCode(int pResponseCode) {
         mResponseCode = pResponseCode;
+    }
+
+    public boolean getUseAutoRedirect() {
+        return useAutoRedirect;
+    }
+
+    public void setUseAutoRedirect(boolean pUseAutoRedirect) {
+        useAutoRedirect = pUseAutoRedirect;
     }
 
     @Override
@@ -76,24 +83,23 @@ public class WebClient implements IWebClient {
         m_Url = p_Url;
     }
 
+    public int getConnectTimeout() {
+        return mConnectTimeout;
+    }
+
     @Override
     public void setConnectTimeout(int pTimeOut) {
         mConnectTimeout = pTimeOut;
-    }
-
-    @Override
-    public void setReadTimeout(int pTimeOut) {
-        mReadTimeout = pTimeOut;
-    }
-
-    public int getConnectTimeout() {
-        return mConnectTimeout;
     }
 
     public int getReadTimeout() {
         return mReadTimeout;
     }
 
+    @Override
+    public void setReadTimeout(int pTimeOut) {
+        mReadTimeout = pTimeOut;
+    }
 
     /**
      * 获取字符编码
@@ -254,7 +260,7 @@ public class WebClient implements IWebClient {
         }
     }
 
-    protected InputStream getResponseStream(URLConnection pURLConnection) throws IOException {
+    public InputStream getResponseStream(URLConnection pURLConnection) throws IOException {
         sun.net.www.protocol.http.HttpURLConnection conn1 = null;
         if (pURLConnection instanceof sun.net.www.protocol.http.HttpURLConnection) {
             conn1 = (sun.net.www.protocol.http.HttpURLConnection) pURLConnection;
@@ -311,7 +317,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    protected String parseGZipString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
+    public String parseGZipString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
         GZIPInputStream gzin = null;
         try {
             gzin = new GZIPInputStream(p_Stream);
@@ -334,6 +340,14 @@ public class WebClient implements IWebClient {
         }
     }
 
+    public String parseString(URLConnection pURLConnection) throws APPErrorException {
+        try {
+            return parseString(getResponseStream(pURLConnection), m_Encoding);
+        } catch (IOException e) {
+            throw new APPErrorException("获取返回信息出错", e);
+        }
+    }
+
     /**
      * 将输入的流转换成 字符
      *
@@ -342,7 +356,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    protected String parseString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
+    public String parseString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         try {
@@ -421,7 +435,7 @@ public class WebClient implements IWebClient {
         return StringUtil.removeLast(sb.toString(), '&');
     }
 
-    protected void closeConnection(URLConnection pConn) {
+    public void closeConnection(URLConnection pConn) {
         if (null != pConn && (pConn instanceof HttpURLConnection)) {
             ((HttpURLConnection) pConn).disconnect();
         }
@@ -442,6 +456,9 @@ public class WebClient implements IWebClient {
         URL vUrl = p_Conn.getURL();
         String domain = vUrl.getHost();
         String path = vUrl.getPath().substring(0, vUrl.getPath().substring(1).indexOf("/") + 1);
+        if (StringUtil.isNullOrEmpty(path) && StringUtil.isNotEmpty(vUrl.getPath())) {
+            path = vUrl.getPath();
+        }
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<HttpCookie>> item : mCookies.entrySet()) {
             if (domain.endsWith(item.getKey())) {
@@ -493,7 +510,7 @@ public class WebClient implements IWebClient {
         return valuestr.indexOf("gzip") > -1;
     }
 
-    protected URLConnection doInvoke(String p_Param) throws APPErrorException {
+    public URLConnection doInvoke(String p_Param) throws APPErrorException {
         try {
             ByteArrayInputStream dd = new ByteArrayInputStream(p_Param.getBytes(m_Encoding));
             return doInvoke(dd);
@@ -509,7 +526,7 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    protected URLConnection doInvoke(InputStream p_Input) throws APPErrorException {
+    public URLConnection doInvoke(InputStream p_Input) throws APPErrorException {
 
         String url = m_Url;
         OutputStream out = null;
@@ -566,14 +583,7 @@ public class WebClient implements IWebClient {
                             mCookies.put(domain, new ArrayList<HttpCookie>());
                         }
                         for (HttpCookie httpCookie : httpcookies) {
-                            if (StringUtil.isNullOrEmpty(httpCookie.getDomain())) {
-                                mCookies.get(domain).add(httpCookie);
-                            } else {
-                                if (!mCookies.containsKey(httpCookie.getDomain())) {
-                                    mCookies.put(httpCookie.getDomain(), new ArrayList<HttpCookie>());
-                                }
-                                mCookies.get(httpCookie.getDomain()).add(httpCookie);
-                            }
+                            addCookie(domain, httpCookie);
                         }
                     }
                 }
@@ -583,22 +593,52 @@ public class WebClient implements IWebClient {
                 setResponseCode(conn1.getResponseCode());
             }
             //302 自动跳转
-            if (302 == getResponseCode()) {
-                String urlRedirect = conn.getHeaderField("Location");
-                if (!StringUtil.isNullOrEmpty(urlRedirect)) {
-                    String preMethod = getMethod();
-                    setMethod("GET");
-                    setUrl(urlRedirect);
-                    closeConnection(conn);
-                    conn = doInvoke(StringUtil.EMPTY_STRING);
-                    setMethod(preMethod);
-                }
+            if (useAutoRedirect && 302 == getResponseCode()) {
+                conn = doRedirect(conn);
             }
-
             return conn;
 
         } catch (Exception e) {
             throw new APPErrorException("请求出错！", e);
         }
+    }
+
+    protected void addCookie(String pDomain, HttpCookie pHttpCookie) {
+        if (StringUtil.isNullOrEmpty(pHttpCookie.getDomain())) {
+            mCookies.get(pDomain).add(pHttpCookie);
+        } else {
+            if (!mCookies.containsKey(pHttpCookie.getDomain())) {
+                mCookies.put(pHttpCookie.getDomain(), new ArrayList<HttpCookie>());
+            }
+            List<HttpCookie> vCookies = mCookies.get(pHttpCookie.getDomain());
+            if (!vCookies.contains(pHttpCookie)) {
+                mCookies.get(pHttpCookie.getDomain()).add(pHttpCookie);
+            }
+            else
+            {
+                vCookies.remove(vCookies.indexOf(pHttpCookie));
+                vCookies.add(pHttpCookie);
+            }
+        }
+    }
+
+    /**
+     * 重定向
+     *
+     * @return
+     * @throws APPErrorException
+     */
+    public URLConnection doRedirect(URLConnection pURLConnection) throws APPErrorException {
+        String urlRedirect = pURLConnection.getHeaderField("Location");
+        if (!StringUtil.isNullOrEmpty(urlRedirect)) {
+            String preMethod = getMethod();
+            setMethod("GET");
+            setUrl(urlRedirect);
+            closeConnection(pURLConnection);
+            URLConnection vURLConnection = doInvoke(StringUtil.EMPTY_STRING);
+            setMethod(preMethod);
+            return vURLConnection;
+        }
+        return null;
     }
 }
