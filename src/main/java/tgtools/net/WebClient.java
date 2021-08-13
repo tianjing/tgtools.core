@@ -613,9 +613,7 @@ public class WebClient implements IWebClient {
             List<HttpCookie> vCookies = mCookies.get(pHttpCookie.getDomain());
             if (!vCookies.contains(pHttpCookie)) {
                 mCookies.get(pHttpCookie.getDomain()).add(pHttpCookie);
-            }
-            else
-            {
+            } else {
                 vCookies.remove(vCookies.indexOf(pHttpCookie));
                 vCookies.add(pHttpCookie);
             }
