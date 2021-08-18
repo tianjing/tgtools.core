@@ -305,7 +305,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
             LogHelper.info("", sql, "SpringDataAccess.Query");
-            return new DataTable(rs, sql);
+            return new DataTable(rs, sql,p_BlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {

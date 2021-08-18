@@ -26,12 +26,43 @@ public class FileWebClient extends WebClient {
     protected static final String MIME_STREAM = "application/octet-stream";
     protected static final int CHUNK_LEN = 40960;
     protected String boundary;
+    protected boolean useAutoBuildBoundary = true;
+
+    protected String newLine = NEW_LINE;
+    protected int chunkLen = CHUNK_LEN;
 
 
-    protected static String buildBoundary() {
-        String vBoundary = GUID.newGUID().replace("-", "");
-        int vTotal = 38;
-        return StringUtil.alignRight(vBoundary, vTotal, '-');
+    protected String buildBoundary() {
+        if (getUseAutoBuildBoundary()) {
+            String vBoundary = GUID.newGUID().replace("-", "");
+            int vTotal = 38;
+            return StringUtil.alignRight(vBoundary, vTotal, '-');
+        }
+        return boundary;
+    }
+
+    public String getNewLine() {
+        return newLine;
+    }
+
+    public void setNewLine(String pNewLine) {
+        newLine = pNewLine;
+    }
+
+    public boolean getUseAutoBuildBoundary() {
+        return useAutoBuildBoundary;
+    }
+
+    public void setUseAutoBuildBoundary(boolean pUseAutoBuildBoundary) {
+        useAutoBuildBoundary = pUseAutoBuildBoundary;
+    }
+
+    public int getChunkLen() {
+        return chunkLen;
+    }
+
+    public void setChunkLen(int pChunkLen) {
+        chunkLen = pChunkLen;
     }
 
     public String getBoundary() {
@@ -61,9 +92,9 @@ public class FileWebClient extends WebClient {
             // 打开和URL之间的连接
             URLConnection conn = realUrl.openConnection();
 
-            if(conn instanceof HttpURLConnection) {
+            if (conn instanceof HttpURLConnection) {
                 ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
-                ((HttpURLConnection) conn).setChunkedStreamingMode(CHUNK_LEN);
+                ((HttpURLConnection) conn).setChunkedStreamingMode(chunkLen);
             }
             conn.setAllowUserInteraction(false);
 
@@ -163,23 +194,23 @@ public class FileWebClient extends WebClient {
 
                 String vContent = "";
                 vContent += vBoundary;
-                vContent += NEW_LINE;
+                vContent += getNewLine();
                 vContent += vContentDisposition;
-                vContent += NEW_LINE + NEW_LINE;
+                vContent += getNewLine() + getNewLine();
                 ;
                 vContent += vContentType;
-                vContent += NEW_LINE;
+                vContent += getNewLine();
 
 
                 pOutputStream.write(vContent.getBytes(getEncoding()));
 
                 InputStream vInputStream = vFileParam.getFileData();
-                byte[] vData = new byte[CHUNK_LEN];
+                byte[] vData = new byte[chunkLen];
                 int length = -1;
                 while ((length = vInputStream.read(vData)) > 0) {
                     pOutputStream.write(vData, 0, length);
                 }
-                pOutputStream.write(NEW_LINE.getBytes(getEncoding()));
+                pOutputStream.write(getNewLine().getBytes(getEncoding()));
             }
         } catch (Exception e) {
             throw new APPErrorException("写入参数信息出错！" + e, e);
@@ -196,11 +227,11 @@ public class FileWebClient extends WebClient {
 
                 String vContent = "";
                 vContent += vBoundary;
-                vContent += NEW_LINE;
+                vContent += getNewLine();
                 vContent += vContentDisposition;
-                vContent += NEW_LINE + NEW_LINE;
+                vContent += getNewLine() + getNewLine();
                 vContent += vItem.getValue();
-                vContent += NEW_LINE;
+                vContent += getNewLine();
 
                 pOutputStream.write(vContent.getBytes(getEncoding()));
             }
@@ -213,7 +244,7 @@ public class FileWebClient extends WebClient {
     protected void writeEnd(OutputStream pOutputStream) throws APPErrorException {
         try {
 
-            String vEndString = "--" + getBoundary() + "--" + NEW_LINE;
+            String vEndString = "--" + getBoundary() + "--" + getNewLine();
             pOutputStream.write(vEndString.getBytes(getEncoding()));
             pOutputStream.close();
 
