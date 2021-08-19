@@ -70,7 +70,7 @@ public class JsonParseHelper {
      * @param p_IsReal
      * @return
      */
-    private static ObjectMapper getMapper(boolean p_IsReal) {
+    public static ObjectMapper getMapper(boolean p_IsReal) {
         if (p_IsReal) {
             return m_realMapper;
         }
