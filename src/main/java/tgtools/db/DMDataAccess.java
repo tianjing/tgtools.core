@@ -100,9 +100,10 @@ public class DMDataAccess extends AbstractDataAccess {
     @Override
     public int[] executeBatch(String[] sqls) throws APPErrorException {
         Connection conn = null;
+        Statement statment =null;
         try {
             conn = getConnection();
-            Statement statment = getConnection().createStatement();
+            statment = conn.createStatement();
 
             for (String sql : sqls) {
                 statment.addBatch(sql);
@@ -111,6 +112,7 @@ public class DMDataAccess extends AbstractDataAccess {
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：", e);
         } finally {
+            closeBatch(statment);
             close(conn);
         }
     }
@@ -128,7 +130,7 @@ public class DMDataAccess extends AbstractDataAccess {
         return true;
     }
 
-    private void close(Statement p_Statement) {
+    protected void close(Statement p_Statement) {
         try {
             if (null != p_Statement)
                 p_Statement.close();
@@ -137,7 +139,7 @@ public class DMDataAccess extends AbstractDataAccess {
         p_Statement = null;
     }
 
-    private void close(ResultSet p_Result) {
+    protected void close(ResultSet p_Result) {
         try {
             if (null != p_Result)
                 p_Result.close();
@@ -146,7 +148,7 @@ public class DMDataAccess extends AbstractDataAccess {
         p_Result = null;
     }
 
-    private void close(Connection p_Conn) {
+    protected void close(Connection p_Conn) {
         try {
             if (null != p_Conn)
                 p_Conn.close();
@@ -154,7 +156,16 @@ public class DMDataAccess extends AbstractDataAccess {
         }
         p_Conn = null;
     }
-
+    protected void closeBatch(Statement p_Statement) {
+        try {
+            if (null != p_Statement) {
+                p_Statement.clearBatch();
+                p_Statement.close();
+            }
+        } catch (Exception e) {
+        }
+        p_Statement = null;
+    }
     @Override
     public void close() {
         try {

@@ -5,12 +5,10 @@ import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 import tgtools.util.JsonParseHelper;
 import tgtools.util.LogHelper;
-import tgtools.util.ReflectionUtil;
 import tgtools.util.StringUtil;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.sql.*;
 
 /**
@@ -56,9 +54,10 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     @Override
     public int[] executeBatch(String[] sqls) throws APPErrorException {
         Connection conn = null;
+        Statement statment = null;
         try {
             conn = getConnection();
-            Statement statment = getConnection().createStatement();
+            statment = conn.createStatement();
 
             for (String sql : sqls) {
                 if (!StringUtil.isNullOrEmpty(sql)) {
@@ -68,17 +67,32 @@ public class DataSourceDataAccess extends AbstractDataAccess {
 
             return statment.executeBatch();
         } catch (Exception e) {
-            throw new APPErrorException("sql执行失败：", e);
+            throw new APPErrorException("sql执行失败 executeBatch：", e);
         } finally {
-            close(conn);
+            try {
+                if (null != statment) {
+                    statment.clearBatch();
+                    statment.close();
+                }
+            } catch (Exception e) {
+            }
+            statment = null;
+
+            try {
+                if (null != conn && !conn.isClosed()) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+            }
+            conn = null;
         }
     }
 
-    private Connection getConnection() throws APPErrorException, SQLException {
+    protected Connection getConnection() throws APPErrorException, SQLException {
         return m_DataSource.getConnection();
     }
 
-    private void close(Statement p_Statement) {
+    protected void close(Statement p_Statement) {
         try {
             if (null != p_Statement) {
                 p_Statement.close();
@@ -88,16 +102,28 @@ public class DataSourceDataAccess extends AbstractDataAccess {
         p_Statement = null;
     }
 
-    private void close(ResultSet p_Result) {
+    protected void closeBatch(Statement p_Statement) {
         try {
-            if (null != p_Result)
+            if (null != p_Statement) {
+                p_Statement.clearBatch();
+                p_Statement.close();
+            }
+        } catch (Exception e) {
+        }
+        p_Statement = null;
+    }
+
+    protected void close(ResultSet p_Result) {
+        try {
+            if (null != p_Result) {
                 p_Result.close();
+            }
         } catch (Exception e) {
         }
         p_Result = null;
     }
 
-    private void close(Connection p_Conn) {
+    protected void close(Connection p_Conn) {
         try {
             if (null != p_Conn) {
                 p_Conn.close();
@@ -243,20 +269,21 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     @Override
     public boolean executeBatchByTransaction(String[] sqls, int level) throws APPErrorException {
         Connection conn = null;
+        Statement statement = null;
         try {
             conn = getConnection();
             conn.setAutoCommit(false);
             if (level > -1) {
                 conn.setTransactionIsolation(level);
             }
-            Statement statment = conn.createStatement();
+            statement = conn.createStatement();
 
-            for (String sql : sqls)
+            for (String sql : sqls) {
                 if (!StringUtil.isNullOrEmpty(sql)) {
-                    statment.addBatch(sql);
+                    statement.addBatch(sql);
                 }
-
-            statment.executeBatch();
+            }
+            statement.executeBatch();
             conn.commit();
             return true;
         } catch (Exception e) {
@@ -268,6 +295,15 @@ public class DataSourceDataAccess extends AbstractDataAccess {
             LogHelper.error("", "事物批量执行失败", "SpringDataAccess.executeBatchByTransaction", e);
             return false;
         } finally {
+            try {
+                if (null != statement) {
+                    statement.clearBatch();
+                    statement.close();
+                }
+            } catch (Exception e) {
+            }
+            statement = null;
+
             close(conn);
         }
     }
@@ -305,7 +341,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
             LogHelper.info("", sql, "SpringDataAccess.Query");
-            return new DataTable(rs, sql,p_BlobUseStream);
+            return new DataTable(rs, sql, p_BlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {

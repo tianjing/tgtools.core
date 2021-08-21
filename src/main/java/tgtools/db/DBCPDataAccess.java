@@ -137,19 +137,21 @@ public class DBCPDataAccess extends AbstractDataAccess {
 
     @Override
     public int[] executeBatch(String[] sqls) throws APPErrorException {
-        // TODO Auto-generated method stub
         Connection conn = null;
+        Statement statment = null;
+
         try {
             conn = getConnection();
-            Statement statment = getConnection().createStatement();
+            statment = conn.createStatement();
 
-            for (String sql : sqls)
+            for (String sql : sqls) {
                 statment.addBatch(sql);
-
+            }
             return statment.executeBatch();
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：", e);
         } finally {
+            closeBatch(statment);
             close(conn);
         }
 
@@ -188,8 +190,17 @@ public class DBCPDataAccess extends AbstractDataAccess {
     public void close() {
         ShutdownPool();
     }
-
-    private void close(ResultSet p_Result) {
+    protected void closeBatch(Statement p_Statement) {
+        try {
+            if (null != p_Statement) {
+                p_Statement.clearBatch();
+                p_Statement.close();
+            }
+        } catch (Exception e) {
+        }
+        p_Statement = null;
+    }
+    protected void close(ResultSet p_Result) {
         try {
             if (null != p_Result)
                 p_Result.close();
@@ -198,7 +209,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
         p_Result = null;
     }
 
-    private void close(Statement p_Statement) {
+    protected void close(Statement p_Statement) {
         try {
             if (null != p_Statement)
                 p_Statement.close();
