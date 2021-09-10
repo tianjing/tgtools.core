@@ -14,7 +14,8 @@ public class DataBaseFactoryTest {
 
     @Test
     public void main() throws APPErrorException {
-        String str1[] = {"jdbc:dm://192.168.88.128:5235", "SYSDBA", "SYSDBA"};
+        //String str1[] = {"jdbc:dm://192.168.88.128:5235", "SYSDBA", "SYSDBA"};
+        String str1[] = {"jdbc:dm://192.168.1.237:6101", "SYSDBA", "SYSDBA"};
         MyDBCPDataAccess oms=new MyDBCPDataAccess();
         oms.init(str1);
 
@@ -22,10 +23,13 @@ public class DataBaseFactoryTest {
         ems.init(str1);
         DataBaseFactory.add("DATAACCESS_OMS_DATA", oms);
         DataBaseFactory.add("DATAACCESS_EMS_DATA", ems);
-        DataTable table1 = DataBaseFactory.get("DATAACCESS_OMS_DATA").query("select * from TABLE_2");
+        DataTable table1 = DataBaseFactory.get("DATAACCESS_OMS_DATA").query("select * from WCPT_BUSINESS.BUSINESS_DD_TXL_DC_USER");
         System.out.println(table1.toJson());
         DataTable table2 = DataBaseFactory.get("DATAACCESS_EMS_DATA").query("select * from TABLE_2");
         System.out.println(table2.toJson());
+
+
+
     }
 
 

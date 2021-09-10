@@ -1,5 +1,6 @@
 package tgtools.data;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import tgtools.json.JSONObject;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
@@ -215,7 +216,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      * 转换成json格式
      *
      * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
-     *
      * @return
      */
     public String toJson(boolean p_IgnoreNull) {
@@ -227,7 +227,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      *
      * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
      * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
-     *
      * @return
      */
     public String toJson(boolean p_IgnoreNull, boolean p_UseLower) {
@@ -270,7 +269,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      * @param p_Value
      * @param p_ValueType
      * @param p_IgnoreNull
-     *
      * @return
      */
     private String getJsonValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
@@ -308,7 +306,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      * 转换成JSONObject格式
      *
      * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
-     *
      * @return
      */
     public JSONObject toJSONObject(boolean p_IgnoreNull) {
@@ -320,7 +317,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      *
      * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
      * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
-     *
      * @return
      */
     public JSONObject toJSONObject(boolean p_IgnoreNull, boolean p_UseLower) {
@@ -355,7 +351,6 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
      * @param p_Value
      * @param p_ValueType
      * @param p_IgnoreNull
-     *
      * @return
      */
     private Object getJSONObjectValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
@@ -375,8 +370,57 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
 
             default:
                 return p_Value;
-
         }
+    }
+
+
+
+    /**
+     * 转换成json格式,并忽略null 参看 toJson(true)
+     *
+     * @return
+     */
+    public ObjectNode toObjectNode() {
+        return toObjectNode(true);
+    }
+
+    /**
+     * 转换成JSONObject格式
+     *
+     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @return
+     */
+    public ObjectNode toObjectNode(boolean p_IgnoreNull) {
+        return toObjectNode(p_IgnoreNull, false);
+    }
+    /**
+     * 转换成json格式
+     *
+     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+     * @return
+     */
+    public ObjectNode toObjectNode(boolean p_IgnoreNull, boolean p_UseLower) {
+        ObjectNode json = tgtools.util.JsonParseHelper.createObjectNode();
+        int ide = 0;
+        for (int j = 0; j < this.getTable().getColumns().size(); j++) {
+            DataColumn column = this.getTable().getColumn(j);
+            int datatype = column.getColumnType();
+            if (datatype == java.sql.Types.BLOB) {
+                continue;
+            }
+            String name = this.getTable().getColumnName(column.getColumnName());
+            Object value = this.getValue(column.getColumnName());
+            try {
+                if (p_UseLower) {
+                    name = name.toLowerCase();
+                }
+                json.putPOJO(name, getJSONObjectValue(value, datatype, p_IgnoreNull));
+            } catch (Exception e) {
+                LogHelper.error("", "第" + String.valueOf(this.getTable().indexOfRow(this)) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！", "table.tojson", e);
+            }
+        }
+        return json;
     }
 
 
