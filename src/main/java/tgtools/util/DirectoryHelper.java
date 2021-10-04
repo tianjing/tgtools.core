@@ -24,14 +24,17 @@ public class DirectoryHelper {
 
 	/**
 	 * 获取类所在目录(如果是jar 则返回jar所在目录)
-	 * @param p_Class
+	 * @param pClass
 	 */
-	public static String getClassDirectory(Class<?> p_Class) {
-		String path = p_Class.getResource("").toString();
+	public static String getClassDirectory(Class<?> pClass) {
+		String path = pClass.getResource("").toString();
 		path=StringUtil.replace(path,"\\","/");
-		if (path.indexOf("file:/") >= 0) {//windows
+		//windows
+		if (path.indexOf("file:/") >= 0) {
 			path = "/" + path.substring(path.indexOf("file:/") + 6);
-		} else {//linux
+		}
+		//linux
+		else {
 			path = path.substring(path.indexOf(":") + 1);
 		}
 

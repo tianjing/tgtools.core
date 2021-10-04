@@ -2,7 +2,9 @@ package tgtools.xml;
 
 import tgtools.exceptions.APPErrorException;
 
-
+/**
+ * @author tianjing
+ */
 public class XMLStreamException extends APPErrorException {
     /**
 	 * 

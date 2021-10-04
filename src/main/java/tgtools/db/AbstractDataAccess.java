@@ -7,41 +7,44 @@ import tgtools.util.StringUtil;
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
 
+/**
+ *
+ * @author tianjing
+ */
 public abstract class AbstractDataAccess implements IDataAccess {
-    protected DataSource m_DataSource;
-    protected String m_DataBaseType = "";
+    protected DataSource dataSource;
+    protected String dataBaseType = "";
 
     @Override
     public String getDataBaseType() {
-        if (!StringUtil.isNullOrEmpty(m_DataBaseType)) {
-            return m_DataBaseType;
+        if (!StringUtil.isNullOrEmpty(dataBaseType)) {
+            return dataBaseType;
         }
         String url = getUrl();
         if (!StringUtil.isNullOrEmpty(url)) {
-            m_DataBaseType = url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
+            dataBaseType = url.substring(url.indexOf("jdbc:") + 5, url.indexOf(":", url.indexOf("jdbc:") + 5));
         }
-        return m_DataBaseType;
+        return dataBaseType;
     }
 
     @Override
-    public void setDataBaseType(String p_DataBaseType) {
-
-        m_DataBaseType = p_DataBaseType;
+    public void setDataBaseType(String pDataBaseType) {
+        dataBaseType = pDataBaseType;
     }
 
     @Override
     public String getUrl() {
-        if (null != m_DataSource) {
+        if (null != dataSource) {
             try {
-                Method method = ReflectionUtil.findMethod(m_DataSource.getClass(), "getUrl", new Class[]{});
+                Method method = ReflectionUtil.findMethod(dataSource.getClass(), "getUrl", new Class[]{});
                 if (null == method) {
                     LogHelper.info(getClass().getName(), "无法获取getUrl方法。开始尝试getJdbcUrl", "getUrl");
-                    method = ReflectionUtil.findMethod(m_DataSource.getClass(), "getJdbcUrl", new Class[]{});
+                    method = ReflectionUtil.findMethod(dataSource.getClass(), "getJdbcUrl", new Class[]{});
                     if (null == method) {
                         LogHelper.info(getClass().getName(), "无法获取getJdbcUrl方法。", "getUrl");
                     }
                 }
-                Object obj = method.invoke(m_DataSource, new Object[]{});
+                Object obj = method.invoke(dataSource, new Object[]{});
                 return null == obj ? StringUtil.EMPTY_STRING : obj.toString();
             } catch (Exception e) {
                 LogHelper.error(getClass().getName(), "获取数据库连接出错。", "getUrl", e);
@@ -52,11 +55,11 @@ public abstract class AbstractDataAccess implements IDataAccess {
 
     @Override
     public DataSource getDataSource() {
-        return m_DataSource;
+        return dataSource;
     }
 
-    public void setDataSource(DataSource p_DataSource) {
-        m_DataSource = p_DataSource;
+    public void setDataSource(DataSource pDataSource) {
+        dataSource = pDataSource;
     }
 
 

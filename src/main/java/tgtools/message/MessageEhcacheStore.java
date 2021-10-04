@@ -14,59 +14,59 @@ import java.util.List;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：11:31
  */
 public class MessageEhcacheStore implements IMessageStore {
-    private List<String> m_Keys = new ArrayList<String>();
-    private Cache m_Cache = null;
+    private List<String> keys = new ArrayList<String>();
+    private Cache cache = null;
     public MessageEhcacheStore() {
         if (null == CacheFactory.get("MessageCache")) {
             Cache cache = new Cache("MessageCache", 100000, false, true, 0, 0);
             CacheFactory.create(cache);
         }
-        m_Cache = CacheFactory.get("MessageCache");
-        m_Cache.getCacheEventNotificationService().registerListener(new MyCacheEventListener(m_Keys));
+        cache = CacheFactory.get("MessageCache");
+        cache.getCacheEventNotificationService().registerListener(new MyCacheEventListener(keys));
     }
 
     @Override
-    public void addMessage(Message p_Message) throws APPErrorException {
-        if (null == m_Cache) {
+    public void addMessage(Message pMessage) throws APPErrorException {
+        if (null == cache) {
             throw new APPErrorException("无效的消息缓存");
         }
         String key = GUID.newGUID();
-        m_Keys.add(key);
-        m_Cache.put(new Element(key, p_Message));
+        keys.add(key);
+        cache.put(new Element(key, pMessage));
     }
 
     @Override
     public Message getMessage() throws APPErrorException {
-        if (null == m_Cache) {
+        if (null == cache) {
             throw new APPErrorException("无效的消息缓存");
         }
-        if (m_Keys.size() < 1) {
+        if (keys.size() < 1) {
             return null;
         }
 
-        String key = m_Keys.get(0);
-        Message message = null == m_Cache.get(key) ? null : (Message) m_Cache.get(key).getObjectValue();
+        String key = keys.get(0);
+        Message message = null == cache.get(key) ? null : (Message) cache.get(key).getObjectValue();
         removeMessage(key);
         return message;
 
     }
 
-    private void removeMessage(String p_Key) {
-        m_Keys.remove(p_Key);
-        m_Cache.remove(p_Key);
+    private void removeMessage(String pKey) {
+        keys.remove(pKey);
+        cache.remove(pKey);
     }
 
     private static class MyCacheEventListener implements CacheEventListener
     {
-        private List<String> m_Keys;
-        MyCacheEventListener(List<String> p_Keys)
+        private List<String> keys;
+        MyCacheEventListener(List<String> pKeys)
         {
-            m_Keys=p_Keys;
+            keys=pKeys;
         }
 
         @Override
@@ -75,8 +75,9 @@ public class MessageEhcacheStore implements IMessageStore {
 
         @Override
         public void notifyElementPut(Ehcache ehcache, Element element) throws CacheException {
-            if(null!=element.getObjectKey())
-                m_Keys.add(element.getObjectKey().toString());
+            if(null!=element.getObjectKey()) {
+                keys.add(element.getObjectKey().toString());
+            }
         }
 
         @Override

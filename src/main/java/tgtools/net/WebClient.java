@@ -15,40 +15,40 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Created by tian_ on 2016-06-25.
+ * @author tianjing
  */
 public class WebClient implements IWebClient {
-    private String m_Url;
-    private String m_Encoding = "UTF-8";
-    private String m_Method = "POST";
-    private Map<String, String> m_Head;
-    private boolean m_GZip;
-    private Map<String, List<String>> m_ResponseHeader = new HashMap<String, List<String>>();
-    private int mResponseCode;
-    private int mConnectTimeout = -1;
-    private int mReadTimeout = -1;
-    private HashMap<String, List<HttpCookie>> mCookies;
+    private String url;
+    private String encoding = "UTF-8";
+    private String method = "POST";
+    private Map<String, String> head;
+    private boolean gZip;
+    private Map<String, List<String>> responseHeader = new HashMap<String, List<String>>();
+    private int responseCode;
+    private int connectTimeout = -1;
+    private int readTimeout = -1;
+    private HashMap<String, List<HttpCookie>> cookies;
     private boolean useAutoRedirect = true;
 
     public WebClient() {
-        mCookies = new HashMap<String, List<HttpCookie>>();
-        m_Head = new HashMap<String, String>();
-        m_Head.put("accept", "*/*");
-        m_Head.put("connection", "Keep-Alive");
-        m_Head.put("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko");
-        m_Head.put("Content-Type", "text/xml; charset=utf-8");
+        cookies = new HashMap<String, List<HttpCookie>>();
+        head = new HashMap<String, String>();
+        head.put("accept", "*/*");
+        head.put("connection", "Keep-Alive");
+        head.put("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko");
+        head.put("Content-Type", "text/xml; charset=utf-8");
     }
 
     public HashMap<String, List<HttpCookie>> getCookies() {
-        return mCookies;
+        return cookies;
     }
 
     public int getResponseCode() {
-        return mResponseCode;
+        return responseCode;
     }
 
     public void setResponseCode(int pResponseCode) {
-        mResponseCode = pResponseCode;
+        responseCode = pResponseCode;
     }
 
     public boolean getUseAutoRedirect() {
@@ -61,44 +61,44 @@ public class WebClient implements IWebClient {
 
     @Override
     public Map<String, List<String>> getResponseHeader() {
-        return m_ResponseHeader;
+        return responseHeader;
     }
 
-    public void setResponseHeader(Map<String, List<String>> p_ResponseHeader) {
-        m_ResponseHeader.clear();
-        m_ResponseHeader.putAll(p_ResponseHeader);
+    public void setResponseHeader(Map<String, List<String>> pResponseHeader) {
+        responseHeader.clear();
+        responseHeader.putAll(pResponseHeader);
     }
 
     public void clearResponseHeader() {
-        m_ResponseHeader.clear();
+        responseHeader.clear();
     }
 
     @Override
     public String getUrl() {
-        return m_Url;
+        return url;
     }
 
     @Override
-    public void setUrl(String p_Url) {
-        m_Url = p_Url;
+    public void setUrl(String pUrl) {
+        url = pUrl;
     }
 
     public int getConnectTimeout() {
-        return mConnectTimeout;
+        return connectTimeout;
     }
 
     @Override
     public void setConnectTimeout(int pTimeOut) {
-        mConnectTimeout = pTimeOut;
+        connectTimeout = pTimeOut;
     }
 
     public int getReadTimeout() {
-        return mReadTimeout;
+        return readTimeout;
     }
 
     @Override
     public void setReadTimeout(int pTimeOut) {
-        mReadTimeout = pTimeOut;
+        readTimeout = pTimeOut;
     }
 
     /**
@@ -106,68 +106,68 @@ public class WebClient implements IWebClient {
      */
     @Override
     public String getEncoding() {
-        return m_Encoding;
+        return encoding;
     }
 
     /**
      * 设置字符编码
      *
-     * @param p_Encoding
+     * @param pEncoding
      */
     @Override
-    public void setEncoding(String p_Encoding) {
-        m_Encoding = p_Encoding;
+    public void setEncoding(String pEncoding) {
+        encoding = pEncoding;
     }
 
     @Override
     public String getMethod() {
-        return m_Method;
+        return method;
     }
 
     /**
      * 设置HTTP 方法 如 ：GET,POST
      *
-     * @param p_Method
+     * @param pMethod
      */
     @Override
-    public void setMethod(String p_Method) {
-        m_Method = p_Method;
+    public void setMethod(String pMethod) {
+        method = pMethod;
     }
 
     @Override
     public boolean getGZip() {
-        return m_GZip;
+        return gZip;
     }
 
     /**
      * 设置是否使用gzip 压缩（注：只适用POST）
      *
-     * @param p_GZip
+     * @param pGZip
      */
     @Override
-    public void setGZip(boolean p_GZip) {
-        m_GZip = p_GZip;
+    public void setGZip(boolean pGZip) {
+        gZip = pGZip;
     }
 
     /**
      * 增加head
      *
-     * @param p_Name
-     * @param p_Value
+     * @param pName
+     * @param pValue
      */
     @Override
-    public void addHead(String p_Name, String p_Value) {
-        m_Head.put(p_Name, p_Value);
+    public void addHead(String pName, String pValue) {
+        head.put(pName, pValue);
     }
 
     @Override
     public Map<String, String> getHead() {
-        return m_Head;
+        return head;
     }
 
-    public void setContentType(String p_Type) {
-        if (!StringUtil.isNullOrEmpty(p_Type)) {
-            getHead().put("Content-Type", p_Type);
+    public void setContentType(String pType) {
+        if (!StringUtil.isNullOrEmpty(pType)) {
+            getHead().put("Content-Type", pType);
         }
     }
 
@@ -218,9 +218,9 @@ public class WebClient implements IWebClient {
             boolean isgzip = isGzip(conn.getHeaderFields());
             String encoding = getResponseEncoding(conn.getHeaderFields());
             if (isgzip) {
-                return parseGZipString(getResponseStream(conn), m_Encoding);
+                return parseGZipString(getResponseStream(conn), encoding);
             }
-            return parseString(getResponseStream(conn), m_Encoding);
+            return parseString(getResponseStream(conn), encoding);
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         } finally {
@@ -260,29 +260,29 @@ public class WebClient implements IWebClient {
         }
     }
 
-    public InputStream getResponseStream(URLConnection pURLConnection) throws IOException {
+    public InputStream getResponseStream(URLConnection pUrlConnection) throws IOException {
         sun.net.www.protocol.http.HttpURLConnection conn1 = null;
-        if (pURLConnection instanceof sun.net.www.protocol.http.HttpURLConnection) {
-            conn1 = (sun.net.www.protocol.http.HttpURLConnection) pURLConnection;
+        if (pUrlConnection instanceof sun.net.www.protocol.http.HttpURLConnection) {
+            conn1 = (sun.net.www.protocol.http.HttpURLConnection) pUrlConnection;
         }
-        if (mResponseCode == HttpURLConnection.HTTP_BAD_METHOD || mResponseCode == HttpURLConnection.HTTP_BAD_REQUEST
-                || mResponseCode == HttpURLConnection.HTTP_NOT_FOUND || mResponseCode == HttpURLConnection.HTTP_BAD_GATEWAY ||
-                mResponseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+        if (responseCode == HttpURLConnection.HTTP_BAD_METHOD || responseCode == HttpURLConnection.HTTP_BAD_REQUEST
+                || responseCode == HttpURLConnection.HTTP_NOT_FOUND || responseCode == HttpURLConnection.HTTP_BAD_GATEWAY ||
+                responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
             if (null != conn1) {
                 return conn1.getErrorStream();
             } else {
-                return pURLConnection.getInputStream();
+                return pUrlConnection.getInputStream();
             }
         } else {
-            return pURLConnection.getInputStream();
+            return pUrlConnection.getInputStream();
         }
 
     }
 
-    public InputStream doInvokeAsStream(InputStream p_Input) throws APPErrorException {
+    public InputStream doInvokeAsStream(InputStream pInput) throws APPErrorException {
         URLConnection conn = null;
         try {
-            conn = doInvoke(p_Input);
+            conn = doInvoke(pInput);
             return getResponseStream(conn);
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
@@ -292,8 +292,8 @@ public class WebClient implements IWebClient {
     }
 
     @Override
-    public byte[] doInvokeAsByte(InputStream p_Input) throws APPErrorException {
-        InputStream is = doInvokeAsStream(p_Input);
+    public byte[] doInvokeAsByte(InputStream pInput) throws APPErrorException {
+        InputStream is = doInvokeAsStream(pInput);
         return parseByte(is);
     }
 
@@ -312,17 +312,17 @@ public class WebClient implements IWebClient {
     /**
      * 将gzip信息解压
      *
-     * @param p_Stream   输入的gzip 数据
-     * @param p_Encoding 字符编码
+     * @param pStream   输入的gzip 数据
+     * @param pEncoding 字符编码
      * @return
      * @throws APPErrorException
      */
-    public String parseGZipString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
+    public String parseGZipString(InputStream pStream, String pEncoding) throws APPErrorException {
         GZIPInputStream gzin = null;
         try {
-            gzin = new GZIPInputStream(p_Stream);
+            gzin = new GZIPInputStream(pStream);
 
-            InputStreamReader isr = new InputStreamReader(gzin, p_Encoding);
+            InputStreamReader isr = new InputStreamReader(gzin, pEncoding);
             BufferedReader br = new BufferedReader(isr);
             StringBuffer sb = new StringBuffer();
             String tempbf;
@@ -340,9 +340,9 @@ public class WebClient implements IWebClient {
         }
     }
 
-    public String parseString(URLConnection pURLConnection) throws APPErrorException {
+    public String parseString(URLConnection pUrlConnection) throws APPErrorException {
         try {
-            return parseString(getResponseStream(pURLConnection), m_Encoding);
+            return parseString(getResponseStream(pUrlConnection), encoding);
         } catch (IOException e) {
             throw new APPErrorException("获取返回信息出错", e);
         }
@@ -351,22 +351,22 @@ public class WebClient implements IWebClient {
     /**
      * 将输入的流转换成 字符
      *
-     * @param p_Stream   输入的流
-     * @param p_Encoding 字符编码
+     * @param pStream   输入的流
+     * @param pEncoding 字符编码
      * @return
      * @throws APPErrorException
      */
-    public String parseString(InputStream p_Stream, String p_Encoding) throws APPErrorException {
+    public String parseString(InputStream pStream, String pEncoding) throws APPErrorException {
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         try {
             byte[] data = new byte[4096];
             int count = -1;
-            while ((count = p_Stream.read(data, 0, 4096)) != -1) {
+            while ((count = pStream.read(data, 0, 4096)) != -1) {
                 outStream.write(data, 0, count);
             }
 
-            return new String(outStream.toByteArray(), p_Encoding);
+            return new String(outStream.toByteArray(), pEncoding);
 
         } catch (UnsupportedEncodingException e) {
             throw new APPErrorException("字符串转换失败", e);
@@ -386,11 +386,11 @@ public class WebClient implements IWebClient {
     /**
      * 将输入的流转换成 字节
      *
-     * @param p_Stream
+     * @param pStream
      * @return
      * @throws APPErrorException
      */
-    protected byte[] parseByte(InputStream p_Stream) throws APPErrorException {
+    protected byte[] parseByte(InputStream pStream) throws APPErrorException {
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
@@ -398,7 +398,7 @@ public class WebClient implements IWebClient {
         try {
             int count = -1;
 
-            while ((count = p_Stream.read(data, 0, 4096)) != -1) {
+            while ((count = pStream.read(data, 0, 4096)) != -1) {
                 outStream.write(data, 0, count);
             }
 
@@ -420,12 +420,12 @@ public class WebClient implements IWebClient {
     /**
      * 将参数 转换成 a=1&b=2的形式
      *
-     * @param p_Paramss
+     * @param pParams
      * @return
      */
-    protected String getParamsString(Map<String, String> p_Paramss) {
+    protected String getParamsString(Map<String, String> pParams) {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> item : p_Paramss.entrySet()) {
+        for (Map.Entry<String, String> item : pParams.entrySet()) {
             String key = item.getKey();
             String value = item.getValue();
 
@@ -444,23 +444,23 @@ public class WebClient implements IWebClient {
     /**
      * 设置请求头
      *
-     * @param p_Conn
+     * @param pConn
      */
-    protected void setRequestHead(URLConnection p_Conn) {
-        for (Map.Entry<String, String> item : m_Head.entrySet()) {
+    protected void setRequestHead(URLConnection pConn) {
+        for (Map.Entry<String, String> item : head.entrySet()) {
             if ("GET".equals(getMethod().toUpperCase()) && "Content-Type".equals(item.getKey())) {
                 continue;
             }
-            p_Conn.setRequestProperty(item.getKey(), null == item.getValue() ? "" : item.getValue());
+            pConn.setRequestProperty(item.getKey(), null == item.getValue() ? "" : item.getValue());
         }
-        URL vUrl = p_Conn.getURL();
+        URL vUrl = pConn.getURL();
         String domain = vUrl.getHost();
         String path = vUrl.getPath().substring(0, vUrl.getPath().substring(1).indexOf("/") + 1);
         if (StringUtil.isNullOrEmpty(path) && StringUtil.isNotEmpty(vUrl.getPath())) {
             path = vUrl.getPath();
         }
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, List<HttpCookie>> item : mCookies.entrySet()) {
+        for (Map.Entry<String, List<HttpCookie>> item : cookies.entrySet()) {
             if (domain.endsWith(item.getKey())) {
                 for (HttpCookie cookie : item.getValue()) {
                     if ("/".equals(cookie.getPath()) || path.equals(cookie.getPath())) {
@@ -470,21 +470,21 @@ public class WebClient implements IWebClient {
             }
         }
         if (sb.length() > 1) {
-            p_Conn.setRequestProperty("Cookie", sb.toString());
+            pConn.setRequestProperty("Cookie", sb.toString());
         }
     }
 
     /**
      * 获取响应头中 字符编码 如果不存在 则使用 设置的encoding
      *
-     * @param m_ReponseHead
+     * @param pReponseHead
      * @return
      */
-    protected String getResponseEncoding(Map<String, List<String>> m_ReponseHead) {
-        if (null == m_ReponseHead || m_ReponseHead.size() < 1 || !m_ReponseHead.containsKey("Content-Type")) {
-            return m_Encoding;
+    protected String getResponseEncoding(Map<String, List<String>> pReponseHead) {
+        if (null == pReponseHead || pReponseHead.size() < 1 || !pReponseHead.containsKey("Content-Type")) {
+            return encoding;
         }
-        List<String> names = m_ReponseHead.get("Content-Type");
+        List<String> names = pReponseHead.get("Content-Type");
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
             if (name.indexOf("charset=") >= 0) {
@@ -494,48 +494,48 @@ public class WebClient implements IWebClient {
                 }
             }
         }
-        return m_Encoding;
+        return encoding;
     }
 
     /**
      * 判断响应数据是否为GZIP
      *
-     * @param m_ReponseHead
+     * @param pReponseHead
      * @return
      */
-    protected boolean isGzip(Map<String, List<String>> m_ReponseHead) {
-        Object value = m_ReponseHead.get("content-encoding");
+    protected boolean isGzip(Map<String, List<String>> pReponseHead) {
+        Object value = pReponseHead.get("content-encoding");
         String valuestr = null != value ? value.toString() : "";
 
         return valuestr.indexOf("gzip") > -1;
     }
 
-    public URLConnection doInvoke(String p_Param) throws APPErrorException {
+    public URLConnection doInvoke(String pParam) throws APPErrorException {
         try {
-            ByteArrayInputStream dd = new ByteArrayInputStream(p_Param.getBytes(m_Encoding));
+            ByteArrayInputStream dd = new ByteArrayInputStream(pParam.getBytes(encoding));
             return doInvoke(dd);
         } catch (UnsupportedEncodingException e) {
-            throw new APPErrorException("参数转码失败；参数：" + p_Param + ";编码：" + m_Encoding + ";原因：" + e.getMessage());
+            throw new APPErrorException("参数转码失败；参数：" + pParam + ";编码：" + encoding + ";原因：" + e.getMessage());
         }
     }
 
     /**
      * 请求
      *
-     * @param p_Input
+     * @param pInput
      * @return
      * @throws APPErrorException
      */
-    public URLConnection doInvoke(InputStream p_Input) throws APPErrorException {
+    public URLConnection doInvoke(InputStream pInput) throws APPErrorException {
 
-        String url = m_Url;
+        String vUrl = url;
         OutputStream out = null;
         try {
 
             setResponseCode(0);
             clearResponseHeader();
 
-            URL realUrl = new URL(url);
+            URL realUrl = new URL(vUrl);
 
             // 打开和URL之间的连接
             URLConnection conn = realUrl.openConnection();
@@ -543,44 +543,44 @@ public class WebClient implements IWebClient {
             ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
 
 
-            if (mConnectTimeout > 0) {
-                conn.setConnectTimeout(mConnectTimeout);
+            if (connectTimeout > 0) {
+                conn.setConnectTimeout(connectTimeout);
             }
-            if (mReadTimeout > 0) {
-                conn.setReadTimeout(mReadTimeout);
+            if (readTimeout > 0) {
+                conn.setReadTimeout(readTimeout);
             }
             // 设置通用的请求属性
             setRequestHead(conn);
 
 
-            if ("POST".equals(m_Method.toUpperCase())) {
+            if ("POST".equals(method.toUpperCase())) {
                 // 发送POST请求必须设置如下两行
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
                 // 获取URLConnection对象对应的输te出流
                 out = conn.getOutputStream();
                 // 发送请求参数
-                byte[] data = parseByte(p_Input);
+                byte[] data = parseByte(pInput);
                 out.write(data);
                 // flush输出流的缓冲
                 out.flush();
                 // 定义BufferedReader输入流来读取URL的响应
 
-            } else if ("GET".equals(m_Method.toUpperCase())) {
+            } else if ("GET".equals(method.toUpperCase())) {
                 conn.connect();
             }
             setResponseHeader(conn.getHeaderFields());
             //处理 cookie
             if (null != getResponseHeader() && getResponseHeader().size() > 0 && getResponseHeader().containsKey("Set-Cookie")) {
-                List<String> cookies = getResponseHeader().get("Set-Cookie");
+                List<String> vCookies = getResponseHeader().get("Set-Cookie");
                 if (null != cookies) {
-                    for (int i = 0, size = cookies.size(); i < size; i++) {
-                        String cookie = cookies.get(i);
+                    for (int i = 0, size = vCookies.size(); i < size; i++) {
+                        String cookieString = vCookies.get(i);
                         URL resultUrl = conn.getURL();
                         String domain = resultUrl.getHost();
-                        List<HttpCookie> httpcookies = HttpCookie.parse(cookie);
-                        if (!mCookies.containsKey(domain)) {
-                            mCookies.put(domain, new ArrayList<HttpCookie>());
+                        List<HttpCookie> httpcookies = HttpCookie.parse(cookieString);
+                        if (!cookies.containsKey(domain)) {
+                            cookies.put(domain, new ArrayList<HttpCookie>());
                         }
                         for (HttpCookie httpCookie : httpcookies) {
                             addCookie(domain, httpCookie);
@@ -605,14 +605,14 @@ public class WebClient implements IWebClient {
 
     protected void addCookie(String pDomain, HttpCookie pHttpCookie) {
         if (StringUtil.isNullOrEmpty(pHttpCookie.getDomain())) {
-            mCookies.get(pDomain).add(pHttpCookie);
+            cookies.get(pDomain).add(pHttpCookie);
         } else {
-            if (!mCookies.containsKey(pHttpCookie.getDomain())) {
-                mCookies.put(pHttpCookie.getDomain(), new ArrayList<HttpCookie>());
+            if (!cookies.containsKey(pHttpCookie.getDomain())) {
+                cookies.put(pHttpCookie.getDomain(), new ArrayList<HttpCookie>());
             }
-            List<HttpCookie> vCookies = mCookies.get(pHttpCookie.getDomain());
+            List<HttpCookie> vCookies = cookies.get(pHttpCookie.getDomain());
             if (!vCookies.contains(pHttpCookie)) {
-                mCookies.get(pHttpCookie.getDomain()).add(pHttpCookie);
+                cookies.get(pHttpCookie.getDomain()).add(pHttpCookie);
             } else {
                 vCookies.remove(vCookies.indexOf(pHttpCookie));
                 vCookies.add(pHttpCookie);
@@ -626,16 +626,16 @@ public class WebClient implements IWebClient {
      * @return
      * @throws APPErrorException
      */
-    public URLConnection doRedirect(URLConnection pURLConnection) throws APPErrorException {
-        String urlRedirect = pURLConnection.getHeaderField("Location");
+    public URLConnection doRedirect(URLConnection pUrlConnection) throws APPErrorException {
+        String urlRedirect = pUrlConnection.getHeaderField("Location");
         if (!StringUtil.isNullOrEmpty(urlRedirect)) {
             String preMethod = getMethod();
             setMethod("GET");
             setUrl(urlRedirect);
-            closeConnection(pURLConnection);
-            URLConnection vURLConnection = doInvoke(StringUtil.EMPTY_STRING);
+            closeConnection(pUrlConnection);
+            URLConnection vUrlConnection = doInvoke(StringUtil.EMPTY_STRING);
             setMethod(preMethod);
-            return vURLConnection;
+            return vUrlConnection;
         }
         return null;
     }

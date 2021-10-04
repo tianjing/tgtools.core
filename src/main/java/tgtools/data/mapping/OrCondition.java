@@ -3,33 +3,34 @@ package tgtools.data.mapping;
 import tgtools.data.DataParameterCollection;
 import tgtools.data.DataRow;
 
+/**
+ * @author tianjing
+ */
+public class OrCondition extends CompositeCondition {
+    @Override
+    public boolean isValid(DataRow pRow) {
+        for (Condition condition : this.conditions) {
+            if (condition.isValid(pRow)) {
+                return true;
+            }
+        }
+        return this.conditions.size() == 0;
+    }
 
-public class OrCondition extends CompositeCondition
-{
-  @Override
-  public boolean isValid(DataRow p_row)
-  {
-    for (Condition condition : this.conditions)
-    {
-      if (condition.isValid(p_row)) return true;
+    @Override
+    public String toSQL(DataParameterCollection pParams) {
+        if (this.conditions.size() == 0) {
+            return "";
+        }
+        StringBuffer sql = new StringBuffer();
+        sql.append("(");
+        for (Condition condition : this.conditions) {
+            if (!"(".equals(sql.toString())) {
+                sql.append(" or ");
+            }
+            sql.append(condition.toSQL(pParams));
+        }
+        sql.append(")");
+        return sql.toString();
     }
-    return this.conditions.size() == 0;
-  }
-  @Override
-  public String toSQL(DataParameterCollection p_params)
-  {
-    if (this.conditions.size() == 0) return "";
-    StringBuffer sql = new StringBuffer();
-    sql.append("(");
-    for (Condition condition : this.conditions)
-    {
-      if (!sql.toString().equals("("))
-      {
-        sql.append(" or ");
-      }
-      sql.append(condition.toSQL(p_params));
-    }
-    sql.append(")");
-    return sql.toString();
-  }
 }

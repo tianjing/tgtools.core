@@ -1,6 +1,12 @@
 package tgtools.json;
-
-public abstract interface JSONString
+/**
+ * @author tianjing
+ */
+public interface JSONString
 {
-  public abstract String toJSONString();
+  /**
+   * toJSONString
+   * @return
+   */
+   String toJSONString();
 }

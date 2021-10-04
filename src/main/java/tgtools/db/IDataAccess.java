@@ -7,15 +7,17 @@ import tgtools.data.DataTable;
 import tgtools.exceptions.APPErrorException;
 
 import javax.sql.DataSource;
-
+/**
+ * @author tianjing
+ */
 public interface IDataAccess {
 
 	/**
 	 * 获取数据库设置
-	 * @param p_DataBaseType
+	 * @param pDataBaseType
 	 * @return
      */
-	void setDataBaseType(String p_DataBaseType);
+	void setDataBaseType(String pDataBaseType);
 	/**
 	 * 取数据库类型
 	 * @return
@@ -51,32 +53,32 @@ public interface IDataAccess {
 	/**
 	 * 查询并返回table对象（Blob 字段 使用stream 适合大文件数据获取）
 	 * @param sql
-	 * @param p_BlobUseStream Blob字段是否使用stream
+	 * @param pBlobUseStream Blob字段是否使用stream
 	 * @return
 	 * @throws APPErrorException
 	 */
 	@Deprecated
-	DataTable Query(String sql,boolean p_BlobUseStream)throws APPErrorException;
+	DataTable Query(String sql,boolean pBlobUseStream)throws APPErrorException;
 	/**
 	 * 查询并返回table对象
 	 * @param sql
-	 * @param p_Class
+	 * @param pClass
 	 * @param <T>
 	 * @return
 	 * @throws APPErrorException
      */
 	@Deprecated
-	<T>T Query(String sql,Class<T> p_Class)throws APPErrorException;
+	<T>T Query(String sql,Class<T> pClass)throws APPErrorException;
 
 	/**
 	 * 查询并返回table对象（推荐 参数查询）
 	 * @param sql (如  select * from table where id=? and name=?)
-	 * @p_Params (如 数组第一个值对应 sql 第一个 ? 以此类推)
+	 * @param pParams (如 数组第一个值对应 sql 第一个 ? 以此类推)
 	 * @return
 	 * @throws APPErrorException
 	 */
 	@Deprecated
-	DataTable Query(String sql,Object[] p_Params)throws APPErrorException;
+	DataTable Query(String sql,Object[] pParams)throws APPErrorException;
 
 	/**
 	 * 执行一个sql 如 update insert
@@ -106,45 +108,46 @@ public interface IDataAccess {
 	/**
 	 * 创建一个连接对象
 	 * @return
+	 * @throws APPErrorException
 	 */
 	Connection createConnection()throws APPErrorException;
 	
 
 	/**
 	 * 执行一个sql 如 update insert
-	 * @param sql (如  update table set sex=? ,name=? whwere id=? )
-	 * @p_Params (如 数组第一个值对应 sql 第一个 ? 以此类推)
+	 * @param pSql (如  update table set sex=? ,name=? whwere id=? )
+	 * @param pParams (如 数组第一个值对应 sql 第一个 ? 以此类推)
 	 * @return
 	 * @throws APPErrorException
 	 */
-	int executeUpdate(String sql,Object[] p_Params) throws APPErrorException;
+	int executeUpdate(String pSql,Object[] pParams) throws APPErrorException;
 	/**
 	 * 执行一个sql 如 update insert
-	 * @param sql (如  update table set sex=? ,name=? whwere id=? )
-	 * @p_Params (如 数组第一个值对应 sql 第一个 ? 以此类推)
-	 * @pUseSetInputStream 是否使用 setInputStream 方法处理流 有的驱动不支持
+	 * @param pSql (如  update table set sex=? ,name=? whwere id=? )
+	 * @param pParams (如 数组第一个值对应 sql 第一个 ? 以此类推)
+	 * @param pUseSetInputStream 是否使用 setInputStream 方法处理流 有的驱动不支持
 	 * @return
 	 * @throws APPErrorException
 	 */
-	int executeUpdate(String sql,Object[] p_Params,boolean pUseSetInputStream) throws APPErrorException;
+	int executeUpdate(String pSql,Object[] pParams,boolean pUseSetInputStream) throws APPErrorException;
 	/**
 	 * 更新大字段
-	 * @param sql （update 之类）
-	 * @param p_Params 二进制数据
+	 * @param pSql （update 之类）
+	 * @param pParams 二进制数据
 	 * @return
 	 * @throws APPErrorException
 	 */
-	int executeBlob(String sql,byte[] p_Params) throws APPErrorException;
+	int executeBlob(String pSql,byte[] pParams) throws APPErrorException;
 	/**
-	 * 
-	 * @param p_Sqls
+	 *  executeSqlFile
+	 * @param pSqls
 	 * @return
 	 * @throws APPErrorException
 	 */
-	int[] executeSqlFile(String p_Sqls) throws APPErrorException;
+	int[] executeSqlFile(String pSqls) throws APPErrorException;
 
 	/**
-	 *
+	 * executeBatchByTransaction
 	 * @param sqls
 	 * @return
 	 * @throws APPErrorException
@@ -163,11 +166,11 @@ public interface IDataAccess {
 	/**
 	 * 查询并返回table对象（推荐 参数查询）
 	 * @param sql (如  select * from table where id=? and name=?)
-	 * @p_Params (如 数组第一个值对应 sql 第一个 ? 以此类推)
+	 * @param pParams (如 数组第一个值对应 sql 第一个 ? 以此类推)
 	 * @return
 	 * @throws APPErrorException
 	 */
-	DataTable query(String sql,Object[] p_Params)throws APPErrorException;
+	DataTable query(String sql,Object[] pParams)throws APPErrorException;
 	/**
 	 * 查询并返回table对象（推荐，Blob 字段 使用byte[] 适合小文件数据获取）
 	 * @param sql
@@ -178,11 +181,11 @@ public interface IDataAccess {
 	/**
 	 * 查询并返回table对象
 	 * @param sql
-	 * @param p_Class
+	 * @param pClass
 	 * @param <T>
 	 * @return
 	 * @throws APPErrorException
 	 */
-	<T>T query(String sql,Class<T> p_Class)throws APPErrorException;
+	<T>T query(String sql,Class<T> pClass)throws APPErrorException;
 
 }

@@ -12,16 +12,27 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * 名  称：扫描jar包 的class
- * 编写者：田径
- * 功  能：
- * 时  间：21:24
+ *
+ * @author tianjing
+ *
  */
 public class ClassScanner {
-    private final String CLASS_FILE_SUFFIX = ".class";                       // Java字节码文件后缀
+    /**
+     *Java字节码文件后缀
+     */
+    private final String CLASS_FILE_SUFFIX = ".class";
+    /**
+     *
+     */
     private Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
-    private FilenameFilter javaClassFilter;                                    // 类文件过滤器,只扫描一级类
-    private String packPrefix;                                         // 包路径根路劲
+    /**
+     *  类文件过滤器,只扫描一级类
+     */
+    private FilenameFilter javaClassFilter;
+    /**
+     * 包路径根路劲
+     */
+    private String packPrefix;
 
     public ClassScanner() {
         javaClassFilter = new FilenameFilter() {
@@ -68,7 +79,7 @@ public class ClassScanner {
             // 得到指定路径中所有的资源文件
             dir = Thread.currentThread().getContextClassLoader().getResources(filePackPath);
             packPrefix = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-            if (System.getProperty("file.separator").equals("\\")) {
+            if ("\\".equals(System.getProperty("file.separator"))) {
                 packPrefix = packPrefix.substring(1);
             }
             // 遍历资源文件
@@ -98,8 +109,8 @@ public class ClassScanner {
      * @Description 扫描Jar包下所有class
      */
     private void scanJ(URL url, boolean recursive) throws IOException, ClassNotFoundException {
-        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-        JarFile jarFile = jarURLConnection.getJarFile();
+        JarURLConnection vJarUrlConnection = (JarURLConnection) url.openConnection();
+        JarFile jarFile = vJarUrlConnection.getJarFile();
         // 遍历Jar包
         Enumeration<JarEntry> entries = jarFile.entries();
         while (entries.hasMoreElements()) {
@@ -110,7 +121,6 @@ public class ClassScanner {
                 }
                 continue;
             }
-            // .class
             if (fileName.endsWith(CLASS_FILE_SUFFIX)) {
                 String className = fileName.substring(0, fileName.indexOf('.')).replace('/', '.');
                 classes.put(className, Class.forName(className));
@@ -132,7 +142,8 @@ public class ClassScanner {
             String path = f.getAbsolutePath();
             // 跳过其他文件
             if (path.endsWith(CLASS_FILE_SUFFIX)) {
-                String className = getPackageByPath(f, packPrefix); // 获取包名
+                // 获取包名
+                String className = getPackageByPath(f, packPrefix);
                 classes.put(className, Class.forName(className));
             }
         }

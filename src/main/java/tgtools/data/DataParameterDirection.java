@@ -1,12 +1,25 @@
 package tgtools.data;
 
+/**
+ *
+ * @author tianjing
+ */
 public enum DataParameterDirection
 {
-  In, 
-
-  Out, 
-
-  InOut, 
-
+  /**
+   * In
+   */
+  In,
+  /**
+   * Out
+   */
+  Out,
+  /**
+   * InOut
+   */
+  InOut,
+  /**
+   *  Return
+   */
   Return;
 }

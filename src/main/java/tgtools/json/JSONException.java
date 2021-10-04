@@ -1,7 +1,9 @@
 package tgtools.json;
 
 import tgtools.exceptions.APPErrorException;
-
+/**
+ * @author tianjing
+ */
 public class JSONException extends APPErrorException {
 
 
@@ -11,35 +13,35 @@ public class JSONException extends APPErrorException {
 	private static final long serialVersionUID = 1L;
 
 
-	public JSONException(Throwable p_exception) {
-		super(p_exception);
+	public JSONException(Throwable pException) {
+		super(pException);
 	}
 
-	public JSONException(int p_errorCode) {
-		this("", p_errorCode);
+	public JSONException(int pErrorCode) {
+		this("", pErrorCode);
 	}
 
-	public JSONException(int p_errorCode, Throwable p_excpt) {
-		this("", p_errorCode, p_excpt);
+	public JSONException(int pErrorCode, Throwable pExcpt) {
+		this("", pErrorCode, pExcpt);
 	}
 
-	public JSONException(String p_excptMsg) {
-		this(p_excptMsg, 0);
+	public JSONException(String pExcptMsg) {
+		this(pExcptMsg, 0);
 	}
 
-	public JSONException(String p_excptMsg, Throwable p_excpt) {
-		this( p_excptMsg, 0, p_excpt);
+	public JSONException(String pExcptMsg, Throwable pExcpt) {
+		this( pExcptMsg, 0, pExcpt);
 	}
 
-	public JSONException(String p_excptMsg, int p_errorCode) {
-		super(p_excptMsg);
-		setErrorCode(p_errorCode);
+	public JSONException(String pExcptMsg, int pErrorCode) {
+		super(pExcptMsg);
+		setErrorCode(pErrorCode);
 	}
 
-	public JSONException(String p_excptMsg, int p_errorCode,
-			Throwable p_excpt) {
-		super(p_excptMsg , p_excpt);
-		setErrorCode(p_errorCode);
+	public JSONException(String pExcptMsg, int pErrorCode,
+			Throwable pExcpt) {
+		super(pExcptMsg , pExcpt);
+		setErrorCode(pErrorCode);
 	}
 
 }

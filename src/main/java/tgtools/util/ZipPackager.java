@@ -12,7 +12,7 @@ import java.util.zip.Deflater;
 
 /**
  * 名  称：zip 打包类
- * 编写者：田径
+ * @author tianjing
  * 功  能：对多个文件进行打包
  * 例  子1：
  * ZipPackager zip = new ZipPackager("GBK");
@@ -34,9 +34,9 @@ import java.util.zip.Deflater;
  * 时  间：10:39
  */
 public class ZipPackager implements IDispose {
-    ZipOutputStream m_ZipOutputStream = null;
-    private String m_Encode;
-    private int m_ZipLevel;
+    ZipOutputStream zipOutputStream = null;
+    private String encode;
+    private int zipLevel;
 
     /**
      * 构造
@@ -48,64 +48,64 @@ public class ZipPackager implements IDispose {
     /**
      * 构造
      *
-     * @param p_Encode 文件名编码
+     * @param pEncode 文件名编码
      */
-    public ZipPackager(String p_Encode) {
-        this(p_Encode, Deflater.NO_COMPRESSION);
+    public ZipPackager(String pEncode) {
+        this(pEncode, Deflater.NO_COMPRESSION);
     }
 
     /**
      * 构造
      *
-     * @param p_Encode 文件名编码
-     * @param p_Level  压缩等级 参考java.util.zip.Deflater
+     * @param pEncode 文件名编码
+     * @param pLevel  压缩等级 参考java.util.zip.Deflater
      */
-    public ZipPackager(String p_Encode, int p_Level) {
-        m_Encode = p_Encode;
-        m_ZipLevel = p_Level;
+    public ZipPackager(String pEncode, int pLevel) {
+        encode = pEncode;
+        zipLevel = pLevel;
     }
 
     /**
      * 初始化 设置输出流
      *
-     * @param p_OutputStream
+     * @param pOutputStream
      */
-    public void init(OutputStream p_OutputStream) {
-        if (null != p_OutputStream) {
-            m_ZipOutputStream = new ZipOutputStream(new CheckedOutputStream(p_OutputStream,
+    public void init(OutputStream pOutputStream) {
+        if (null != pOutputStream) {
+            zipOutputStream = new ZipOutputStream(new CheckedOutputStream(pOutputStream,
                     new CRC32()));
         } else {
-            m_ZipOutputStream = new ZipOutputStream(new CheckedOutputStream(new ByteArrayOutputStream(), new CRC32()));
+            zipOutputStream = new ZipOutputStream(new CheckedOutputStream(new ByteArrayOutputStream(), new CRC32()));
         }
         // 支持中文
-        m_ZipOutputStream.setEncoding(m_Encode);
+        zipOutputStream.setEncoding(encode);
         // 启用压缩
-        m_ZipOutputStream.setMethod(ZipOutputStream.DEFLATED);
+        zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
         // 压缩级别为最强压缩，但时间要花得多一点
-        m_ZipOutputStream.setLevel(m_ZipLevel);
+        zipOutputStream.setLevel(zipLevel);
     }
 
     /**
      * 添加文件
      *
-     * @param p_File 文件对象
+     * @param pFile 文件对象
      * @throws APPErrorException
      */
-    public void addFile(File p_File) throws APPErrorException {
-        if (null == p_File) {
+    public void addFile(File pFile) throws APPErrorException {
+        if (null == pFile) {
             throw new APPErrorException("文件不能为NULL");
         }
-        if (!p_File.exists() || !p_File.isFile()) {
-            throw new APPErrorException("文件不存在或不是文件。file：" + p_File.getAbsolutePath());
+        if (!pFile.exists() || !pFile.isFile()) {
+            throw new APPErrorException("文件不存在或不是文件。file：" + pFile.getAbsolutePath());
         }
         FileInputStream in = null;
         try {
-            in = new FileInputStream(p_File);
+            in = new FileInputStream(pFile);
         } catch (Exception ex) {
-            throw new APPErrorException("初始化文件流错误。file：" + p_File.getAbsolutePath(), ex);
+            throw new APPErrorException("初始化文件流错误。file：" + pFile.getAbsolutePath(), ex);
         }
         if (null != in) {
-            addFile(in, p_File.getName());
+            addFile(in, pFile.getName());
         }
 
     }
@@ -113,36 +113,36 @@ public class ZipPackager implements IDispose {
     /**
      * 添加文件
      *
-     * @param p_InputStream 输入流
-     * @param p_FileName    文件名
+     * @param pInputStream 输入流
+     * @param pFileName    文件名
      * @throws APPErrorException
      */
-    public void addFile(InputStream p_InputStream, String p_FileName) throws APPErrorException {
-        addZipEntry(p_InputStream, p_FileName);
+    public void addFile(InputStream pInputStream, String pFileName) throws APPErrorException {
+        addZipEntry(pInputStream, pFileName);
     }
 
-    private void addZipEntry(InputStream p_InputStream, String p_EntryName) throws APPErrorException {
+    private void addZipEntry(InputStream pInputStream, String pEntryName) throws APPErrorException {
         try {
-            BufferedInputStream bi = new BufferedInputStream(p_InputStream);
+            BufferedInputStream bi = new BufferedInputStream(pInputStream);
 
             // 开始写入新的ZIP文件条目并将流定位到条目数据的开始处
-            ZipEntry zipEntry = new ZipEntry(p_EntryName);
-            m_ZipOutputStream.putNextEntry(zipEntry);
+            ZipEntry zipEntry = new ZipEntry(pEntryName);
+            zipOutputStream.putNextEntry(zipEntry);
             byte[] buffer = new byte[1024];
             int readCount = bi.read(buffer);
 
             while (readCount != -1) {
-                m_ZipOutputStream.write(buffer, 0, readCount);
+                zipOutputStream.write(buffer, 0, readCount);
                 readCount = bi.read(buffer);
             }
             // 注，在使用缓冲流写压缩文件时，一个条件完后一定要刷新一把，不
             // 然可能有的内容就会存入到后面条目中去了
-            m_ZipOutputStream.flush();
+            zipOutputStream.flush();
         } catch (Exception ex) {
-            throw new APPErrorException("压缩文件出错。文件名称：" + p_EntryName + ";原因:" + ex.getMessage(), ex);
+            throw new APPErrorException("压缩文件出错。文件名称：" + pEntryName + ";原因:" + ex.getMessage(), ex);
         } finally {
             try {
-                p_InputStream.close();
+                pInputStream.close();
             } catch (IOException e) {
                 LogHelper.error("", "输入流关闭错误", "ZipPackager.addFile", e);
             }
@@ -150,23 +150,23 @@ public class ZipPackager implements IDispose {
     }
 
     /**
-     * @param p_EntryName
+     * @param pEntryName
      * @throws APPErrorException
      */
-    private void addZipEntry(String p_EntryName) throws APPErrorException {
-        ZipEntry zipEntry = new ZipEntry(p_EntryName);
+    private void addZipEntry(String pEntryName) throws APPErrorException {
+        ZipEntry zipEntry = new ZipEntry(pEntryName);
         try {
-            m_ZipOutputStream.putNextEntry(zipEntry);
+            zipOutputStream.putNextEntry(zipEntry);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void addZipEntry(File p_File, String p_EntryName) throws APPErrorException {
-        if (p_File.isDirectory()) {
-            String entryName=p_EntryName+p_File.getName()+"/";
+    private void addZipEntry(File pFile, String pEntryName) throws APPErrorException {
+        if (pFile.isDirectory()) {
+            String entryName=pEntryName+pFile.getName()+"/";
             addZipEntry(entryName);
-            File [] files=p_File.listFiles();
+            File [] files=pFile.listFiles();
             for(int i=0;i<files.length;i++)
             {
                 addZipEntry(files[i],entryName);
@@ -175,9 +175,9 @@ public class ZipPackager implements IDispose {
         else
         {
             try {
-                addZipEntry(new FileInputStream(p_File),p_EntryName+p_File.getName());
+                addZipEntry(new FileInputStream(pFile),pEntryName+pFile.getName());
             } catch (FileNotFoundException e) {
-                throw new APPErrorException("初始化文件流错误。file：" + p_File.getAbsolutePath(), e);
+                throw new APPErrorException("初始化文件流错误。file：" + pFile.getAbsolutePath(), e);
             }
         }
     }
@@ -185,27 +185,27 @@ public class ZipPackager implements IDispose {
     /**
      * 添加文件
      *
-     * @param p_Data     文件数据
-     * @param p_FileName 文件名
+     * @param pData     文件数据
+     * @param pFileName 文件名
      * @throws APPErrorException
      */
-    public void addFile(byte[] p_Data, String p_FileName) throws APPErrorException {
-        addFile(new ByteArrayInputStream(p_Data), p_FileName);
+    public void addFile(byte[] pData, String pFileName) throws APPErrorException {
+        addFile(new ByteArrayInputStream(pData), pFileName);
     }
 
     /**
      * 添加目录下所有文件
-     * @param p_File
+     * @param pFile
      * @throws APPErrorException
      */
-    public void addDir(File p_File) throws APPErrorException {
-        if (null == p_File) {
+    public void addDir(File pFile) throws APPErrorException {
+        if (null == pFile) {
             throw new APPErrorException("目录不能为NULL");
         }
-        if (!p_File.exists() || !p_File.isDirectory()) {
-            throw new APPErrorException("目录不存在或不是目录。dir：" + p_File.getAbsolutePath());
+        if (!pFile.exists() || !pFile.isDirectory()) {
+            throw new APPErrorException("目录不存在或不是目录。dir：" + pFile.getAbsolutePath());
         }
-        addZipEntry(p_File, "");
+        addZipEntry(pFile, "");
     }
 
 
@@ -215,16 +215,16 @@ public class ZipPackager implements IDispose {
     @Override
     public void Dispose() {
         try {
-            m_ZipOutputStream.flush();
+            zipOutputStream.flush();
         } catch (IOException e) {
             LogHelper.error("", "flush压缩流错误", "ZipPackager.Dispose", e);
         }
         try {
-            m_ZipOutputStream.close();
+            zipOutputStream.close();
         } catch (IOException e) {
             LogHelper.error("", "close压缩流错误", "ZipPackager.Dispose", e);
         }
-        m_ZipOutputStream = null;
+        zipOutputStream = null;
     }
 
 

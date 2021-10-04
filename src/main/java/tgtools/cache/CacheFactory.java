@@ -12,77 +12,68 @@ import net.sf.ehcache.CacheManager;
  */
 public class CacheFactory {
 
-	private static CacheManager m_Manager;
-    public static final String TimerCache="TimerCache";
+	private static CacheManager manager;
+    public static final String  TimerCache="TimerCache";
     public static final String EverCache="EverCache";
 
     public static CacheManager getCacheManager()
 	{
-		return m_Manager;
+		return manager;
 	}
 
 	public static void  setCacheManager(CacheManager pCacheManager)
 	{
-		m_Manager=pCacheManager;
+		manager=pCacheManager;
 	}
 
 	public static void init() {
 		URL url = CacheFactory.class.getResource("/ehcache.xml");
 
-		m_Manager = CacheManager.create(url);
+		manager = CacheManager.create(url);
 	}
-	public static void init(URL p_Url) {
-		m_Manager = CacheManager.create(p_Url);
+	public static void init(URL pUrl) {
+		manager = CacheManager.create(pUrl);
 	}
 	/**
 	 * 根据名称创建缓存区
 	 * 
-	 * @param p_Name
+	 * @param pName
 	 */
-	public static Cache get(String p_Name) {
-		return m_Manager.getCache(p_Name);
+	public static Cache get(String pName) {
+		return manager.getCache(pName);
 	}
 
 	/**
 	 * 根据名称创建缓存区
 	 * 
-	 * @param p_Cache
+	 * @param pCache
 	 */
-	public static void create(Cache p_Cache) {
-		if (!m_Manager.cacheExists(p_Cache.getName())) {
-			m_Manager.addCache(p_Cache);
+	public static void create(Cache pCache) {
+		if (!manager.cacheExists(pCache.getName())) {
+			manager.addCache(pCache);
 		}
 	}
-	public static void create(String p_CacheName) {
-		if (!m_Manager.cacheExists(p_CacheName)) {
-			m_Manager.addCache(p_CacheName);
+	public static void create(String pCacheName) {
+		if (!manager.cacheExists(pCacheName)) {
+			manager.addCache(pCacheName);
 		}
 	}
 	/**
 	 * 根据名称清除缓存区下所有缓存项
 	 * 
-	 * @param p_Name
+	 * @param pName
 	 */
-	public static void clear(String p_Name) {
-		m_Manager.getCache(p_Name).removeAll();
+	public static void clear(String pName) {
+		manager.getCache(pName).removeAll();
 	}
 
 	/**
 	 * 根据名称删除缓存区
-	 * 
-	 * @param p_Name
+	 *
+	 * @param pName
 	 */
-	public static void remove(String p_Name) {
-		m_Manager.removeCache(p_Name);
+	public static void remove(String pName) {
+		manager.removeCache(pName);
 	}
-	
-	public static void main(String[] args)
-	{
-		init();
-        String[] strs =m_Manager.getCacheNames();
-        for(String item:strs)
-		System.out.println(item);
 
-		
-	}
 }

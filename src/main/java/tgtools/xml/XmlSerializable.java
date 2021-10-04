@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：17:25
  */

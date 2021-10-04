@@ -6,30 +6,32 @@ import tgtools.data.DataRow;
 import tgtools.data.DbNull;
 import tgtools.data.DbTypeConverter;
 
-
+/**
+ * @author tianjing
+ */
 public class EqualCondition extends Condition
 {
   private String fieldName;
   private Object fieldValue;
   private int dataType;
 
-  public EqualCondition(String p_fieldName, Object p_fieldValue, int p_dataType)
+  public EqualCondition(String pFieldName, Object pFieldValue, int pDataType)
   {
-    this.fieldName = p_fieldName;
-    this.dataType = p_dataType;
-    this.fieldValue = DbTypeConverter.toCommonType(p_fieldValue, this.dataType);
+    this.fieldName = pFieldName;
+    this.dataType = pDataType;
+    this.fieldValue = DbTypeConverter.toCommonType(pFieldValue, this.dataType);
   }
   @Override
-  public boolean isValid(DataRow p_row)
+  public boolean isValid(DataRow pRow)
   {
     if ((this.fieldValue == null) || ((this.fieldValue instanceof DbNull)))
     {
-      return p_row.getValue(this.fieldName) == null;
+      return pRow.getValue(this.fieldName) == null;
     }
-    return this.fieldValue.equals(p_row.getValue(this.fieldName));
+    return this.fieldValue.equals(pRow.getValue(this.fieldName));
   }
   @Override
-  public String toSQL(DataParameterCollection p_params)
+  public String toSQL(DataParameterCollection pParams)
   {
     if ((this.fieldValue == null) || ((this.fieldValue instanceof DbNull)))
     {
@@ -39,7 +41,7 @@ public class EqualCondition extends Condition
     DataParameter param = new DataParameter();
     param.setValue(this.fieldValue);
     param.setDataType(this.dataType);
-    p_params.add(param);
+    pParams.add(param);
     return String.format("%1$s = ?", new Object[] { this.fieldName });
   }
 

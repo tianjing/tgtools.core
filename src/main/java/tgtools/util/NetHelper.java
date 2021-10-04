@@ -10,14 +10,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author tianjing
+ */
 public class NetHelper {
 
+
+    private static final String[] windowsCommand = {"ipconfig", "/all"};
+    private static final String[] linuxCommand = {"/sbin/ifconfig", "-a"};
+    private static final Pattern macPattern = Pattern.compile(".*((:?[0-9a-f]{2}[-:]){5}[0-9a-f]{2}).*",
+            Pattern.CASE_INSENSITIVE);
+    private static String mAllMacAddressStr = null;
 
     /**
      * 获取当前IP
      *
      * @return
-     *
      * @author tian.jing
      * @date 2015年12月30日
      */
@@ -34,7 +42,6 @@ public class NetHelper {
      * 获取当前HostName
      *
      * @return
-     *
      * @author tian.jing
      * @date 2015年12月30日
      */
@@ -51,7 +58,6 @@ public class NetHelper {
      * 获取当前电脑的所有IP
      *
      * @return
-     *
      * @author tian.jing
      * @date 2015年12月30日
      */
@@ -75,18 +81,10 @@ public class NetHelper {
         return ret;
     }
 
-
-
-
-    private static final String[] windowsCommand = {"ipconfig", "/all"};
-    private static final String[] linuxCommand = {"/sbin/ifconfig", "-a"};
-    private static final Pattern macPattern = Pattern.compile(".*((:?[0-9a-f]{2}[-:]){5}[0-9a-f]{2}).*",
-            Pattern.CASE_INSENSITIVE);
     /**
      * 获取多个网卡MAC地址
      *
      * @return
-     *
      * @throws IOException
      */
     public final static List<String> getMacAddressList() throws IOException {
@@ -109,18 +107,13 @@ public class NetHelper {
             Matcher matcher = macPattern.matcher(line);
             if (matcher.matches()) {
                 macAddressList.add(matcher.group(1));
-                // macAddressList.add(matcher.group(1).replaceAll("[-:]",
-                // ""));//去掉MAC中的“-”
             }
         }
-
         process.destroy();
         bufReader.close();
         return macAddressList;
     }
 
-
-    private static String mAllMacAddressStr = null;
     /**
      * 获取个网卡MAC地址（多个网卡时从中获取一个）
      *
@@ -128,12 +121,13 @@ public class NetHelper {
      */
     public static String getAllMacAddress() {
         if (StringUtil.isNullOrEmpty(mAllMacAddressStr)) {
-            StringBuffer sb = new StringBuffer(); // 存放多个网卡地址用，目前只取一个非0000000000E0隧道的值
+            // 存放多个网卡地址用，目前只取一个非0000000000E0隧道的值
+            StringBuffer sb = new StringBuffer();
             try {
                 List<String> macList = getMacAddressList();
                 for (Iterator<String> iter = macList.iterator(); iter.hasNext(); ) {
                     String amac = iter.next();
-                    if (!amac.equals("0000000000E0")) {
+                    if (!"0000000000E0".equals(amac)) {
                         sb.append(amac);
                         break;
                     }

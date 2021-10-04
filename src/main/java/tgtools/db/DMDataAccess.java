@@ -11,37 +11,38 @@ import javax.sql.DataSource;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.*;
-
+/**
+ * @author tianjing
+ */
 public class DMDataAccess extends AbstractDataAccess {
     // jdbc:dm://URL:PORT/DATABASE
-    protected String m_ConnStr;
-    protected String m_UserName;
-    protected String m_Password;
-    protected Connection m_Conn;
-
+    protected String connStr;
+    protected String userName;
+    protected String password;
+    protected Connection conn;
 
 
     protected Connection getConnection() throws APPErrorException, SQLException {
 
-        if (null == m_DataSource) {
+        if (null == dataSource) {
             initDataSource();
         }
-        return m_DataSource.getConnection();
+        return dataSource.getConnection();
     }
 
     protected void initDataSource() throws APPErrorException {
         initDataSource("dm.jdbc.pool.DmdbDataSource");
     }
 
-    protected void initDataSource(String p_DriverName) throws APPErrorException {
+    protected void initDataSource(String pDriverName) throws APPErrorException {
         try {
-            Class clazz = Class.forName(p_DriverName);
+            Class clazz = Class.forName(pDriverName);
             if (null != clazz) {
                 DataSource source = (DataSource) clazz.newInstance();
-                setValue(clazz, source, "setURL", m_ConnStr);
-                setValue(clazz, source, "setUser", m_UserName);
-                setValue(clazz, source, "setPassword", m_Password);
-                m_DataSource = source;
+                setValue(clazz, source, "setURL", connStr);
+                setValue(clazz, source, "setUser", userName);
+                setValue(clazz, source, "setPassword", password);
+                dataSource = source;
             } else {
                 throw new APPErrorException("没有找到DmdbDataSource");
             }
@@ -52,10 +53,10 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @SuppressWarnings("unchecked")
-    private void setValue(Class p_Clazz, Object obj, String p_MethodName, String p_Value) {
+    private void setValue(Class pClazz, Object obj, String pMethodName, String pValue) {
         try {
-            Method method = p_Clazz.getDeclaredMethod(p_MethodName, String.class);
-            method.invoke(obj, p_Value);
+            Method method = pClazz.getDeclaredMethod(pMethodName, String.class);
+            method.invoke(obj, pValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +101,7 @@ public class DMDataAccess extends AbstractDataAccess {
     @Override
     public int[] executeBatch(String[] sqls) throws APPErrorException {
         Connection conn = null;
-        Statement statment =null;
+        Statement statment = null;
         try {
             conn = getConnection();
             statment = conn.createStatement();
@@ -118,11 +119,11 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public boolean init(Object... params) //String p_Connstr, String p_UserName, String p_Password)
+    public boolean init(Object... params) //String pConnstr, String p_UserName, String p_Password)
             throws APPErrorException {
-        m_ConnStr = params[0].toString();
-        m_UserName = params[1].toString();
-        m_Password = params[2].toString();
+        connStr = params[0].toString();
+        userName = params[1].toString();
+        password = params[2].toString();
         try {
             // getConnection();
         } catch (Exception e) {
@@ -130,51 +131,56 @@ public class DMDataAccess extends AbstractDataAccess {
         return true;
     }
 
-    protected void close(Statement p_Statement) {
+    protected void close(Statement pStatement) {
         try {
-            if (null != p_Statement)
-                p_Statement.close();
-        } catch (Exception e) {
-        }
-        p_Statement = null;
-    }
-
-    protected void close(ResultSet p_Result) {
-        try {
-            if (null != p_Result)
-                p_Result.close();
-        } catch (Exception e) {
-        }
-        p_Result = null;
-    }
-
-    protected void close(Connection p_Conn) {
-        try {
-            if (null != p_Conn)
-                p_Conn.close();
-        } catch (Exception e) {
-        }
-        p_Conn = null;
-    }
-    protected void closeBatch(Statement p_Statement) {
-        try {
-            if (null != p_Statement) {
-                p_Statement.clearBatch();
-                p_Statement.close();
+            if (null != pStatement) {
+                pStatement.close();
             }
         } catch (Exception e) {
         }
-        p_Statement = null;
+        pStatement = null;
     }
+
+    protected void close(ResultSet pResult) {
+        try {
+            if (null != pResult) {
+                pResult.close();
+            }
+        } catch (Exception e) {
+        }
+        pResult = null;
+    }
+
+    protected void close(Connection pConn) {
+        try {
+            if (null != pConn) {
+                pConn.close();
+            }
+        } catch (Exception e) {
+        }
+        pConn = null;
+    }
+
+    protected void closeBatch(Statement pStatement) {
+        try {
+            if (null != pStatement) {
+                pStatement.clearBatch();
+                pStatement.close();
+            }
+        } catch (Exception e) {
+        }
+        pStatement = null;
+    }
+
     @Override
     public void close() {
         try {
-            if (null != m_Conn) {
-                m_Conn.close();
+            if (null != conn) {
+                conn.close();
             }
         } catch (Exception e) {
         }
-        m_Conn = null;
+        conn = null;
     }
 
     @Override
@@ -187,18 +193,18 @@ public class DMDataAccess extends AbstractDataAccess {
         }
     }
 
-    protected void setParams(PreparedStatement p_Statement, Object[] p_Params, boolean pUseSetInputStream)
+    protected void setParams(PreparedStatement pStatement, Object[] pParams, boolean pUseSetInputStream)
             throws SQLException {
-        if (null != p_Params) {
-            for (int i = 0; i < p_Params.length; i++) {
-                if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
+        if (null != pParams) {
+            for (int i = 0; i < pParams.length; i++) {
+                if (pUseSetInputStream && (pParams[i] instanceof InputStream)) {
                     try {
-                        p_Statement.setBinaryStream(i + 1, (InputStream) p_Params[i], ((InputStream) p_Params[i]).available());
+                        pStatement.setBinaryStream(i + 1, (InputStream) pParams[i], ((InputStream) pParams[i]).available());
                     } catch (Exception ex) {
                         throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
                     }
                 } else {
-                    p_Statement.setObject(i + 1, p_Params[i]);
+                    pStatement.setObject(i + 1, pParams[i]);
                 }
             }
         }
@@ -206,7 +212,7 @@ public class DMDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params)
+    public int executeUpdate(String sql, Object[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -215,9 +221,8 @@ public class DMDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params, false);
+                setParams(statement, pParams, false);
                 return statement.executeUpdate();
-                // rs.close();
             }
 
         } catch (SQLException e) {
@@ -229,7 +234,7 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+    public int executeUpdate(String sql, Object[] pParams, boolean pUseSetInputStream) throws APPErrorException {
         Connection conn = null;
 
         try {
@@ -237,9 +242,8 @@ public class DMDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params, false);
+                setParams(statement, pParams, false);
                 return statement.executeUpdate();
-                // rs.close();
             }
 
         } catch (SQLException e) {
@@ -251,7 +255,7 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int executeBlob(String sql, byte[] p_Params)
+    public int executeBlob(String sql, byte[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -260,7 +264,7 @@ public class DMDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                statement.setBytes(1, p_Params);
+                statement.setBytes(1, pParams);
                 return statement.executeUpdate();
             }
             throw new APPErrorException("获取连接失败！");
@@ -272,7 +276,7 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int[] executeSqlFile(String p_SqlFile) throws APPErrorException {
+    public int[] executeSqlFile(String pSqlFile) throws APPErrorException {
         throw new APPErrorException("未实现改方法");
     }
 
@@ -287,11 +291,11 @@ public class DMDataAccess extends AbstractDataAccess {
             }
             Statement statment = conn.createStatement();
 
-            for (String sql : sqls)
+            for (String sql : sqls) {
                 if (!StringUtil.isNullOrEmpty(sql)) {
                     statment.addBatch(sql);
                 }
-
+            }
             statment.executeBatch();
             conn.commit();
             return true;
@@ -310,18 +314,18 @@ public class DMDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public DataTable Query(String sql, Object[] p_Params) throws APPErrorException {
-        return query(sql, p_Params);
+    public DataTable Query(String sql, Object[] pParams) throws APPErrorException {
+        return query(sql, pParams);
     }
 
     @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return query(sql, p_Class);
+    public <T> T Query(String sql, Class<T> pClass) throws APPErrorException {
+        return query(sql, pClass);
     }
 
     @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
-        return query(sql, p_BlobUseStream);
+    public DataTable Query(String sql, boolean pBlobUseStream) throws APPErrorException {
+        return query(sql, pBlobUseStream);
     }
 
     @Override
@@ -331,7 +335,7 @@ public class DMDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public DataTable query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+    public DataTable query(String sql, boolean pBlobUseStream) throws APPErrorException {
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
@@ -339,7 +343,7 @@ public class DMDataAccess extends AbstractDataAccess {
             conn = getConnection();
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
-            return new DataTable(rs, sql, p_BlobUseStream);
+            return new DataTable(rs, sql, pBlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {
@@ -350,14 +354,14 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+    public DataTable query(String sql, Object[] pParams) throws APPErrorException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params, false);
+            setParams(statement, pParams, false);
             rs = statement.executeQuery();
             return new DataTable(rs, sql);
         } catch (Exception e) {
@@ -375,7 +379,7 @@ public class DMDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(query(sql), p_Class, true);
+    public <T> T query(String sql, Class<T> pClass) throws APPErrorException {
+        return (T) JsonParseHelper.parseToObject(query(sql), pClass, true);
     }
 }

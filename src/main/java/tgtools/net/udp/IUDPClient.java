@@ -7,81 +7,78 @@ import tgtools.net.udp.listener.IUDPClientListener;
 import java.net.InetAddress;
 
 /**
- * 名  称：
- * 编写者：田径
- * 功  能：
- * 时  间：13:35
+ * @author tianjing
  */
 public interface IUDPClient extends IDispose{
     /**
      * 设置超时时间
-     * @param p_TimeOut
+     * @param pTimeOut
      */
-    void setTimeOut(int p_TimeOut);
+    void setTimeOut(int pTimeOut);
 
     /**
      * 设置缓冲
-     * @param p_BuffeSize
+     * @param pBuffeSize
      */
-    void setBuffeSize(int p_BuffeSize);
+    void setBuffeSize(int pBuffeSize);
 
     /**
      * 设置监听
-     * @param p_Listener
+     * @param pListener
      */
-    void setListener(IUDPClientListener p_Listener);
+    void setListener(IUDPClientListener pListener);
 
     /**
      * 设置目标地址
-     * @param p_InetAddress
+     * @param pInetAddress
      */
-    void setTargetAddress(InetAddress p_InetAddress);
+    void setTargetAddress(InetAddress pInetAddress);
 
     /**
      * 设置目标端口
-     * @param p_TargetPort
+     * @param pTargetPort
      */
-    void setTargetPort(int p_TargetPort);
+    void setTargetPort(int pTargetPort);
 
     /**
      * 发送消息
-     * @param p_Target 目标地址
-     * @param p_TargetPort 目标端口
-     * @param p_Data 消息内容
+     * @param pTarget 目标地址
+     * @param pTargetPort 目标端口
+     * @param pData 消息内容
      * @throws APPErrorException
      */
-    void send(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException;
+    void send(InetAddress pTarget, int pTargetPort, byte[] pData) throws APPErrorException;
 
     /**
      * 发送消息 根据设置的目标地址和目标端口
-     * @param p_Data
+     * @param pData
      * @throws APPErrorException
      */
-    void send(byte[] p_Data) throws APPErrorException;
+    void send(byte[] pData) throws APPErrorException;
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
-     * @param p_Data 数据
+     * @param pData 数据
      * @throws APPErrorException
      */
-    void multiSend(byte[] p_Data) throws APPErrorException;
+    void multiSend(byte[] pData) throws APPErrorException;
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
-     * @param p_Target 目标IP
-     * @param p_TargetPort 目标端口
-     * @param p_Data 数据
+     * @param pTarget 目标IP
+     * @param pTargetPort 目标端口
+     * @param pData 数据
      * @throws APPErrorException
      */
-    void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException;
+    void multiSend(InetAddress pTarget, int pTargetPort, byte[] pData) throws APPErrorException;
 
     /**
      * 多包发送（如果数据长度超出限制则分包发送）
-     * @param p_Target 目标IP
-     * @param p_TargetPort 目标端口
-     * @param p_Data 数据
-     * @param p_Length 单包长度
+     * @param pTarget 目标IP
+     * @param pTargetPort 目标端口
+     * @param pData 数据
+     * @param pLength 单包长度
      * @throws APPErrorException
      */
-    void multiSend(InetAddress p_Target, int p_TargetPort, byte[] p_Data,int p_Length) throws APPErrorException;
+    void multiSend(InetAddress pTarget, int pTargetPort, byte[] pData,int pLength) throws APPErrorException;
 }

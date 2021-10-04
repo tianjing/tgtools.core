@@ -1,10 +1,14 @@
 package tgtools.data.mapping;
 
+/**
+ *
+ * @author tianjing
+ */
 public class AscOrder extends Order
 {
-  public AscOrder(String p_fieldName)
+  public AscOrder(String pFieldName)
   {
-    super(p_fieldName);
+    super(pFieldName);
   }
   @Override
   public String toSQL()
@@ -12,8 +16,3 @@ public class AscOrder extends Order
     return this.fieldName + " asc";
   }
 }
-
-/* Location:           C:\Users\TianJing\Desktop\pi3000\nariis.pi3000.framework.jar
- * Qualified Name:     nariis.pi3000.framework.ormapping.AscOrder
- * JD-Core Version:    0.6.2
- */

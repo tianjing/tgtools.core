@@ -7,11 +7,21 @@ import javax.xml.stream.XMLStreamWriter;
 
 
 /**
- * 描述一个class是否具有序列化xml的能力
+ * @author tianjing
  */
-public abstract interface IXmlSerializable
+public interface IXmlSerializable
 {
-  public abstract void writeXml(XMLStreamWriter paramXMLStreamWriter) throws APPErrorException;
+  /**
+   * writeXml
+   * @param pParamXmlStreamWriter
+   * @throws APPErrorException
+   */
+  void writeXml(XMLStreamWriter pParamXmlStreamWriter) throws APPErrorException;
 
-  public abstract void readXml(XMLStreamReader paramXMLStreamReader) throws APPErrorException;
+  /**
+   * readXml
+   * @param pParamXmlStreamWriter
+   * @throws APPErrorException
+   */
+  void readXml(XMLStreamReader pParamXmlStreamWriter) throws APPErrorException;
 }

@@ -17,20 +17,21 @@ import java.io.InputStream;
  * 接收内容的对象
  * 注：该类为抽象类
  * 通过重写 readXml 或 readBody 来转换xml内容
+ * @author tianjing
  */
 public abstract class ResponseBody implements IXmlSerializable {
 
 
-    private String m_FaultCode;
-    private String m_FaultString;
-    private InputStream m_InputStream;
+    private String faultCode;
+    private String faultString;
+    private InputStream inputStream;
 
     public String getFaultCode() {
-        return m_FaultCode;
+        return faultCode;
     }
 
     public String getFaultString() {
-        return m_FaultString;
+        return faultString;
     }
 
     @Override
@@ -38,18 +39,18 @@ public abstract class ResponseBody implements IXmlSerializable {
 
     }
 
-    public void init(String p_Result) {
-        m_InputStream = new java.io.ByteArrayInputStream(p_Result.getBytes());
+    public void init(String pResult) {
+        inputStream = new java.io.ByteArrayInputStream(pResult.getBytes());
     }
 
-    public void init(InputStream p_Result) {
-        m_InputStream = p_Result;
+    public void init(InputStream pResult) {
+        inputStream = pResult;
     }
 
     public void parse() throws APPErrorException {
 
         try {
-            XMLStreamReader reader = tgtools.xml.XmlSerializeHelper.createXMLInputFactory().createXMLStreamReader(m_InputStream);
+            XMLStreamReader reader = tgtools.xml.XmlSerializeHelper.createXMLInputFactory().createXMLStreamReader(inputStream);
             readXml(reader);
 
         } catch (XMLStreamException e) {
@@ -58,7 +59,7 @@ public abstract class ResponseBody implements IXmlSerializable {
 
     }
 
-    protected String getText(String p_LocalName, XMLStreamReader xmlStreamReader) throws XMLStreamException {
+    protected String getText(String pLocalName, XMLStreamReader xmlStreamReader) throws XMLStreamException {
         do {
 
             while (xmlStreamReader.getEventType() != XMLEvent.START_ELEMENT) {
@@ -68,7 +69,7 @@ public abstract class ResponseBody implements IXmlSerializable {
                 xmlStreamReader.next();
             }
             String name = xmlStreamReader.getLocalName().toLowerCase();
-            if (!StringUtil.isNullOrEmpty(name) && name.indexOf(p_LocalName) > -1) {
+            if (!StringUtil.isNullOrEmpty(name) && name.indexOf(pLocalName) > -1) {
                 xmlStreamReader.next();
 
                 StringBuilder sb=new StringBuilder();
@@ -97,12 +98,12 @@ public abstract class ResponseBody implements IXmlSerializable {
 
                         if ("faultcode".equals(localname)) {
                             while (xmlStreamReader.next() > 0 && xmlStreamReader.getEventType() == XMLEvent.CHARACTERS) {
-                                m_FaultCode = xmlStreamReader.getText();
+                                faultCode = xmlStreamReader.getText();
                                 break;
                             }
                         } else if ("faultstring".equals(localname)) {
                             while (xmlStreamReader.next() > 0 && xmlStreamReader.getEventType() == XMLEvent.CHARACTERS) {
-                                m_FaultString = xmlStreamReader.getText();
+                                faultString = xmlStreamReader.getText();
                                 break;
                             }
                         } else {

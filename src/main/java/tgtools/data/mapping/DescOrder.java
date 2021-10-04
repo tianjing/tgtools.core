@@ -2,17 +2,19 @@ package tgtools.data.mapping;
 
 import tgtools.data.DataRow;
 
-
+/**
+ * @author tianjing
+ */
 public class DescOrder extends Order
 {
-  public DescOrder(String p_fieldName)
+  public DescOrder(String pFieldName)
   {
-    super(p_fieldName);
+    super(pFieldName);
   }
   @Override
-  public int compare(DataRow p_row1, DataRow p_row2)
+  public int compare(DataRow pRow1, DataRow pRow2)
   {
-    return -super.compare(p_row1, p_row2);
+    return -super.compare(pRow1, pRow2);
   }
   @Override
   public String toSQL()

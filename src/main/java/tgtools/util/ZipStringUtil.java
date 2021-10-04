@@ -9,7 +9,9 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
+/**
+ * @author tianjing
+ */
 public class ZipStringUtil {
 	/**
 	 * 
@@ -26,9 +28,9 @@ public class ZipStringUtil {
 		}
 		return null;
 	}
-	public static byte[] gzip(byte[] p_Content) {
-		if (p_Content == null || p_Content.length == 0) {
-			return p_Content;
+	public static byte[] gzip(byte[] pContent) {
+		if (pContent == null || pContent.length == 0) {
+			return pContent;
 		}
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -36,7 +38,7 @@ public class ZipStringUtil {
 		GZIPOutputStream gzip = null;
 		try {
 			gzip = new GZIPOutputStream(out);
-			gzip.write(p_Content);
+			gzip.write(pContent);
 		} catch (IOException e) {
 			LogHelper.error("","GZIP压缩写入出错；原因："+e.getMessage(),"ZipStringUtil.gzip(byte[])",e);
 		} finally {
@@ -132,8 +134,9 @@ public class ZipStringUtil {
          * @return 返回压缩后的文本
          */
 	public static final String zip(String str) {
-		if (str == null)
+		if (str == null) {
 			return null;
+		}
 		byte[] compressed;
 		ByteArrayOutputStream out = null;
 		ZipOutputStream zout = null;
@@ -220,11 +223,4 @@ public class ZipStringUtil {
 		return decompressed;
 	}
 
-	public static void main(String[] arg) throws IOException {
-		String ss="H4sIAAAAAAAAACupLEi1zcxLy1dLzs8rSc0rsU3MyXHOLypwzk9JBYoVFfgl5qbaPtu84en2eU/2zX4 ZevT1jVP 3cAAPF7TLg5AAAA";
-		String ss1="Bbxxbinsert,南京,奥体变,xxx";
-		String res= gunzip(ss);
-		//System.out.println("gzip:"+gzip(ss1));
-		System.out.println(gunzip(ss));
-	}
 }

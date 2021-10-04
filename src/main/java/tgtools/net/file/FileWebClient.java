@@ -117,16 +117,16 @@ public class FileWebClient extends WebClient {
         }
     }
 
-    public URLConnection doInvokeAfter(URLConnection pURLConnection) throws APPErrorException {
+    public URLConnection doInvokeAfter(URLConnection pUrlConnection) throws APPErrorException {
         try {
-            setResponseHeader(pURLConnection.getHeaderFields());
+            setResponseHeader(pUrlConnection.getHeaderFields());
             //处理 cookie
             if (null != getResponseHeader() && getResponseHeader().size() > 0 && getResponseHeader().containsKey("Set-Cookie")) {
                 List<String> cookies = getResponseHeader().get("Set-Cookie");
                 if (null != cookies) {
                     for (int i = 0, size = cookies.size(); i < size; i++) {
                         String cookie = cookies.get(i);
-                        URL resultUrl = pURLConnection.getURL();
+                        URL resultUrl = pUrlConnection.getURL();
                         String domain = resultUrl.getHost();
                         List<HttpCookie> httpcookies = HttpCookie.parse(cookie);
                         if (!getCookies().containsKey(domain)) {
@@ -138,11 +138,11 @@ public class FileWebClient extends WebClient {
                     }
                 }
             }
-            if (pURLConnection instanceof java.net.HttpURLConnection) {
-                java.net.HttpURLConnection conn1 = (java.net.HttpURLConnection) pURLConnection;
+            if (pUrlConnection instanceof java.net.HttpURLConnection) {
+                java.net.HttpURLConnection conn1 = (java.net.HttpURLConnection) pUrlConnection;
                 setResponseCode(conn1.getResponseCode());
             }
-            return pURLConnection;
+            return pUrlConnection;
         } catch (Exception e) {
             throw new APPErrorException("请求出错！", e);
         }

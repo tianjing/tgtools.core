@@ -14,6 +14,7 @@ import java.io.StringWriter;
  * 请求内容对象
  * 注：该类为抽象类
  * 通过重写 readXml 或 readBody 来转换xml内容
+ * @author tianjing
  */
 public class RequestBody implements IXmlSerializable {
 
@@ -21,35 +22,35 @@ public class RequestBody implements IXmlSerializable {
 
 	}
 
-	protected String m_Method;
-	protected Object[] m_Param;
+	protected String method;
+	protected Object[] param;
 
 	public String getMethod() {
-		return m_Method;
+		return method;
 	}
 
-	public void setMethod(String p_Method) {
-		this.m_Method = p_Method;
+	public void setMethod(String pMethod) {
+		this.method = pMethod;
 	}
 
 	public Object[] getParam() {
-		return m_Param;
+		return param;
 	}
 
-	public void setParam(Object[] p_Param) {
-		this.m_Param = p_Param;
+	public void setParam(Object[] pParam) {
+		this.param = pParam;
 	}
 
 	protected  void writeMethod(XMLStreamWriter write) throws XMLStreamException {
-		write.writeStartElement("", m_Method);
+		write.writeStartElement("", method);
 
 	}
-	protected  void writeParam (XMLStreamWriter write,String p_ParamName,String p_ParamValue) throws XMLStreamException
+	protected  void writeParam (XMLStreamWriter write,String pParamName,String pParamValue) throws XMLStreamException
 	{
 		write.writeStartElement(
-				"", p_ParamName );
+				"", pParamName );
 
-		write.writeCharacters(p_ParamValue);
+		write.writeCharacters(pParamValue);
 
 
 	}
@@ -85,11 +86,9 @@ public class RequestBody implements IXmlSerializable {
 		write.writeStartElement("",
 				"s:Body");
 		writeMethod(write);
-		//write.writeStartElement("", m_Method);
-		//write.writeAttribute("xmlns","http://WebXml.com.cn/");
-		if (null != m_Param) {
-			for (int i = 0; i < m_Param.length; i++) {
-				writeParam(write,"in"+ i,m_Param[i].toString());
+		if (null != param) {
+			for (int i = 0; i < param.length; i++) {
+				writeParam(write,"in"+ i,param[i].toString());
 				write.writeEndElement();
 			}
 
@@ -104,7 +103,7 @@ public class RequestBody implements IXmlSerializable {
 	}
 
 	@Override
-	public void readXml(XMLStreamReader paramXMLStreamReader) {
+	public void readXml(XMLStreamReader pParamXMLStreamReader) {
 
 	}
 }

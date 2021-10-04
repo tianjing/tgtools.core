@@ -18,6 +18,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *
+ * @author tianjing
+ */
 public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      *
@@ -27,12 +31,13 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     protected DataTable table;
     private List<Object> data;
 
-    protected DataRow(DataTable p_table) {
-        this.table = p_table;
+    protected DataRow(DataTable pTable) {
+        this.table = pTable;
         this.data = Collections.synchronizedList(new ArrayList<Object>(this.table.getColumns().size()));
 
-        for (int i = 0; i < this.table.getColumns().size(); i++)
+        for (int i = 0; i < this.table.getColumns().size(); i++) {
             this.data.add(CONST_DBDATA_NULL);
+        }
     }
 
     public DataTable getTable() {
@@ -47,44 +52,43 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
         this.data.remove(index);
     }
 
-    public Object getValue(String p_columnName) {
-        DataColumn column = this.table.getColumn(p_columnName);
+    public Object getValue(String pColumnName) {
+        DataColumn column = this.table.getColumn(pColumnName);
         return DbTypeConverter.validateNullToDbNull(this.data.get(column.getIndexInColList()));
     }
 
-    public Object getValue(int p_columnIndex) {
-        // DataColumn column = this.table.getColumn(p_columnIndex);
-        return DbTypeConverter.validateNullToDbNull(this.data.get(p_columnIndex));
+    public Object getValue(int pColumnIndex) {
+        return DbTypeConverter.validateNullToDbNull(this.data.get(pColumnIndex));
     }
 
-    public boolean isNullValue(String p_columnName) {
-        return getValue(p_columnName) instanceof DbNull;
+    public boolean isNullValue(String pColumnName) {
+        return getValue(pColumnName) instanceof DbNull;
     }
 
-    public boolean isNullValue(int p_columnIndex) {
-        return getValue(p_columnIndex) instanceof DbNull;
+    public boolean isNullValue(int pColumnIndex) {
+        return getValue(pColumnIndex) instanceof DbNull;
     }
 
-    public void setValue(String p_columnName, Object p_value, boolean p_ignoreReadOnly) {
-        DataColumn column = this.table.getColumn(p_columnName);
-        if ((!p_ignoreReadOnly) && (column.isReadOnly())) {
-            throw new DataAccessException(String.format("无法向只读字段[%1$s]设置数值。", new Object[]{p_columnName}));
+    public void setValue(String pColumnName, Object pValue, boolean pIgnoreReadOnly) {
+        DataColumn column = this.table.getColumn(pColumnName);
+        if ((!pIgnoreReadOnly) && (column.isReadOnly())) {
+            throw new DataAccessException(String.format("无法向只读字段[%1$s]设置数值。", new Object[]{pColumnName}));
         }
-        Object obj = DbTypeConverter.toCommonType(p_value, column.getColumnType(), this.getTable().getBolbUseStream());
+        Object obj = DbTypeConverter.toCommonType(pValue, column.getColumnType(), this.getTable().getBolbUseStream());
         this.data.set(column.getIndexInColList(), obj);
     }
 
-    public void setValue(String p_columnName, Object p_value) {
-        setValue(p_columnName, p_value, false);
+    public void setValue(String pColumnName, Object pValue) {
+        setValue(pColumnName, pValue, false);
     }
 
-    public void setValue(int p_columnIndex, Object p_value, boolean p_ignoreReadOnly) {
-        DataColumn column = this.table.getColumn(p_columnIndex);
-        if ((!p_ignoreReadOnly) && (column.isReadOnly())) {
+    public void setValue(int pColumnIndex, Object pValue, boolean pIgnoreReadOnly) {
+        DataColumn column = this.table.getColumn(pColumnIndex);
+        if ((!pIgnoreReadOnly) && (column.isReadOnly())) {
             throw new DataAccessException(String.format("无法向只读字段[%1$s]设置数值。", new Object[]{column.getColumnName()}));
         }
 
-        this.data.set(p_columnIndex, DbTypeConverter.toCommonType(p_value, column.getColumnType()));
+        this.data.set(pColumnIndex, DbTypeConverter.toCommonType(pValue, column.getColumnType()));
     }
 
     @Override
@@ -116,15 +120,16 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     }
 
     @Override
-    public boolean equals(Object p_row) {
-        if ((p_row instanceof DataRow)) {
-            DataRow row = (DataRow) p_row;
+    public boolean equals(Object pRow) {
+        if ((pRow instanceof DataRow)) {
+            DataRow row = (DataRow) pRow;
             if (row.table.getColumns().size() != this.table.getColumns().size()) {
                 return false;
             }
             for (int i = 0; i < this.data.size(); i++) {
-                if (!this.data.get(i).equals(row.data.get(i)))
+                if (!this.data.get(i).equals(row.data.get(i))) {
                     return false;
+                }
             }
             return true;
         }
@@ -143,8 +148,9 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     }
 
     public int copyData(DataRow row) {
-        for (int i = 0; i < row.getTable().getColumns().size(); i++)
+        for (int i = 0; i < row.getTable().getColumns().size(); i++) {
             this.table.appendColumn(row.getTable().getColumn(i));
+        }
         for (int i = 0; i < row.getTable().getColumns().size(); i++) {
             boolean ro = this.table.getColumn(row.getTable().getColumnName(i)).readOnly;
             this.table.getColumn(row.getTable().getColumnName(i)).readOnly = false;
@@ -157,19 +163,20 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
 
 
     @Override
-    public void readXml(XMLStreamReader p_reader) {
-        if (!p_reader.getLocalName().equalsIgnoreCase("Row")) {
+    public void readXml(XMLStreamReader pReader) {
+        if (!StringUtil.equalsIgnoreCase(pReader.getLocalName(),"Row")) {
             throw new XmlSerializeException("无法反序列化 DataRow 对象，当前 XMLStreamReader 的游标位置有误。");
         }
         try {
-            while (p_reader.hasNext()) {
-                p_reader.nextTag();
-                if (p_reader.isEndElement())
+            while (pReader.hasNext()) {
+                pReader.nextTag();
+                if (pReader.isEndElement()) {
                     break;
-                if (p_reader.isStartElement()) {
-                    String columnName = p_reader.getLocalName().toUpperCase();
-                    p_reader.next();
-                    Object value = DbTypeConverter.toCommonType(XmlSerializeHelper.readText(p_reader), this.table.getColumn(columnName).getColumnType());
+                }
+                if (pReader.isStartElement()) {
+                    String columnName = pReader.getLocalName().toUpperCase();
+                    pReader.next();
+                    Object value = DbTypeConverter.toCommonType(XmlSerializeHelper.readText(pReader), this.table.getColumn(columnName).getColumnType());
 
                     setValue(columnName, value, true);
                 }
@@ -180,9 +187,9 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     }
 
     @Override
-    public void writeXml(XMLStreamWriter p_writer) {
+    public void writeXml(XMLStreamWriter pWriter) {
         try {
-            p_writer.writeStartElement("Row");
+            pWriter.writeStartElement("Row");
             for (int i = 0; i < this.table.getColumns().size(); i++) {
                 DataColumn column = this.table.getColumn(i);
 
@@ -190,14 +197,14 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
                     Object value = DbTypeConverter.validateDbNullToNull(this.data.get(column.getIndexInColList()));
 
                     if (value != null) {
-                        p_writer.writeStartElement(column.getColumnName());
-                        p_writer.writeCData(XmlSerializeHelper.serializeObjectToString(value));
+                        pWriter.writeStartElement(column.getColumnName());
+                        pWriter.writeCData(XmlSerializeHelper.serializeObjectToString(value));
 
-                        p_writer.writeEndElement();
+                        pWriter.writeEndElement();
                     }
                 }
             }
-            p_writer.writeEndElement();
+            pWriter.writeEndElement();
         } catch (XMLStreamException e) {
             throw new XmlSerializeException("DataRow 序列化为 Xml 时发生异常。", e);
         }
@@ -215,21 +222,21 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      * 转换成json格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
      * @return
      */
-    public String toJson(boolean p_IgnoreNull) {
-        return toJson(p_IgnoreNull, false);
+    public String toJson(boolean pIgnoreNull) {
+        return toJson(pIgnoreNull, false);
     }
 
     /**
      * 转换成json格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
-     * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pUseLower   列名是否小写，true:列名大写转小写，false：保持列名
      * @return
      */
-    public String toJson(boolean p_IgnoreNull, boolean p_UseLower) {
+    public String toJson(boolean pIgnoreNull, boolean pUseLower) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("{");
@@ -243,16 +250,16 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
             String name = this.getTable().getColumnName(column.getColumnName());
             Object value = this.getValue(column.getColumnName());
             try {
-                if (p_UseLower) {
+                if (pUseLower) {
                     name = name.toLowerCase();
                 }
                 if (ide > 0) {
 
                     sb.append(",\"" + name + "\":"
-                            + getJsonValue(value, datatype, p_IgnoreNull));
+                            + getJsonValue(value, datatype, pIgnoreNull));
                 } else {
                     sb.append("\"" + name + "\":"
-                            + getJsonValue(value, datatype, p_IgnoreNull));
+                            + getJsonValue(value, datatype, pIgnoreNull));
                 }
             } catch (Exception e) {
                 LogHelper.error("", "第" + String.valueOf(this.getTable().indexOfRow(this)) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！", "table.tojson", e);
@@ -266,28 +273,28 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      * 将值转换成json的值类型
      *
-     * @param p_Value
-     * @param p_ValueType
-     * @param p_IgnoreNull
+     * @param pValue
+     * @param pValueType
+     * @param pIgnoreNull
      * @return
      */
-    private String getJsonValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
-        if (p_Value == null || p_Value instanceof DbNull) {
-            if (p_IgnoreNull) {
+    private String getJsonValue(Object pValue, int pValueType, boolean pIgnoreNull) {
+        if (pValue == null || pValue instanceof DbNull) {
+            if (pIgnoreNull) {
                 return "\"\"";
             } else {
                 return "null";
             }
         }
-        switch (p_ValueType) {
+        switch (pValueType) {
             case Types.NUMERIC:
             case Types.DECIMAL:
             case Types.INTEGER:
             case Types.BOOLEAN:
-                return p_Value.toString();
+                return pValue.toString();
 
             default:
-                return "\"" + StringUtil.convertJson(p_Value.toString()) + "\"";
+                return "\"" + StringUtil.convertJson(pValue.toString()) + "\"";
 
         }
     }
@@ -305,21 +312,21 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      * 转换成JSONObject格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
      * @return
      */
-    public JSONObject toJSONObject(boolean p_IgnoreNull) {
-        return toJSONObject(p_IgnoreNull, false);
+    public JSONObject toJSONObject(boolean pIgnoreNull) {
+        return toJSONObject(pIgnoreNull, false);
     }
 
     /**
      * 转换成json格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
-     * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pUseLower   列名是否小写，true:列名大写转小写，false：保持列名
      * @return
      */
-    public JSONObject toJSONObject(boolean p_IgnoreNull, boolean p_UseLower) {
+    public JSONObject toJSONObject(boolean pIgnoreNull, boolean pUseLower) {
         JSONObject json = new JSONObject();
         int ide = 0;
         for (int j = 0; j < this.getTable().getColumns().size(); j++) {
@@ -331,10 +338,10 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
             String name = this.getTable().getColumnName(column.getColumnName());
             Object value = this.getValue(column.getColumnName());
             try {
-                if (p_UseLower) {
+                if (pUseLower) {
                     name = name.toLowerCase();
                 }
-                json.put(name, getJSONObjectValue(value, datatype, p_IgnoreNull));
+                json.put(name, getJSONObjectValue(value, datatype, pIgnoreNull));
 
             } catch (Exception e) {
                 LogHelper.error("", "第" + String.valueOf(this.getTable().indexOfRow(this)) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！", "table.tojson", e);
@@ -348,28 +355,28 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      * 将值转换成json的值类型
      *
-     * @param p_Value
-     * @param p_ValueType
-     * @param p_IgnoreNull
+     * @param pValue
+     * @param pValueType
+     * @param pIgnoreNull
      * @return
      */
-    private Object getJSONObjectValue(Object p_Value, int p_ValueType, boolean p_IgnoreNull) {
-        if (p_Value == null || p_Value instanceof DbNull) {
-            if (p_IgnoreNull) {
+    private Object getJSONObjectValue(Object pValue, int pValueType, boolean pIgnoreNull) {
+        if (pValue == null || pValue instanceof DbNull) {
+            if (pIgnoreNull) {
                 return "";
             } else {
                 return null;
             }
         }
-        switch (p_ValueType) {
+        switch (pValueType) {
             case Types.NUMERIC:
             case Types.DECIMAL:
             case Types.INTEGER:
             case Types.BOOLEAN:
-                return p_Value;
+                return pValue;
 
             default:
-                return p_Value;
+                return pValue;
         }
     }
 
@@ -387,20 +394,20 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
     /**
      * 转换成JSONObject格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
      * @return
      */
-    public ObjectNode toObjectNode(boolean p_IgnoreNull) {
-        return toObjectNode(p_IgnoreNull, false);
+    public ObjectNode toObjectNode(boolean pIgnoreNull) {
+        return toObjectNode(pIgnoreNull, false);
     }
     /**
      * 转换成json格式
      *
-     * @param p_IgnoreNull 为true时null为空字符串。为false时返回null
-     * @param p_UseLower   列名是否小写，true:列名大写转小写，false：保持列名
+     * @param pIgnoreNull 为true时null为空字符串。为false时返回null
+     * @param pUseLower   列名是否小写，true:列名大写转小写，false：保持列名
      * @return
      */
-    public ObjectNode toObjectNode(boolean p_IgnoreNull, boolean p_UseLower) {
+    public ObjectNode toObjectNode(boolean pIgnoreNull, boolean pUseLower) {
         ObjectNode json = tgtools.util.JsonParseHelper.createObjectNode();
         int ide = 0;
         for (int j = 0; j < this.getTable().getColumns().size(); j++) {
@@ -412,10 +419,10 @@ public class DataRow implements IXmlSerializable, Cloneable, Serializable {
             String name = this.getTable().getColumnName(column.getColumnName());
             Object value = this.getValue(column.getColumnName());
             try {
-                if (p_UseLower) {
+                if (pUseLower) {
                     name = name.toLowerCase();
                 }
-                json.putPOJO(name, getJSONObjectValue(value, datatype, p_IgnoreNull));
+                json.putPOJO(name, getJSONObjectValue(value, datatype, pIgnoreNull));
             } catch (Exception e) {
                 LogHelper.error("", "第" + String.valueOf(this.getTable().indexOfRow(this)) + "行，第" + String.valueOf(ide + 1) + "列，列名：" + name + "类型：" + String.valueOf(datatype) + "出现错误！", "table.tojson", e);
             }

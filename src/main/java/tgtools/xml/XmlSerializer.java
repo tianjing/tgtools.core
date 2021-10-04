@@ -5,10 +5,10 @@ import tgtools.util.LogHelper;
 import tgtools.util.ReflectionUtil;
 import tgtools.util.StringUtil;
 
-import javax.xml.stream.*;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.*;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -18,20 +18,21 @@ import java.util.*;
 
 /**
  * 名  称：
- * 编写者：田径
+ *
+ * @author tianjing
  * 功  能：
  * 时  间：17:20
  */
 @SuppressWarnings("unchecked")
 public class XmlSerializer {
-    public static String serialize(Object p_obj) throws APPErrorException {
+    public static String serialize(Object pObj) throws APPErrorException {
         try {
             XMLOutputFactory xmlOutputFactory = XmlSerializeHelper.createXmlOutputFactory();
 
             StringWriter stringWriter = new StringWriter();
             XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(stringWriter);
             try {
-                serialize(p_obj, xmlStreamWriter);
+                serialize(pObj, xmlStreamWriter);
                 xmlStreamWriter.flush();
                 stringWriter.flush();
                 String s = stringWriter.toString();
@@ -49,114 +50,117 @@ public class XmlSerializer {
         }
     }
 
-    public static void serialize(Object p_obj, XMLStreamWriter p_writer) throws APPErrorException {
-        Class objClass = p_obj.getClass();
+    public static void serialize(Object pObj, XMLStreamWriter pWriter) throws APPErrorException {
+        Class objClass = pObj.getClass();
 
         if (!objClass.isAnnotationPresent(XmlSerializable.class)) {
             throw new XmlSerializeException(String.format("类型[%1$s]未标记XmlSerializable，无法进行Xml序列化。", new Object[]{objClass.getName()}));
         }
 
-        if ((p_obj instanceof IXmlSerializable)) {
-            ((IXmlSerializable) p_obj).writeXml(p_writer);
+        if ((pObj instanceof IXmlSerializable)) {
+            ((IXmlSerializable) pObj).writeXml(pWriter);
             return;
         }
 
         String elementName = XmlSerializeHelper.getSerializableClassElementName(objClass);
         try {
-            p_writer.writeStartElement(elementName);
+            pWriter.writeStartElement(elementName);
 
-            if ((p_obj instanceof Collection)) {
-                serializeCollection((Collection) p_obj, p_writer);
+            if ((pObj instanceof Collection)) {
+                serializeCollection((Collection) pObj, pWriter);
             } else {
-                Field[] fields = XmlSerializeHelper.getFields(p_obj.getClass());
+                Field[] fields = XmlSerializeHelper.getFields(pObj.getClass());
                 for (Field field : fields) {
-                    if (field.isAnnotationPresent(XmlAttribute.class))
-                        serializeField(p_obj, field, p_writer);
+                    if (field.isAnnotationPresent(XmlAttribute.class)) {
+                        serializeField(pObj, field, pWriter);
+                    }
                 }
                 for (Field field : fields) {
-                    if (!field.isAnnotationPresent(XmlAttribute.class))
-                        serializeField(p_obj, field, p_writer);
+                    if (!field.isAnnotationPresent(XmlAttribute.class)) {
+                        serializeField(pObj, field, pWriter);
+                    }
                 }
             }
-            p_writer.writeEndElement();
+            pWriter.writeEndElement();
         } catch (XMLStreamException e) {
             throw new XmlSerializeException(e);
         }
     }
 
-    private static void serializeCollection(Collection p_collection, XMLStreamWriter p_writer) throws APPErrorException {
-        for (Iterator i$ = p_collection.iterator(); i$.hasNext(); ) {
-            Object itemValue = i$.next();
-            serializeSingleObjToElement(itemValue, p_writer);
+    private static void serializeCollection(Collection pCollection, XMLStreamWriter pWriter) throws APPErrorException {
+        for (Iterator item = pCollection.iterator(); item.hasNext(); ) {
+            Object itemValue = item.next();
+            serializeSingleObjToElement(itemValue, pWriter);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static void serializeField(Object p_obj, Field p_field, XMLStreamWriter p_writer) throws APPErrorException {
+    private static void serializeField(Object pObj, Field pField, XMLStreamWriter pWriter) throws APPErrorException {
         try {
-            if (p_field.isAnnotationPresent(XmlIgnore.class)) {
+            if (pField.isAnnotationPresent(XmlIgnore.class)) {
                 return;
             }
 
             Object value = null;
             try {
-                p_field.setAccessible(true);
-                value = p_field.get(p_obj);
-                if (value == null)
+                pField.setAccessible(true);
+                value = pField.get(pObj);
+                if (value == null) {
                     return;
+                }
             } catch (Exception e) {
                 throw new XmlSerializeException("序列化过程中反射成员值失败。", e);
             }
 
-            XmlAttribute attrAnnotation = (XmlAttribute) p_field.getAnnotation(XmlAttribute.class);
+            XmlAttribute attrAnnotation = (XmlAttribute) pField.getAnnotation(XmlAttribute.class);
 
             if (attrAnnotation != null) {
-                p_writer.writeAttribute(attrAnnotation.name(), value.toString());
-
+                pWriter.writeAttribute(attrAnnotation.name(), value.toString());
                 return;
             }
 
-            String elementName = p_field.getName();
+            String elementName = pField.getName();
 
-            XmlElement elementAnnotation = (XmlElement) p_field.getAnnotation(XmlElement.class);
+            XmlElement elementAnnotation = (XmlElement) pField.getAnnotation(XmlElement.class);
 
             if (elementAnnotation != null) {
                 elementName = elementAnnotation.name();
             }
-            XmlArray arrayAnnotation = (XmlArray) p_field.getAnnotation(XmlArray.class);
+            XmlArray arrayAnnotation = (XmlArray) pField.getAnnotation(XmlArray.class);
             if ((arrayAnnotation != null) &&
-                    (!arrayAnnotation.name().equals(""))) {
+                    (!"".equals(arrayAnnotation.name()))) {
                 elementName = arrayAnnotation.name();
             }
 
-            p_writer.writeStartElement(elementName);
-            if (value.getClass().isAnnotationPresent(XmlSerializable.class))
-                serialize(value, p_writer);
-            else if (value.getClass().isArray()) {
-                for (int i = 0; i < Array.getLength(value); i++)
-                    serializeSingleObjToElement(Array.get(value, i), p_writer);
+            pWriter.writeStartElement(elementName);
+            if (value.getClass().isAnnotationPresent(XmlSerializable.class)) {
+                serialize(value, pWriter);
+            } else if (value.getClass().isArray()) {
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    serializeSingleObjToElement(Array.get(value, i), pWriter);
+                }
             } else if ((value instanceof Collection)) {
-                serializeCollection((Collection) value, p_writer);
+                serializeCollection((Collection) value, pWriter);
             } else {
-                p_writer.writeCharacters(value.toString());
+                pWriter.writeCharacters(value.toString());
             }
-            p_writer.writeEndElement();
+            pWriter.writeEndElement();
         } catch (XMLStreamException e) {
             throw new XmlSerializeException(e);
         }
     }
 
-    public static void serializeSingleObjToElement(Object p_obj, XMLStreamWriter p_writer) throws APPErrorException {
+    public static void serializeSingleObjToElement(Object pObj, XMLStreamWriter pWriter) throws APPErrorException {
         try {
-            if (p_obj.getClass().isAnnotationPresent(XmlSerializable.class)) {
-                serialize(p_obj, p_writer);
-            } else if (XmlSerializeHelper.isSimpleClass(p_obj.getClass())) {
-                p_writer.writeStartElement(p_obj.getClass().getSimpleName());
+            if (pObj.getClass().isAnnotationPresent(XmlSerializable.class)) {
+                serialize(pObj, pWriter);
+            } else if (XmlSerializeHelper.isSimpleClass(pObj.getClass())) {
+                pWriter.writeStartElement(pObj.getClass().getSimpleName());
 
-                p_writer.writeCharacters(p_obj.toString());
-                p_writer.writeEndElement();
+                pWriter.writeCharacters(pObj.toString());
+                pWriter.writeEndElement();
             } else {
-                throw new XmlSerializeException(String.format("XmlSerializer正向序列化到Xml元素标签时发生异常，类型[%1$s]无法自动序列化。", new Object[]{p_obj.getClass().getName()}));
+                throw new XmlSerializeException(String.format("XmlSerializer正向序列化到Xml元素标签时发生异常，类型[%1$s]无法自动序列化。", new Object[]{pObj.getClass().getName()}));
             }
 
         } catch (XMLStreamException e) {
@@ -164,14 +168,14 @@ public class XmlSerializer {
         }
     }
 
-    public static <T> T deserialize(String p_xml, Class<T> p_class) throws APPErrorException {
+    public static <T> T deserialize(String pXml, Class<T> pClass) throws APPErrorException {
         try {
             XMLInputFactory xmlInputFactory = XmlSerializeHelper.createXMLInputFactory();
 
-            StringReader stringReader = new StringReader(p_xml);
+            StringReader stringReader = new StringReader(pXml);
             XMLStreamReader xmlReader = xmlInputFactory.createFilteredReader(xmlInputFactory.createXMLStreamReader(stringReader), new XmlSerializeStreamFilter());
             try {
-                return deserialize(xmlReader, p_class);
+                return deserialize(xmlReader, pClass);
             } finally {
                 xmlReader.close();
                 stringReader.close();
@@ -181,84 +185,86 @@ public class XmlSerializer {
         }
     }
 
-    private static void setFieldValue(Object p_Obj, Map<String, Object> p_Filelds) {
-        if (null == p_Filelds) return;
-        for (Map.Entry<String, Object> item : p_Filelds.entrySet()) {
+    private static void setFieldValue(Object pObj, Map<String, Object> pFilelds) {
+        if (null == pFilelds) {
+            return;
+        }
+        for (Map.Entry<String, Object> item : pFilelds.entrySet()) {
             try {
-                Field field = ReflectionUtil.findField(p_Obj.getClass(),item.getKey());
+                Field field = ReflectionUtil.findField(pObj.getClass(), item.getKey());
                 if (null != field) {
                     field.setAccessible(true);
-                    field.set(p_Obj, item.getValue());
-                }
-                else
-                {
-                    LogHelper.error("", "无法获取对象属性,对象：" + p_Obj.getClass() + ",属性：" + item.getKey(), "XmlSerializer.setFieldValue", new APPErrorException(""));
+                    field.set(pObj, item.getValue());
+                } else {
+                    LogHelper.error("", "无法获取对象属性,对象：" + pObj.getClass() + ",属性：" + item.getKey(), "XmlSerializer.setFieldValue", new APPErrorException(""));
                 }
             } catch (IllegalAccessException e) {
-                LogHelper.error("", "无法给对象属性赋值,对象：" + p_Obj.getClass() + ",属性：" + item.getKey() + ",值：" + item.getValue(), "XmlSerializer.setFieldValue", e);
+                LogHelper.error("", "无法给对象属性赋值,对象：" + pObj.getClass() + ",属性：" + item.getKey() + ",值：" + item.getValue(), "XmlSerializer.setFieldValue", e);
             }
         }
 
     }
 
-        /**
-         * 反序列化
-         * @param p_xmlReader
-         * @param p_class
-         * @param <T>
-         * @return
-         * @throws APPErrorException
-         */
-    public static <T> T deserialize(XMLStreamReader p_xmlReader, Class<T> p_class) throws APPErrorException {
-        return deserialize(p_xmlReader, p_class, new HashMap<String, Object>());
-    }
-
     /**
      * 反序列化
-     * @param p_xmlReader
-     * @param p_class
-     * @param p_Filelds 对象需要初始化的参数
+     *
+     * @param pXmlReader
+     * @param pClass
      * @param <T>
      * @return
      * @throws APPErrorException
      */
-    public static <T> T deserialize(XMLStreamReader p_xmlReader, Class<T> p_class, Map<String, Object> p_Filelds) throws APPErrorException {
+    public static <T> T deserialize(XMLStreamReader pXmlReader, Class<T> pClass) throws APPErrorException {
+        return deserialize(pXmlReader, pClass, new HashMap<String, Object>(10));
+    }
+
+    /**
+     * 反序列化
+     *
+     * @param pXmlReader
+     * @param pClass
+     * @param pFilelds   对象需要初始化的参数
+     * @param <T>
+     * @return
+     * @throws APPErrorException
+     */
+    public static <T> T deserialize(XMLStreamReader pXmlReader, Class<T> pClass, Map<String, Object> pFilelds) throws APPErrorException {
         Object result = null;
         try {
-            while ((p_xmlReader.hasNext()) &&
-                    (!p_xmlReader.isStartElement())) {
-                p_xmlReader.next();
+            while ((pXmlReader.hasNext()) &&
+                    (!pXmlReader.isStartElement())) {
+                pXmlReader.next();
             }
-            if (!p_xmlReader.isStartElement()) {
+            if (!pXmlReader.isStartElement()) {
                 throw new XmlSerializeException("Xml 反序列化时无法定位起始元素。");
             }
 
-            if (XmlSerializeHelper.isSimpleClass(p_class)) {
-                p_xmlReader.next();
-                return (T) ReflectionUtil.instanceSimpleClass(p_class, XmlSerializeHelper.readText(p_xmlReader));
+            if (XmlSerializeHelper.isSimpleClass(pClass)) {
+                pXmlReader.next();
+                return (T) ReflectionUtil.instanceSimpleClass(pClass, XmlSerializeHelper.readText(pXmlReader));
             }
 
-            result = p_class.newInstance();
-            setFieldValue(result, p_Filelds);
+            result = pClass.newInstance();
+            setFieldValue(result, pFilelds);
             if ((result instanceof IXmlSerializable)) {
-                ((IXmlSerializable) result).readXml(p_xmlReader);
+                ((IXmlSerializable) result).readXml(pXmlReader);
                 return (T) result;
             }
 
-            String elementName = XmlSerializeHelper.getSerializableClassElementName(p_class);
+            String elementName = XmlSerializeHelper.getSerializableClassElementName(pClass);
 
-            if (!StringUtil.equal(elementName, p_xmlReader.getLocalName(), true)) {
-                throw new XmlSerializeException(String.format("Xml 反序列化时，Xml 文档的元素标签名称[%1$s]和对象映射名称[%2$s]不匹配。", new Object[]{p_xmlReader.getLocalName(), elementName}));
+            if (!StringUtil.equal(elementName, pXmlReader.getLocalName(), true)) {
+                throw new XmlSerializeException(String.format("Xml 反序列化时，Xml 文档的元素标签名称[%1$s]和对象映射名称[%2$s]不匹配。", new Object[]{pXmlReader.getLocalName(), elementName}));
             }
 
             if ((result instanceof Collection)) {
-                deserializeCollection((Collection) result, p_class, (XmlArrayItem) p_class.getAnnotation(XmlArrayItem.class), p_xmlReader);
+                deserializeCollection((Collection) result, pClass, (XmlArrayItem) pClass.getAnnotation(XmlArrayItem.class), pXmlReader);
             } else {
-                for (int i = 0; i < p_xmlReader.getAttributeCount(); i++) {
-                    String attrName = p_xmlReader.getAttributeName(i).toString();
+                for (int i = 0; i < pXmlReader.getAttributeCount(); i++) {
+                    String attrName = pXmlReader.getAttributeName(i).toString();
 
-                    String attrValue = p_xmlReader.getAttributeValue(i);
-                    Field f = XmlSerializeHelper.getField(p_class, attrName, true);
+                    String attrValue = pXmlReader.getAttributeValue(i);
+                    Field f = XmlSerializeHelper.getField(pClass, attrName, true);
 
                     if (f == null) {
                         throw new XmlSerializeException(String.format("Xml 反序列化时无法映射属性节点名称为[%1$s]的成员。", new Object[]{attrName}));
@@ -268,20 +274,21 @@ public class XmlSerializer {
                     f.set(result, ReflectionUtil.instanceSimpleClass(f.getType(), attrValue));
                 }
 
-                while (p_xmlReader.hasNext()) {
-                    p_xmlReader.next();
-                    if (p_xmlReader.isEndElement())
+                while (pXmlReader.hasNext()) {
+                    pXmlReader.next();
+                    if (pXmlReader.isEndElement()) {
                         break;
-                    if (p_xmlReader.isStartElement()) {
-                        elementName = p_xmlReader.getLocalName();
-                        Field f = XmlSerializeHelper.getField(p_class, elementName, true);
+                    }
+                    if (pXmlReader.isStartElement()) {
+                        elementName = pXmlReader.getLocalName();
+                        Field f = XmlSerializeHelper.getField(pClass, elementName, true);
 
                         if (f == null) {
                             throw new XmlSerializeException(String.format("Xml 反序列化时，无法定位节点名称为[%1$s]的成员。", new Object[]{elementName}));
                         }
 
                         f.setAccessible(true);
-                        deserializeField(result, f, p_xmlReader);
+                        deserializeField(result, f, pXmlReader);
                     }
                 }
             }
@@ -295,24 +302,25 @@ public class XmlSerializer {
         }
     }
 
-    private static void deserializeCollection(Collection p_collection, Class p_collectionClass, XmlArrayItem p_xmlArrayItem, XMLStreamReader p_xmlReader) throws APPErrorException {
+    private static void deserializeCollection(Collection pCollection, Class pCollectionClass, XmlArrayItem pXmlArrayItem, XMLStreamReader pXmlReader) throws APPErrorException {
         try {
-            while (p_xmlReader.hasNext()) {
-                p_xmlReader.next();
-                if (p_xmlReader.isEndElement())
+            while (pXmlReader.hasNext()) {
+                pXmlReader.next();
+                if (pXmlReader.isEndElement()) {
                     break;
-                if (p_xmlReader.isStartElement()) {
-                    String elementName = p_xmlReader.getLocalName();
-                    Class arrayItemClass = XmlSerializeHelper.getArrayItemClass(p_xmlArrayItem, elementName);
+                }
+                if (pXmlReader.isStartElement()) {
+                    String elementName = pXmlReader.getLocalName();
+                    Class arrayItemClass = XmlSerializeHelper.getArrayItemClass(pXmlArrayItem, elementName);
 
                     if (arrayItemClass == null) {
-                        arrayItemClass = p_collectionClass.getComponentType();
+                        arrayItemClass = pCollectionClass.getComponentType();
                     }
                     if (arrayItemClass == null) {
-                        throw new XmlSerializeException(String.format("数组或集合类型的对象[%1$s]必须使用 XmlArrayItem 标记其元素类型。", new Object[]{p_collectionClass.getName()}));
+                        throw new XmlSerializeException(String.format("数组或集合类型的对象[%1$s]必须使用 XmlArrayItem 标记其元素类型。", new Object[]{pCollectionClass.getName()}));
                     }
 
-                    p_collection.add(deserialize(p_xmlReader, arrayItemClass));
+                    pCollection.add(deserialize(pXmlReader, arrayItemClass));
                 }
             }
         } catch (XMLStreamException e) {
@@ -322,17 +330,17 @@ public class XmlSerializer {
         }
     }
 
-    private static void deserializeField(Object p_obj, Field p_field, XMLStreamReader p_xmlReader) throws APPErrorException {
+    private static void deserializeField(Object pObj, Field pField, XMLStreamReader pXmlReader) throws APPErrorException {
         try {
-            Class fieldClass = p_field.getType();
+            Class fieldClass = pField.getType();
             if (XmlSerializeHelper.isSimpleClass(fieldClass)) {
-                p_xmlReader.next();
-                p_field.set(p_obj, ReflectionUtil.instanceSimpleClass(fieldClass, XmlSerializeHelper.readText(p_xmlReader)));
+                pXmlReader.next();
+                pField.set(pObj, ReflectionUtil.instanceSimpleClass(fieldClass, XmlSerializeHelper.readText(pXmlReader)));
             } else if (fieldClass.isAnnotationPresent(XmlSerializable.class)) {
-                p_field.set(p_obj, deserialize(p_xmlReader, fieldClass));
+                pField.set(pObj, deserialize(pXmlReader, fieldClass));
             } else if (fieldClass.isArray()) {
                 ArrayList list = new ArrayList();
-                deserializeCollection(list, fieldClass, (XmlArrayItem) p_field.getAnnotation(XmlArrayItem.class), p_xmlReader);
+                deserializeCollection(list, fieldClass, (XmlArrayItem) pField.getAnnotation(XmlArrayItem.class), pXmlReader);
 
                 Object objArray = Array.newInstance(fieldClass.getComponentType(), list.size());
 
@@ -343,17 +351,17 @@ public class XmlSerializer {
                         Array.set(objArray, i, tempArray[i]);
                     }
                 }
-                p_field.set(p_obj, objArray);
+                pField.set(pObj, objArray);
             } else if (Collection.class.isAssignableFrom(fieldClass)) {
                 Collection collection = (Collection) fieldClass.newInstance();
-                deserializeCollection(collection, fieldClass, (XmlArrayItem) p_field.getAnnotation(XmlArrayItem.class), p_xmlReader);
+                deserializeCollection(collection, fieldClass, (XmlArrayItem) pField.getAnnotation(XmlArrayItem.class), pXmlReader);
 
-                p_field.set(p_obj, collection);
+                pField.set(pObj, collection);
             } else {
                 throw new XmlSerializeException(String.format("Xml 反序列化元素标签到对象成员时遇到无法解析的数据类型[%1$s]。", new Object[]{fieldClass.getName()}));
             }
         } catch (XmlSerializeException e) {
-            throw new XmlSerializeException(String.format("反序列化对象成员[%1$s]时发生异常。", new Object[]{p_field.getName()}), e);
+            throw new XmlSerializeException(String.format("反序列化对象成员[%1$s]时发生异常。", new Object[]{pField.getName()}), e);
         } catch (InstantiationException e) {
             throw new XmlSerializeException(e);
         } catch (IllegalAccessException e) {

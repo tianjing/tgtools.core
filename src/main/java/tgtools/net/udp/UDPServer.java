@@ -18,116 +18,116 @@ import java.net.UnknownHostException;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：udp 简单服务端，用于接收消息
  * 时  间：14:44
  */
 public class UDPServer implements IUDPServer {
 
-    protected DatagramSocket m_Socket = null;
-    protected int m_Port;
-    protected IUDPServerListener m_Listener;
-    protected int m_BufferSize = 2048;
-    protected int m_TimeOut = 0;
-    protected Task m_ListenTask;
+    protected DatagramSocket socket = null;
+    protected int port;
+    protected IUDPServerListener listener;
+    protected int bufferSize = 2048;
+    protected int timeOut = 0;
+    protected Task listenTask;
 
     protected DatagramSocket getSocket() throws APPErrorException {
-        if (null == m_Socket && m_Port > 0) {
+        if (null == socket && port > 0) {
             try {
-                m_Socket = new DatagramSocket(m_Port);
-                m_Socket.setReceiveBufferSize(m_BufferSize);
-                m_Socket.setSendBufferSize(m_BufferSize);
-                if(m_TimeOut>0) {
-                    m_Socket.setSoTimeout(m_TimeOut);
+                socket = new DatagramSocket(port);
+                socket.setReceiveBufferSize(bufferSize);
+                socket.setSendBufferSize(bufferSize);
+                if(timeOut>0) {
+                    socket.setSoTimeout(timeOut);
                 }
 
-                return m_Socket;
+                return socket;
             } catch (Exception ex) {
                 throw new APPErrorException("创建Udp对象出错，原因：" + ex.getMessage());
             }
         }
-        return m_Socket;
+        return socket;
     }
 
     /**
      * 设置超时
-     * @param p_TimeOut
+     * @param pTimeOut
      */
     @Override
-    public void setTimeOut(int p_TimeOut) {
-        m_TimeOut = p_TimeOut;
+    public void setTimeOut(int pTimeOut) {
+        timeOut = pTimeOut;
     }
 
     /**
      * 设置缓冲
-     * @param p_BuffeSize
+     * @param pBuffeSize
      */
     @Override
-    public void setBuffeSize(int p_BuffeSize) {
-        m_BufferSize=p_BuffeSize;
+    public void setBuffeSize(int pBuffeSize) {
+        bufferSize=pBuffeSize;
     }
 
     /**
      * 设置监听
-     * @param p_Listener
+     * @param pListener
      */
     @Override
-    public void setListener(IUDPServerListener p_Listener) {
-        m_Listener = p_Listener;
+    public void setListener(IUDPServerListener pListener) {
+        listener = pListener;
     }
 
     /**
      * 启动监听
-     * @param p_Port
+     * @param pPort
      * @throws APPErrorException
      */
     @Override
-    public void start(int p_Port) throws APPErrorException {
+    public void start(int pPort) throws APPErrorException {
         validCanRun();
-        m_Port = p_Port;
+        port = pPort;
         onStart();
-        m_ListenTask=new UdpListenerTask(this);
-        m_ListenTask.run(null);
+        listenTask=new UdpListenerTask(this);
+        listenTask.run(null);
 
     }
 
     @Override
-    public void startWithThread(int p_Port) throws APPErrorException {
+    public void startWithThread(int pPort) throws APPErrorException {
         validCanRun();
-        m_Port = p_Port;
+        port = pPort;
         onStart();
-        m_ListenTask=new UdpListenerTask(this);
-        m_ListenTask.runThread(null);
+        listenTask=new UdpListenerTask(this);
+        listenTask.runThread(null);
     }
 
     @Override
     public void stop() throws APPErrorException {
-        if(null==m_ListenTask)
+        if(null==listenTask)
         {return;}
-        m_ListenTask.cancel();
+        listenTask.cancel();
         close();
-        m_ListenTask=null;
+        listenTask=null;
     }
 
     @Override
     public boolean isClosed() {
-        return m_Socket.isClosed();
+        return socket.isClosed();
     }
 
     @Override
     public boolean isConnected() {
-        return m_Socket.isConnected();
+        return socket.isConnected();
     }
 
     protected void validCanRun() throws APPErrorException {
-        if(null!=m_ListenTask)
+        if(null!=listenTask)
         {
             throw new APPErrorException("正在监听无法启动。");
         }
     }
     protected void receive()throws APPErrorException
     {
-        byte[] backbuf = new byte[m_BufferSize];
+        byte[] backbuf = new byte[bufferSize];
         DatagramPacket backPacket = new DatagramPacket(backbuf, backbuf.length);
         try {
             getSocket().receive(backPacket);
@@ -143,9 +143,9 @@ public class UDPServer implements IUDPServer {
      */
     protected void close() {
         onClose();
-        if (null != m_Socket) {
-            m_Socket.close();
-            m_Socket = null;
+        if (null != socket) {
+            socket.close();
+            socket = null;
         }
     }
 
@@ -155,39 +155,39 @@ public class UDPServer implements IUDPServer {
     @Override
     public void Dispose() {
         close();
-        m_Listener = null;
+        listener = null;
     }
 
     /**
      *
      */
     protected void onClose() {
-        if (null != m_Listener) {
-            m_Listener.onClose();
+        if (null != listener) {
+            listener.onClose();
         }
     }
 
     /**
      *
-     * @param p_Data
-     * @param p_Address
-     * @param p_Port
+     * @param pData
+     * @param pAddress
+     * @param pPort
      */
-    protected void onMessage(byte[] p_Data, InetAddress p_Address, int p_Port) {
-        if (null != m_Listener) {
-            UDPMessageEvent event = new UDPMessageEvent(this, p_Address, p_Port, p_Data);
-            m_Listener.onMessage(event);
+    protected void onMessage(byte[] pData, InetAddress pAddress, int pPort) {
+        if (null != listener) {
+            UDPMessageEvent event = new UDPMessageEvent(this, pAddress, pPort, pData);
+            listener.onMessage(event);
         }
     }
 
     /**
      *
-     * @param p_Error
+     * @param pError
      */
-    protected void onError(Throwable p_Error) {
-        if (null != m_Listener) {
-            UDPErrorEvent event = new UDPErrorEvent(this, p_Error);
-            m_Listener.onError(event);
+    protected void onError(Throwable pError) {
+        if (null != listener) {
+            UDPErrorEvent event = new UDPErrorEvent(this, pError);
+            listener.onError(event);
         }
     }
 
@@ -195,13 +195,13 @@ public class UDPServer implements IUDPServer {
      *
      */
     protected void onStart() {
-        if (null != m_Listener) {
-            m_Listener.onStart();
+        if (null != listener) {
+            listener.onStart();
         }
     }
-    public void send(InetAddress p_Target, int p_TargetPort, byte[] p_Data) throws APPErrorException {
+    public void send(InetAddress pTarget, int pTargetPort, byte[] pData) throws APPErrorException {
         try {
-            DatagramPacket dataGramPacket = new DatagramPacket(p_Data, 0, p_Data.length, p_Target, p_TargetPort);
+            DatagramPacket dataGramPacket = new DatagramPacket(pData, 0, pData.length, pTarget, pTargetPort);
             getSocket().send(dataGramPacket);
 
         } catch (IOException e) {
@@ -214,13 +214,13 @@ public class UDPServer implements IUDPServer {
         try {
             server.setListener(new IUDPServerListener() {
                 @Override
-                public void onError(UDPErrorEvent p_Event) {
+                public void onError(UDPErrorEvent pEvent) {
 
                 }
 
                 @Override
-                public void onMessage(UDPMessageEvent p_Event) {
-                    String receiveMessage = new String(p_Event.getMeaage());
+                public void onMessage(UDPMessageEvent pEvent) {
+                    String receiveMessage = new String(pEvent.getMeaage());
                     System.out.println(receiveMessage);//暂时打印到控制台，一般输出到文件
                     System.out.println("aaaaaaaaaaaaaaaaaa---------------------");
                 }
@@ -268,18 +268,18 @@ public class UDPServer implements IUDPServer {
     }
 
    private class UdpListenerTask extends tgtools.tasks.Task{
-        public UdpListenerTask(UDPServer p_Server){
-            m_Server=p_Server;
+        public UdpListenerTask(UDPServer pServer){
+            server=pServer;
         }
-        private UDPServer m_Server;
+        private UDPServer server;
        @Override
        protected boolean canCancel() {
            return true;
        }
 
        @Override
-       public void run(TaskContext p_Param) {
-           if(null==m_Server)
+       public void run(TaskContext pParam) {
+           if(null==server)
            {
                return;
            }
@@ -288,7 +288,7 @@ public class UDPServer implements IUDPServer {
                if(this.isCancel())
                {return;}
                 try {
-                    m_Server.receive();
+                    server.receive();
                 }catch (Throwable e)
                 {
                     LogHelper.error("","接收信息错误；原因："+e.getMessage(),"UdpListenerTask",e);

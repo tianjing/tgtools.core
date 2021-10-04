@@ -3,47 +3,52 @@ package tgtools.data.mapping;
 import tgtools.data.DataParameterCollection;
 import tgtools.data.DataRow;
 
+/**
+ *
+ * @author tianjing
+ */
+public abstract class Condition {
 
-public abstract class Condition
-{
-
-  public abstract boolean isValid(DataRow paramDataRow);
-
-  public abstract String toSQL(DataParameterCollection paramDataParameterCollection);
-
-  public static AndCondition and(Condition[] p_conditions)
-  {
-    AndCondition andCondition = new AndCondition();
-    for (Condition condition : p_conditions)
-    {
-      andCondition.add(condition);
+    public static AndCondition and(Condition[] pConditions) {
+        AndCondition andCondition = new AndCondition();
+        for (Condition condition : pConditions) {
+            andCondition.add(condition);
+        }
+        return andCondition;
     }
-    return andCondition;
-  }
 
-  public static OrCondition or(Condition[] p_conditions)
-  {
-    OrCondition orCondition = new OrCondition();
-    for (Condition condition : p_conditions)
-    {
-      orCondition.add(condition);
+    public static OrCondition or(Condition[] pConditions) {
+        OrCondition orCondition = new OrCondition();
+        for (Condition condition : pConditions) {
+            orCondition.add(condition);
+        }
+        return orCondition;
     }
-    return orCondition;
-  }
 
-  public static NotCondition not(Condition p_condition)
-  {
-    return new NotCondition(p_condition);
-  }
+    public static NotCondition not(Condition pCondition) {
+        return new NotCondition(pCondition);
+    }
 
-  public static EqualCondition equal(String p_fieldName, Object p_fieldValue, int p_dataType)
-  {
-    return new EqualCondition(p_fieldName, p_fieldValue, p_dataType);
-  }
+    public static EqualCondition equal(String pFieldName, Object pFieldValue, int pDataType) {
+        return new EqualCondition(pFieldName, pFieldValue, pDataType);
+    }
 
-  public static LikeCondition like(String p_fieldName, String p_expression)
-  {
-    return new LikeCondition(p_fieldName, p_expression);
-  }
+    public static LikeCondition like(String pFieldName, String pExpression) {
+        return new LikeCondition(pFieldName, pExpression);
+    }
+
+    /**
+     * isValid
+     * @param paramDataRow
+     * @return
+     */
+    public abstract boolean isValid(DataRow paramDataRow);
+
+    /**
+     * toSQL
+     * @param paramDataParameterCollection
+     * @return
+     */
+    public abstract String toSQL(DataParameterCollection paramDataParameterCollection);
 }
 

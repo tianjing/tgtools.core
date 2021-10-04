@@ -115,13 +115,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static long getDiffDays(Date one, Date two) {
-		// Calendar sysDate = new GregorianCalendar();
-		//
-		// sysDate.setTime(one);
-		//
-		// Calendar failDate = new GregorianCalendar();
-		//
-		// failDate.setTime(two);
 		return (one.getTime() - two.getTime()) / 86400000L;
 	}
 
@@ -154,14 +147,14 @@ public class DateUtil {
 	/**
 	 * 将日期转换成短日期 yyyy-MM-dd
 	 * 
-	 * @param p_date
+	 * @param pDate
 	 *            日期字符串
 	 * @return
 	 */
-	public static Date parseShortDate(String p_date) {
+	public static Date parseShortDate(String pDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat(SHORT_TIME);
 		try {
-			return sdf.parse(p_date);
+			return sdf.parse(pDate);
 		} catch (Exception e) {
 		}
 		return null;
@@ -170,14 +163,14 @@ public class DateUtil {
 	/**
 	 * 将日期转换成长日期 yyyy-MM-dd HH:mm:ss
 	 * 
-	 * @param p_date
+	 * @param pDate
 	 *            日期字符串
 	 * @return
 	 */
-	public static Date parseLongDate(String p_date) {
+	public static Date parseLongDate(String pDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat(LONG_TIME);
 		try {
-			return sdf.parse(p_date);
+			return sdf.parse(pDate);
 		} catch (Exception e) {
 		}
 		return null;
@@ -186,14 +179,14 @@ public class DateUtil {
 	/**
 	 * 将时间转换成 yyyy-MM-dd HH:mm:ss.SSS
 	 * 
-	 * @param p_date
+	 * @param pDate
 	 *            需要转换的时间
 	 * @return
 	 */
-	public static String formatLongestDate(Date p_date) {
+	public static String formatLongestDate(Date pDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		try {
-			return sdf.format(p_date);
+			return sdf.format(pDate);
 		} catch (Exception e) {
 		}
 		return null;
@@ -223,23 +216,23 @@ public class DateUtil {
 	}
 	/**
 	 * 获取两个时间的差值 (one - two)
-	 * @param p_One
-	 * @param p_Two
+	 * @param pOne
+	 * @param pTwo
 	 * @return
 	 */
-	public static long DateMinus(Date p_One, Date p_Two) {
-		return p_One.getTime() - p_Two.getTime();
+	public static long DateMinus(Date pOne, Date pTwo) {
+		return pOne.getTime() - pTwo.getTime();
 	}
 	/**
 	 * 判断是否是null或者最小值
-	 * @param p_Date
+	 * @param pDate
 	 * @return
 	 */
-	public static boolean isNullOrMinDate(Date p_Date) {
-		if (null == p_Date) {
+	public static boolean isNullOrMinDate(Date pDate) {
+		if (null == pDate) {
 			return true;
 		}
-		if (0 == p_Date.getTime()) {
+		if (0 == pDate.getTime()) {
 			return true;
 		}
 		return false;

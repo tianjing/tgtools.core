@@ -2,6 +2,10 @@ package tgtools.data;
 
 import tgtools.exceptions.APPRuntimeException;
 
+/**
+ *
+ * @author tianjing
+ */
 public class DataAccessException extends APPRuntimeException{
 
 	  /**
@@ -9,14 +13,14 @@ public class DataAccessException extends APPRuntimeException{
 	 */
 	private static final long serialVersionUID = 3769316662937980305L;
 
-	public DataAccessException(String p_excptMsg)
+	public DataAccessException(String pMessage)
 	  {
-	    super(p_excptMsg);
+	    super(pMessage);
 	  }
 
-	  public DataAccessException(String p_excptMsg, Throwable p_excpt)
+	  public DataAccessException(String pMessage, Throwable pException)
 	  {
-	    super(p_excptMsg, p_excpt);
+	    super(pMessage, pException);
 	  }
 
 	

@@ -3,21 +3,21 @@ package tgtools.message;
 import tgtools.exceptions.APPErrorException;
 
 /**
- * 名  称：
- * 编写者：田径
- * 功  能：
- * 时  间：9:31
+ * @author tianjing
  */
 public interface IMessageStore {
 
     /**
      * 添加消息
-     * @param p_Message
+     * @param pMessage
+     * @throws APPErrorException
      */
-    void addMessage(Message p_Message)  throws APPErrorException;
+    void addMessage(Message pMessage)  throws APPErrorException;
 
     /**
      * 从队列中获取一个消息
+     * @throws APPErrorException
+     * @return
      */
     Message getMessage()  throws APPErrorException;
 

@@ -6,6 +6,10 @@ import java.util.List;
 import tgtools.data.DataParameterCollection;
 import tgtools.data.DataRow;
 
+/**
+ *
+ * @author tianjing
+ */
 public abstract class CompositeCondition extends Condition
 {
   protected ConditionCollection conditions;
@@ -15,17 +19,29 @@ public abstract class CompositeCondition extends Condition
     this.conditions = new ConditionCollection();
   }
 
-  public void add(Condition p_condition)
+  public void add(Condition pCondition)
   {
-    this.conditions.add(p_condition);
+    this.conditions.add(pCondition);
   }
 
   public List<Condition> getConditions()
   {
     return Collections.unmodifiableList(this.conditions);
   }
+
+  /**
+   * isValid
+   * @param pParamDataRow
+   * @return
+   */
   @Override
-  public abstract boolean isValid(DataRow paramDataRow);
+  public abstract boolean isValid(DataRow pParamDataRow);
+
+  /**
+   * toSQL
+   * @param pParamDataParameterCollection
+   * @return
+   */
   @Override
-  public abstract String toSQL(DataParameterCollection paramDataParameterCollection);
+  public abstract String toSQL(DataParameterCollection pParamDataParameterCollection);
 }

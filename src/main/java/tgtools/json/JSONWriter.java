@@ -2,7 +2,9 @@ package tgtools.json;
 
 import java.io.IOException;
 import java.io.Writer;
-
+/**
+ * @author tianjing
+ */
 public class JSONWriter
 {
   private static final int maxdepth = 20;

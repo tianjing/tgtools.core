@@ -1,7 +1,9 @@
 package tgtools.log;
 
 import tgtools.util.StringUtil;
-
+/**
+ * @author tianjing
+ */
 public class LogEntity {
 	private String username;
 	private String logtime;

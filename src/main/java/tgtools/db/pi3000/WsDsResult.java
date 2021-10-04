@@ -8,7 +8,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.StringReader;
-
+/**
+ * @author tianjing
+ */
 public class WsDsResult extends ResponseBody {
 	private String resultHint;
 	private int rows;
@@ -52,8 +54,7 @@ public class WsDsResult extends ResponseBody {
 		return table;
 	}
 	@Override
-	public void writeXml(XMLStreamWriter paramXMLStreamWriter) {
-		// TODO Auto-generated method stub
+	public void writeXml(XMLStreamWriter pParamXmlStreamWriter) {
 
 	}
 

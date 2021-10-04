@@ -21,7 +21,7 @@ import java.io.StringWriter;
 /**
  * 名  称：json 实体 互转类
  * 依赖jackson-databind-2.2.3
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：12:45
  */
@@ -67,11 +67,11 @@ public class JsonParseHelper {
     /**
      * 获取 ObjectMapper
      *
-     * @param p_IsReal
+     * @param pIsReal
      * @return
      */
-    public static ObjectMapper getMapper(boolean p_IsReal) {
-        if (p_IsReal) {
+    public static ObjectMapper getMapper(boolean pIsReal) {
+        if (pIsReal) {
             return m_realMapper;
         }
         return m_mapper;
@@ -89,11 +89,11 @@ public class JsonParseHelper {
     /**
      * 创建 ObjectNode
      *
-     * @param p_IsReal
+     * @param pIsReal
      * @return
      */
-    public static ObjectNode createObjectNode(boolean p_IsReal) {
-        return getMapper(p_IsReal).createObjectNode();
+    public static ObjectNode createObjectNode(boolean pIsReal) {
+        return getMapper(pIsReal).createObjectNode();
     }
 
     /**
@@ -108,21 +108,21 @@ public class JsonParseHelper {
     /**
      * 创建 ArrayNode
      *
-     * @param p_IsReal
+     * @param pIsReal
      * @return
      */
-    public static ArrayNode createArrayNode(boolean p_IsReal) {
-        return getMapper(p_IsReal).createArrayNode();
+    public static ArrayNode createArrayNode(boolean pIsReal) {
+        return getMapper(pIsReal).createArrayNode();
     }
 
     /**
      * 将对象转换为JSON 字符串
      *
      * @param obj      需要转换的对象
-     * @param p_IsReal 是否使用真实字段名（默认小写字段名）
+     * @param pIsReal 是否使用真实字段名（默认小写字段名）
      * @return 转换后的字符串
      */
-    public static String parseToJson(Object obj, boolean p_IsReal) {
+    public static String parseToJson(Object obj, boolean pIsReal) {
 
         String json = null;
         JsonGenerator gen = null;
@@ -131,7 +131,7 @@ public class JsonParseHelper {
             writer = new StringWriter();
             gen = new JsonFactory().createGenerator(writer);
 
-            getMapper(p_IsReal).writeValue(gen, obj);
+            getMapper(pIsReal).writeValue(gen, obj);
             gen.close();
             json = writer.toString();
             writer.close();
@@ -190,24 +190,24 @@ public class JsonParseHelper {
     /**
      * 将DataTable 转换成实例 字段名完全匹配
      *
-     * @param p_Table
+     * @param pTable
      * @param cls     数组类型 如 Menu[].class
      * @return
      * @throws APPErrorException
      */
-    public static <T> T parseToObject(DataTable p_Table, Class<T> cls) throws APPErrorException {
-        return parseToObject(p_Table.toJson(), cls, true);
+    public static <T> T parseToObject(DataTable pTable, Class<T> cls) throws APPErrorException {
+        return parseToObject(pTable.toJson(), cls, true);
     }
 
     /**
-     * @param p_Table
+     * @param pTable
      * @param cls      数组类型 如 Menu[].class
-     * @param p_IsReal 字段名是否完全匹配
+     * @param pIsReal 字段名是否完全匹配
      * @return
      * @throws APPErrorException
      */
-    public static <T> T parseToObject(DataTable p_Table, Class<T> cls, boolean p_IsReal) throws APPErrorException {
-        return parseToObject(p_Table.toJson(), cls, p_IsReal);
+    public static <T> T parseToObject(DataTable pTable, Class<T> cls, boolean pIsReal) throws APPErrorException {
+        return parseToObject(pTable.toJson(), cls, pIsReal);
     }
 
     /**
@@ -215,12 +215,12 @@ public class JsonParseHelper {
      *
      * @param json     json字符串
      * @param cls      对象类型
-     * @param p_IsReal 是否使用真实字段名（默认小写字段名）
+     * @param pIsReal 是否使用真实字段名（默认小写字段名）
      * @return 转换后的对象
      */
-    public static <T> T parseToObject(String json, Class<T> cls, boolean p_IsReal) throws APPErrorException {
+    public static <T> T parseToObject(String json, Class<T> cls, boolean pIsReal) throws APPErrorException {
         try {
-            return getMapper(p_IsReal).readValue(json, cls);
+            return getMapper(pIsReal).readValue(json, cls);
         } catch (IOException e) {
             throw new APPErrorException("json转换实体出错", e);
         }

@@ -6,28 +6,28 @@ import java.net.InetAddress;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：16:13
  */
 public class UDPMessageEvent extends Event{
-    public UDPMessageEvent(Object p_Sender,InetAddress p_Address,int p_Port,byte[] p_Meaage){
-        m_Sender=p_Sender;
-        m_Meaage=p_Meaage;
-        m_Address=p_Address;
-        m_Port=p_Port;
+    public UDPMessageEvent(Object pSender,InetAddress pAddress,int pPort,byte[] pMeaage){
+        sender=pSender;
+        meaage=pMeaage;
+        address=pAddress;
+        port=pPort;
     }
-    private Object m_Sender;
-    private byte[] m_Meaage;
-    private InetAddress m_Address;
-    private int m_Port;
+    private Object sender;
+    private byte[] meaage;
+    private InetAddress address;
+    private int port;
 
     /**
      * 获取对象
      * @return
      */
     public Object getSender() {
-        return m_Sender;
+        return sender;
     }
 
     /**
@@ -35,7 +35,7 @@ public class UDPMessageEvent extends Event{
      * @return
      */
     public byte[] getMeaage() {
-        return m_Meaage;
+        return meaage;
     }
 
     /**
@@ -43,7 +43,7 @@ public class UDPMessageEvent extends Event{
      * @return
      */
     public InetAddress getAddress() {
-        return m_Address;
+        return address;
     }
 
     /**
@@ -51,6 +51,6 @@ public class UDPMessageEvent extends Event{
      * @return
      */
     public int getPort() {
-        return m_Port;
+        return port;
     }
 }

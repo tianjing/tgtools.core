@@ -1,5 +1,6 @@
 package tgtools.data;
 
+import tgtools.util.StringUtil;
 import tgtools.xml.IXmlSerializable;
 import tgtools.xml.XmlSerializeException;
 import tgtools.xml.XmlSerializeHelper;
@@ -10,6 +11,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author tianjing
+ */
 public class DataColumn implements IXmlSerializable, Serializable {
     private static final long serialVersionUID = -1245393580144288826L;
 
@@ -30,10 +34,10 @@ public class DataColumn implements IXmlSerializable, Serializable {
     private HashMap<String, String> extendedProperties;
     private boolean system;
 
-    protected DataColumn(DataTable p_table, String p_columnName) {
-        this.table = p_table;
+    protected DataColumn(DataTable pTable, String pColumnName) {
+        this.table = pTable;
 
-        this.columnName = p_columnName;
+        this.columnName = pColumnName;
         this.caption = null;
         this.nullable = true;
         this.caseSensitive = false;
@@ -59,74 +63,75 @@ public class DataColumn implements IXmlSerializable, Serializable {
         return this.columnName.toUpperCase();
     }
 
-    public void setColumnName(String p_columnName) {
-        this.columnName = p_columnName;
+    public void setColumnName(String pColumnName) {
+        this.columnName = pColumnName;
     }
 
     public String getCaption() {
         return this.caption;
     }
 
-    public void setCaption(String p_caption) {
-        this.caption = p_caption;
+    public void setCaption(String pCaption) {
+        this.caption = pCaption;
     }
 
     public int getColumnType() {
         return this.columnType;
     }
 
-    public void setColumnType(int p_columnType) {
-        this.columnType = p_columnType;
+    public void setColumnType(int pColumnType) {
+        this.columnType = pColumnType;
     }
 
     public int getPrecision() {
         return this.precision;
     }
 
-    public void setPrecision(int p_precision) {
-        this.precision = p_precision;
+    public void setPrecision(int pPrecision) {
+        this.precision = pPrecision;
     }
 
     public int getScale() {
         return this.scale;
     }
 
-    public void setScale(int p_scale) {
-        this.scale = p_scale;
+    public void setScale(int pScale) {
+        this.scale = pScale;
     }
 
     public boolean isNullable() {
         return this.nullable;
     }
 
-    public void setNullable(boolean p_nullable) {
-        this.nullable = p_nullable;
+    public void setNullable(boolean pNullable) {
+        this.nullable = pNullable;
     }
 
     public boolean isCaseSensitive() {
         return this.caseSensitive;
     }
 
-    public void setCaseSensitive(boolean p_caseSensitive) {
-        this.caseSensitive = p_caseSensitive;
+    public void setCaseSensitive(boolean pIndex) {
+        this.caseSensitive = pIndex;
     }
 
     public boolean isReadOnly() {
         return this.readOnly;
     }
 
-    public void setReadOnly(boolean p_readOnly) {
-        this.readOnly = p_readOnly;
+    public void setReadOnly(boolean pReadOnly) {
+        this.readOnly = pReadOnly;
     }
 
     public boolean isPrimaryKey() {
         return this.primaryKey;
     }
 
-    public void setPrimaryKey(boolean p_primaryKey) {
-        this.primaryKey = p_primaryKey;
-        if (this.primaryKey)
+    public void setPrimaryKey(boolean pPrimaryKey) {
+        this.primaryKey = pPrimaryKey;
+        if (this.primaryKey) {
             this.nullable = false;
+        }
     }
 
     public HashMap<String, String> getExtendedProperties() {
@@ -137,8 +142,8 @@ public class DataColumn implements IXmlSerializable, Serializable {
         return this.defaultValue;
     }
 
-    public void setDefaultValue(Object p_value) {
-        this.defaultValue = p_value;
+    public void setDefaultValue(Object pValue) {
+        this.defaultValue = pValue;
     }
 
     public boolean isCalculated() {
@@ -149,8 +154,8 @@ public class DataColumn implements IXmlSerializable, Serializable {
         return this.expression;
     }
 
-    public void setExpression(String p_expression) {
-        this.expression = p_expression;
+    public void setExpression(String pExpression) {
+        this.expression = pExpression;
         this.readOnly = true;
     }
 
@@ -162,9 +167,10 @@ public class DataColumn implements IXmlSerializable, Serializable {
         this.indexInColList = indexInColList;
     }
 
-    public boolean equals(Object p_column) {
-        if ((p_column instanceof DataColumn)) {
-            DataColumn column = (DataColumn) p_column;
+    @Override
+    public boolean equals(Object pColumn) {
+        if ((pColumn instanceof DataColumn)) {
+            DataColumn column = (DataColumn) pColumn;
             return this.columnName.equals(column.columnName);
         }
         return false;
@@ -184,102 +190,109 @@ public class DataColumn implements IXmlSerializable, Serializable {
     }
 
     @Override
-    public void readXml(XMLStreamReader p_reader) {
-        if (!p_reader.getLocalName().equalsIgnoreCase("Column")) {
+    public void readXml(XMLStreamReader pReader) {
+        if (!StringUtil.equalsIgnoreCase(pReader.getLocalName(), "Column")) {
             throw new XmlSerializeException("无法反序列化 DataColumn 对象，当前 XMLStreamReader 的游标位置有误。");
         }
 
-        for (int i = 0; i < p_reader.getAttributeCount(); i++) {
-            String attrName = p_reader.getAttributeName(i).toString();
-            String attrValue = p_reader.getAttributeValue(i);
-            if (attrName.equalsIgnoreCase("columnName"))
+        for (int i = 0; i < pReader.getAttributeCount(); i++) {
+            String attrName = pReader.getAttributeName(i).toString();
+            String attrValue = pReader.getAttributeValue(i);
+            if (StringUtil.equalsIgnoreCase(attrName, "columnName")) {
                 this.columnName = attrValue;
-            else if (attrName.equalsIgnoreCase("caption"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "caption")) {
                 this.caption = attrValue;
-            else if (attrName.equalsIgnoreCase("primaryKey"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "primaryKey")) {
                 this.primaryKey = Boolean.valueOf(attrValue).booleanValue();
-            else if (attrName.equalsIgnoreCase("dbType"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "dbType")) {
                 this.columnType = DbTypeConverter.getDbType(attrValue);
-            else if (attrName.equalsIgnoreCase("expression"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "expression")) {
                 this.expression = attrValue;
-            else if (attrName.equalsIgnoreCase("nullable"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "nullable")) {
                 this.nullable = Boolean.valueOf(attrValue).booleanValue();
-            else if (attrName.equalsIgnoreCase("precision"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "precision")) {
                 this.precision = Integer.valueOf(attrValue).intValue();
-            else if (attrName.equalsIgnoreCase("scale"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "scale")) {
                 this.scale = Integer.valueOf(attrValue).intValue();
-            else if (attrName.equalsIgnoreCase("readOnly"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "readOnly")) {
                 this.readOnly = Boolean.valueOf(attrValue).booleanValue();
-            else if (attrName.equalsIgnoreCase("indexInColList"))
+            } else if (StringUtil.equalsIgnoreCase(attrName, "indexInColList")) {
                 this.indexInColList = Integer.valueOf(attrValue).intValue();
-            else if (attrName.equalsIgnoreCase("visible")) {
+            } else if (StringUtil.equalsIgnoreCase(attrName, "visible")) {
                 getExtendedProperties().put("visible", attrValue);
             } else {
                 getExtendedProperties().put(attrName, attrValue);
             }
         }
 
-        for (int i = 0; i < p_reader.getAttributeCount(); i++) {
-            String attrName = p_reader.getAttributeName(i).toString();
-            String attrValue = p_reader.getAttributeValue(i);
-            if (attrName.equalsIgnoreCase("defaultValue")) {
+        for (int i = 0; i < pReader.getAttributeCount(); i++) {
+            String attrName = pReader.getAttributeName(i).toString();
+            String attrValue = pReader.getAttributeValue(i);
+            if (StringUtil.equalsIgnoreCase(attrName, "defaultValue")) {
                 this.defaultValue = DbTypeConverter.toCommonType(attrValue, getColumnType());
 
                 break;
             }
         }
         try {
-            p_reader.nextTag();
+            pReader.nextTag();
         } catch (javax.xml.stream.XMLStreamException e) {
             throw new XmlSerializeException("DataColumn 反序列化时发生异常。", e);
         }
     }
 
     @Override
-    public void writeXml(XMLStreamWriter p_writer) {
-        writeXmlImpl(p_writer, true);
+    public void writeXml(XMLStreamWriter pWriter) {
+        writeXmlImpl(pWriter, true);
     }
 
     @SuppressWarnings("rawtypes")
-    public void writeXmlImpl(XMLStreamWriter p_writer, boolean p_needMoreCol) {
+    public void writeXmlImpl(XMLStreamWriter pWriter, boolean pNeedMoreCol) {
         try {
-            p_writer.writeStartElement("Column");
-            p_writer.writeAttribute("columnName", this.columnName);
-            if (this.caption != null)
-                p_writer.writeAttribute("caption", this.caption);
-            if (this.primaryKey)
-                p_writer.writeAttribute("primaryKey", "true");
-            p_writer.writeAttribute("dbType", DbTypeConverter.getDbTypeName(this.columnType));
-
+            pWriter.writeStartElement("Column");
+            pWriter.writeAttribute("columnName", this.columnName);
+            if (this.caption != null) {
+                pWriter.writeAttribute("caption", this.caption);
+            }
+            if (this.primaryKey) {
+                pWriter.writeAttribute("primaryKey", "true");
+                pWriter.writeAttribute("dbType", DbTypeConverter.getDbTypeName(this.columnType));
+            }
             if (this.defaultValue != null) {
-                p_writer.writeAttribute("defaultValue", XmlSerializeHelper.serializeObjectToString(this.defaultValue));
+                pWriter.writeAttribute("defaultValue", XmlSerializeHelper.serializeObjectToString(this.defaultValue));
             }
-            if (this.expression != null)
-                p_writer.writeAttribute("expression", this.expression);
-            if (!this.nullable)
-                p_writer.writeAttribute("nullable", "false");
+            if (this.expression != null) {
+                pWriter.writeAttribute("expression", this.expression);
+            }
+            if (!this.nullable) {
+                pWriter.writeAttribute("nullable", "false");
+            }
             if (this.precision != 0) {
-                p_writer.writeAttribute("precision", String.valueOf(this.precision));
+                pWriter.writeAttribute("precision", String.valueOf(this.precision));
             }
-            if (this.scale != 0)
-                p_writer.writeAttribute("scale", String.valueOf(this.scale));
-            if (this.readOnly)
-                p_writer.writeAttribute("readOnly", "true");
-            if (p_needMoreCol) {
-                p_writer.writeAttribute("indexInColList", String.valueOf(this.indexInColList));
+            if (this.scale != 0) {
+                pWriter.writeAttribute("scale", String.valueOf(this.scale));
+            }
+            if (this.readOnly) {
+                pWriter.writeAttribute("readOnly", "true");
+            }
+            if (pNeedMoreCol) {
+                pWriter.writeAttribute("indexInColList", String.valueOf(this.indexInColList));
             }
 
             for (Map.Entry entry : getExtendedProperties().entrySet()) {
                 String keyName = (String) entry.getKey();
                 String keyValue = (String) entry.getValue();
 
-                if (keyName.equalsIgnoreCase("visible")) {
-                    if (!Boolean.valueOf(keyValue).booleanValue())
-                        p_writer.writeAttribute("visible", keyValue);
-                } else
-                    p_writer.writeAttribute(keyName, keyValue);
+                if (StringUtil.equalsIgnoreCase(keyName,"visible")) {
+                    if (!Boolean.valueOf(keyValue).booleanValue()) {
+                        pWriter.writeAttribute("visible", keyValue);
+                    }
+                } else {
+                    pWriter.writeAttribute(keyName, keyValue);
+                }
             }
-            p_writer.writeEndElement();
+            pWriter.writeEndElement();
         } catch (Exception e) {
             throw new XmlSerializeException("DataColumn 序列化为 Xml 时发生异常。", e);
         }

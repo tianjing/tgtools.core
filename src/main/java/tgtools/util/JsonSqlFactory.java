@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 名  称：json转sql字符串
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：9:42
  */
@@ -20,48 +20,48 @@ public class JsonSqlFactory {
     /**
      * 转换json 为 update sql语句
      *
-     * @param p_Json      json对象
-     * @param p_Keys      主键集合
-     * @param p_TableName 表名称
+     * @param pJson      json对象
+     * @param pKeys      主键集合
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseUpdateSql(JSONObject p_Json, List<String> p_Keys, String p_TableName) throws APPErrorException {
-        return parseUpdateSql(p_Json, DataBaseFactory.getDefault().getDataBaseType(), p_Keys, p_TableName);
+    public static String parseUpdateSql(JSONObject pJson, List<String> pKeys, String pTableName) throws APPErrorException {
+        return parseUpdateSql(pJson, DataBaseFactory.getDefault().getDataBaseType(), pKeys, pTableName);
     }
 
     /**
      * 转换json 为 update sql语句
      *
-     * @param p_Json      json对象
-     * @param p_DBType    数据库类型
-     * @param p_Keys      主键集合
-     * @param p_TableName 表名称
+     * @param pJson      json对象
+     * @param pDbType    数据库类型
+     * @param pKeys      主键集合
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseUpdateSql(JSONObject p_Json, String p_DBType, List<String> p_Keys, String p_TableName) throws APPErrorException {
+    public static String parseUpdateSql(JSONObject pJson, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
         String sql = "update ${tablename} set ${values} where ${filters}";
         String values = "";
         String filters = "";
-        JSONArray names = p_Json.names();
+        JSONArray names = pJson.names();
         for (int i = 0; i < names.length(); i++) {
             try {
                 String key = names.getString(i);
-                String value = p_Json.getString(key);
-                value = p_Json.isNull(key) ? "NULL" : value;
+                String value = pJson.getString(key);
+                value = pJson.isNull(key) ? "NULL" : value;
                 if (!StringUtil.isNullOrEmpty(key)) {
-                    if (p_Keys.contains(key)) {
-                        filters += key + "='" + SqlStrHelper.escape(p_DBType, value) + "' and ";
+                    if (pKeys.contains(key)) {
+                        filters += key + "='" + SqlStrHelper.escape(pDbType, value) + "' and ";
                     } else {
-                        if (p_Json.isNull(key)) {
+                        if (pJson.isNull(key)) {
                             values += key + "=NULL,";
                         } else {
-                            values += key + "='" + SqlStrHelper.escape(p_DBType, value) + "',";
+                            values += key + "='" + SqlStrHelper.escape(pDbType, value) + "',";
                         }
                     }
                 }
@@ -72,7 +72,7 @@ public class JsonSqlFactory {
         values = StringUtil.removeLast(values, ',');
         filters += " 1=1";
 
-        sql = StringUtil.replace(sql, "${tablename}", p_TableName);
+        sql = StringUtil.replace(sql, "${tablename}", pTableName);
         sql = StringUtil.replace(sql, "${values}", values);
         sql = StringUtil.replace(sql, "${filters}", filters);
         return sql;
@@ -80,40 +80,40 @@ public class JsonSqlFactory {
     /**
      * 转换json 为 insert sql语句
      *
-     * @param p_Json      json 对象
-     * @param p_TableName 表名称
+     * @param pJson      json 对象
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseInsertSql(JSONObject p_Json, String p_TableName) throws APPErrorException {
-        return parseInsertSql(p_Json, DataBaseFactory.getDefault().getDataBaseType(), p_TableName);
+    public static String parseInsertSql(JSONObject pJson, String pTableName) throws APPErrorException {
+        return parseInsertSql(pJson, DataBaseFactory.getDefault().getDataBaseType(), pTableName);
     }
 
     /**
      * 转换json 为 insert sql语句
      *
-     * @param p_Json      json 对象
-     * @param p_DBType    数据库类型
-     * @param p_TableName 表名称
+     * @param pJson      json 对象
+     * @param pDbType    数据库类型
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseInsertSql(JSONObject p_Json, String p_DBType, String p_TableName) throws APPErrorException {
+    public static String parseInsertSql(JSONObject pJson, String pDbType, String pTableName) throws APPErrorException {
         String sql = "insert into ${tablename} (${keys}) values(${values})";
         String keys = "";
         String values = "";
-        JSONArray names = p_Json.names();
+        JSONArray names = pJson.names();
         for (int i = 0; i < names.length(); i++) {
             try {
                 String key = names.getString(i);
-                String value = p_Json.getString(key);
+                String value = pJson.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
-                    values += p_Json.isNull(key) ? "NULL," : "'" + SqlStrHelper.escape(p_DBType,value) + "',";
+                    values += pJson.isNull(key) ? "NULL," : "'" + SqlStrHelper.escape(pDbType,value) + "',";
                 }
             } catch (Exception e) {
                 throw new APPErrorException("数据不完整");
@@ -123,39 +123,39 @@ public class JsonSqlFactory {
         keys = StringUtil.removeLast(keys, ',');
         sql = StringUtil.replace(sql, "${keys}", keys);
         sql = StringUtil.replace(sql, "${values}", values);
-        sql = StringUtil.replace(sql, "${tablename}", p_TableName);
+        sql = StringUtil.replace(sql, "${tablename}", pTableName);
         return sql;
     }
 
     /**
      * 转换json 为 update sql语句
      *
-     * @param p_Json      json对象
-     * @param p_DBType    数据库类型
-     * @param p_Keys      主键集合
-     * @param p_TableName 表名称
+     * @param pJson      json对象
+     * @param pDbType    数据库类型
+     * @param pKeys      主键集合
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseUpdateSql(JsonNode p_Json, String p_DBType, List<String> p_Keys, String p_TableName) throws APPErrorException {
+    public static String parseUpdateSql(JsonNode pJson, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
         String sql = "update ${tablename} set ${values} where ${filters}";
         String values = "";
         String filters = "";
-        Iterator<String> names = p_Json.fieldNames();
+        Iterator<String> names = pJson.fieldNames();
         while (names.hasNext()) {
             try {
                 String key = names.next();
                 String valuestr = "NULL";
-                JsonNode value = p_Json.get(key);
+                JsonNode value = pJson.get(key);
                 if (!value.isNull() && value.isTextual()) {
-                    valuestr = "'" + SqlStrHelper.escapeAll(p_DBType, value.asText()) + "'";
+                    valuestr = "'" + SqlStrHelper.escapeAll(pDbType, value.asText()) + "'";
                 } else if (!value.isNull()) {
                     valuestr = value.toString();
                 }
                 if (!StringUtil.isNullOrEmpty(key)) {
-                    if (p_Keys.contains(key)) {
+                    if (pKeys.contains(key)) {
                         filters += key + "=" + valuestr + " and ";
                     } else {
                         values += key + "=" + valuestr + ",";
@@ -168,7 +168,7 @@ public class JsonSqlFactory {
         values = StringUtil.removeLast(values, ',');
         filters += " 1=1";
 
-        sql = StringUtil.replace(sql, "${tablename}", p_TableName);
+        sql = StringUtil.replace(sql, "${tablename}", pTableName);
         sql = StringUtil.replace(sql, "${values}", values);
         sql = StringUtil.replace(sql, "${filters}", filters);
         return sql;
@@ -177,25 +177,25 @@ public class JsonSqlFactory {
     /**
      * 转换json 为 insert sql语句
      *
-     * @param p_Json      json 对象
-     * @param p_TableName 表名称
+     * @param pJson      json 对象
+     * @param pTableName 表名称
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static String parseInsertSql(JsonNode p_Json, String p_DBType, String p_TableName) throws APPErrorException {
+    public static String parseInsertSql(JsonNode pJson, String pDbType, String pTableName) throws APPErrorException {
         String sql = "insert into ${tablename} (${keys}) values(${values})";
         String keys = "";
         String values = "";
-        Iterator<String> names = p_Json.fieldNames();
+        Iterator<String> names = pJson.fieldNames();
         while (names.hasNext()) {
             try {
                 String key = names.next();
                 String valuestr = "NULL";
-                JsonNode value = p_Json.get(key);
+                JsonNode value = pJson.get(key);
                 if (!value.isNull() && value.isTextual()) {
-                    valuestr = "'" + SqlStrHelper.escapeAll(p_DBType, value.asText()) + "'";
+                    valuestr = "'" + SqlStrHelper.escapeAll(pDbType, value.asText()) + "'";
                 } else if (!value.isNull()) {
                     valuestr = value.toString();
                 }
@@ -213,7 +213,7 @@ public class JsonSqlFactory {
         keys = StringUtil.removeLast(keys, ',');
         sql = StringUtil.replace(sql, "${keys}", keys);
         sql = StringUtil.replace(sql, "${values}", values);
-        sql = StringUtil.replace(sql, "${tablename}", p_TableName);
+        sql = StringUtil.replace(sql, "${tablename}", pTableName);
         return sql;
     }
 }

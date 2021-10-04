@@ -10,13 +10,13 @@ public class APPRuntimeException extends RuntimeException{
 
 	private static final long serialVersionUID = 6358732841528232544L;
 	
-	public APPRuntimeException(Throwable p_Exception) {
-		super(p_Exception);
+	public APPRuntimeException(Throwable pException) {
+		super(pException);
 	}
-	public APPRuntimeException(String p_Message) {
-		super(p_Message);
+	public APPRuntimeException(String pMessage) {
+		super(pMessage);
 	}
-	public APPRuntimeException(String p_Message, Throwable p_Exception) {
-		super(p_Message,p_Exception);
+	public APPRuntimeException(String pMessage, Throwable pException) {
+		super(pMessage,pException);
 	}
 }

@@ -25,44 +25,44 @@ import java.util.concurrent.ExecutorService;
 public abstract class Task {
 
     protected static final int Time_OneSecond = 1000;
-    protected String m_Name;
-    protected boolean m_IsCancel;
-    protected String m_Status;
-    protected int m_IntervalTime = 0;
-    protected ITaskListener m_TaskListener;
-    protected Date m_PreProcessTime = DateUtil.getCurrentDate();
-    protected boolean m_IsBusy = false;
-    protected boolean m_IsAsync = false;
+    protected String name;
+    protected boolean isCancel;
+    protected String status;
+    protected int intervalTime = 0;
+    protected ITaskListener taskListener;
+    protected Date preProcessTime = DateUtil.getCurrentDate();
+    protected boolean isBusy = false;
+    protected boolean isAsync = false;
 
 
     public boolean isBusy() {
-        return m_IsBusy;
+        return isBusy;
     }
 
-    public void setisBusy(boolean p_IsBusy) {
-        this.m_IsBusy = p_IsBusy;
+    public void setsBusy(boolean pIsBusy) {
+        this.isBusy = pIsBusy;
     }
 
 
-    public void setTaskListener(ITaskListener p_TaskListener) {
-        m_TaskListener = p_TaskListener;
+    public void setTaskListener(ITaskListener pTaskListener) {
+        taskListener = pTaskListener;
     }
 
     /**
      * 出错处理
      */
-    protected void onError(Exception p_Exception) {
-        if (null != m_TaskListener) {
-            m_TaskListener.onError(p_Exception);
+    protected void onError(Exception pException) {
+        if (null != taskListener) {
+            taskListener.onError(pException);
         }
     }
 
     /**
      * 完成处理
      */
-    protected void onComplete(TaskContext p_Context) {
-        if (null != m_TaskListener) {
-            m_TaskListener.onCompleted(p_Context);
+    protected void onComplete(TaskContext pContext) {
+        if (null != taskListener) {
+            taskListener.onCompleted(pContext);
         }
     }
 
@@ -70,8 +70,8 @@ public abstract class Task {
      * 取消
      */
     protected void onCancel() {
-        if (null != m_TaskListener) {
-            m_TaskListener.onCancel();
+        if (null != taskListener) {
+            taskListener.onCancel();
         }
     }
 
@@ -85,20 +85,20 @@ public abstract class Task {
     /**
      * 表示进度变化的处理
      */
-    protected void onProgressChange(int p_Percentage) {
-        if (null != m_TaskListener) {
-            m_TaskListener.onProgressChanged(p_Percentage);
+    protected void onProgressChange(int pPercentage) {
+        if (null != taskListener) {
+            taskListener.onProgressChanged(pPercentage);
         }
     }
 
     /**
      * 表示状态变化需要的处理
      *
-     * @param p_Status
+     * @param pStatus
      */
-    protected void onStatusChange(String p_Status) {
-        if (null != m_TaskListener) {
-            m_TaskListener.onStatusChanged(p_Status);
+    protected void onStatusChange(String pStatus) {
+        if (null != taskListener) {
+            taskListener.onStatusChanged(pStatus);
         }
     }
 
@@ -108,18 +108,18 @@ public abstract class Task {
      * @return
      */
     public String getName() {
-        if (StringUtil.isNullOrEmpty(m_Name)) {
-            m_Name = GUID.newGUID();
+        if (StringUtil.isNullOrEmpty(name)) {
+            name = GUID.newGUID();
         }
-        return m_Name;
+        return name;
     }
 
     public boolean isCancel() {
-        return m_IsCancel;
+        return isCancel;
     }
 
     public void resetCancel() {
-        m_IsCancel = false;
+        isCancel = false;
     }
 
     /**
@@ -127,37 +127,37 @@ public abstract class Task {
      */
     public void cancel() {
         if (canCancel()) {
-            m_IsCancel = true;
+            isCancel = true;
         }
     }
 
     /**
      * 一个 Task 具体处理的事情
      *
-     * @param p_Param
+     * @param pParam
      */
-    public abstract void run(TaskContext p_Param);
+    public abstract void run(TaskContext pParam);
 
     /**
      * 使用线程 运行 当前任务
      *
-     * @param p_Param
+     * @param pParam
      */
-    public void runThread(TaskContext p_Param) {
-        m_IsAsync = true;
-        m_IsBusy = true;
-        final TaskContext p_TaskContext = p_Param;
+    public void runThread(TaskContext pParam) {
+        isAsync = true;
+        isBusy = true;
+        final TaskContext pTaskContext = pParam;
         ThreadPoolFactory.addTask(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    Task.this.run(p_TaskContext);
+                    Task.this.run(pTaskContext);
                 } catch (Exception e) {
                     Task.this.onError(e);
                 } finally {
-                    m_IsAsync = false;
-                    m_IsBusy = false;
+                    isAsync = false;
+                    isBusy = false;
                 }
             }
         });
@@ -166,26 +166,26 @@ public abstract class Task {
     /**
      * 线程方式运行 直到结束
      *
-     * @param p_Param
+     * @param pParam
      */
-    public void runThreadWait(TaskContext p_Param) {
-        m_IsAsync = true;
-        m_IsBusy = true;
-        final TaskContext p_TaskContext = p_Param;
+    public void runThreadWait(TaskContext pParam) {
+        isAsync = true;
+        isBusy = true;
+        final TaskContext pTaskContext = pParam;
         ThreadPoolFactory.addTask(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    Task.this.run(p_TaskContext);
+                    Task.this.run(pTaskContext);
                 } catch (Exception e) {
                     Task.this.onError(e);
                 } finally {
                     synchronized (Task.this) {
                         Task.this.notifyAll();
                     }
-                    m_IsAsync = false;
-                    m_IsBusy = false;
+                    isAsync = false;
+                    isBusy = false;
                 }
             }
         });
@@ -194,24 +194,24 @@ public abstract class Task {
     /**
      * 任务 线程 运行
      *
-     * @param p_Param          运行参数
+     * @param pParam          运行参数
      * @param pExecutorService 线程管理器
      */
-    public void runThread(TaskContext p_Param, ExecutorService pExecutorService) {
-        m_IsAsync = true;
-        m_IsBusy = true;
-        final TaskContext p_TaskContext = p_Param;
+    public void runThread(TaskContext pParam, ExecutorService pExecutorService) {
+        isAsync = true;
+        isBusy = true;
+        final TaskContext pTaskContext = pParam;
         pExecutorService.execute(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    Task.this.run(p_TaskContext);
+                    Task.this.run(pTaskContext);
                 } catch (Exception e) {
                     Task.this.onError(e);
                 } finally {
-                    m_IsAsync = false;
-                    m_IsBusy = false;
+                    isAsync = false;
+                    isBusy = false;
                 }
             }
         });
@@ -220,27 +220,27 @@ public abstract class Task {
     /**
      * 任务 线程 运行
      *
-     * @param p_Param          运行参数
+     * @param pParam          运行参数
      * @param pExecutorService 线程管理器
      */
-    public void runThreadWait(TaskContext p_Param, ExecutorService pExecutorService) {
-        m_IsAsync = true;
-        m_IsBusy = true;
-        final TaskContext p_TaskContext = p_Param;
+    public void runThreadWait(TaskContext pParam, ExecutorService pExecutorService) {
+        isAsync = true;
+        isBusy = true;
+        final TaskContext pTaskContext = pParam;
         pExecutorService.execute(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    Task.this.run(p_TaskContext);
+                    Task.this.run(pTaskContext);
                 } catch (Exception e) {
                     Task.this.onError(e);
                 } finally {
                     synchronized (Task.this) {
                         Task.this.notifyAll();
                     }
-                    m_IsAsync = false;
-                    m_IsBusy = false;
+                    isAsync = false;
+                    isBusy = false;
                 }
             }
         });
@@ -249,52 +249,52 @@ public abstract class Task {
     /**
      * 报告状态变化
      *
-     * @param p_Status
+     * @param pStatus
      */
-    public void reportStatus(String p_Status) {
-        m_Status = p_Status;
-        onStatusChange(m_Status);
+    public void reportStatus(String pStatus) {
+        status = pStatus;
+        onStatusChange(status);
     }
 
-    public void reportComplete(TaskContext p_Context) {
-        reportProgress(100, p_Context);
+    public void reportComplete(TaskContext pContext) {
+        reportProgress(100, pContext);
     }
 
     /**
      * 报告执行进度 注意 p_Percentage为100时 会调用 onComplete 请勿重复调用
      *
-     * @param p_Percentage 进度百分比 0-100
-     * @param p_Context    参数
+     * @param pPercentage 进度百分比 0-100
+     * @param pContext    参数
      * @throws TaskException
      */
-    public void reportProgress(int p_Percentage, TaskContext p_Context) {
-        if (p_Percentage < 0 || p_Percentage > 100) {
+    public void reportProgress(int pPercentage, TaskContext pContext) {
+        if (pPercentage < 0 || pPercentage > 100) {
             return;
         }
-        if (p_Percentage < 100) {
-            onProgressChange(p_Percentage);
+        if (pPercentage < 100) {
+            onProgressChange(pPercentage);
         } else {
-            onComplete(p_Context);
+            onComplete(pContext);
         }
     }
 
     /**
      * 报告异常
      *
-     * @param p_Exception
+     * @param pException
      */
-    public void reportError(Exception p_Exception) {
-        m_IsBusy = false;
-        onError(p_Exception);
+    public void reportError(Exception pException) {
+        isBusy = false;
+        onError(pException);
     }
 
     /**
      * 设置执行周期时间
      *
-     * @param p_Second
+     * @param pSecond
      */
-    public void setIntervalTime(int p_Second) {
-        m_IntervalTime = p_Second * Time_OneSecond;
+    public void setIntervalTime(int pSecond) {
+        intervalTime = pSecond * Time_OneSecond;
     }
 
     /**
@@ -303,12 +303,12 @@ public abstract class Task {
      * @return
      */
     public boolean canRun() {
-        if (m_IntervalTime < 1) {
+        if (intervalTime < 1) {
             return true;
         }
         long currtime = System.currentTimeMillis();
-        long pretime = m_PreProcessTime.getTime();
-        if ((currtime - pretime) >= m_IntervalTime) {
+        long pretime = preProcessTime.getTime();
+        if ((currtime - pretime) >= intervalTime) {
             return true;
         }
 
@@ -319,7 +319,7 @@ public abstract class Task {
      * 将上次执行时间设置为当前时间
      */
     public void setPreProcessTimeForCurrent() {
-        m_PreProcessTime = DateUtil.getCurrentDate();
+        preProcessTime = DateUtil.getCurrentDate();
     }
 
 
@@ -337,30 +337,30 @@ public abstract class Task {
         /**
          * 进度变化事件
          *
-         * @param p_Percentage
+         * @param pPercentage
          */
-        void onProgressChanged(int p_Percentage);
+        void onProgressChanged(int pPercentage);
 
         /**
          * 错误事件
          *
-         * @param p_Exception
+         * @param pException
          */
-        void onError(Exception p_Exception);
+        void onError(Exception pException);
 
         /**
          * 状态变化事件
          *
-         * @param p_Status
+         * @param pStatus
          */
-        void onStatusChanged(String p_Status);
+        void onStatusChanged(String pStatus);
 
         /**
          * 任务完成事件
          *
-         * @param p_Context
+         * @param pContext
          */
-        void onCompleted(TaskContext p_Context);
+        void onCompleted(TaskContext pContext);
     }
 
 

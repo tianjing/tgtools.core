@@ -9,7 +9,9 @@ import tgtools.tasks.TaskContext;
 import tgtools.threads.ThreadPoolFactory;
 import tgtools.util.DateUtil;
 import tgtools.util.LogHelper;
-
+/**
+ * @author tianjing
+ */
 public class ServiceFactory {
  static{
 	 m_Services=new Hashtable<String, BaseService>();
@@ -17,39 +19,39 @@ public class ServiceFactory {
 	private static Hashtable<String, BaseService> m_Services;
 	
 
-    private static boolean m_IsRun;
+    private static boolean isRun;
 	public static boolean isRun() {
-		return m_IsRun;
+		return isRun;
 	}
-	public static void setIsRun(boolean m_IsRun) {
-		ServiceFactory.m_IsRun = m_IsRun;
+	public static void setIsRun(boolean isRun) {
+		ServiceFactory.isRun = isRun;
 	}
     
     public static void start()
     {
-        m_IsRun = true;
+        isRun = true;
     	ThreadPoolFactory.addTask(new Runnable() {
 
 			@Override
 			public void run() {
-                RunServices();
+                runServices();
 			}
         });
     }
     
     public static void stop()
     {
-        m_IsRun = false;
+        isRun = false;
         stopAllServices();
     }
 
     
-    private static void RunServices()
+    private static void runServices()
     {
-        while (m_IsRun)
+        while (isRun)
         {
             try {
-                if (!m_IsRun) {
+                if (!isRun) {
                     return;
                 }
                 //if (null == m_Services || m_Services.size() < 1)
@@ -58,19 +60,19 @@ public class ServiceFactory {
                 //}
 
                 for (BaseService service : m_Services.values()) {
-                    if (!m_IsRun) {
+                    if (!isRun) {
                         return;
                     }
                     if (service.canRun()) {
                         try {
-                            service.start();//.Run(null);
+                            service.start();
                         } catch (Throwable ex) {
                             LogHelper.error("", "服务出错：" + service.getName(), "ServiceFactory", ex);
                         }
                         service.setLastTime(DateUtil.getCurrentDate());
                     }
                 }
-                if (!m_IsRun) {
+                if (!isRun) {
                     return;
                 }
                 try {
@@ -84,37 +86,37 @@ public class ServiceFactory {
         }
     }
     
-    public static boolean hasService(String p_Name)
+    public static boolean hasService(String pName)
     {
-    	return m_Services.containsKey(p_Name);
+    	return m_Services.containsKey(pName);
     }
-    public static BaseService getService(String p_Name)
+    public static BaseService getService(String pName)
     {
-    	if( m_Services.containsKey(p_Name))
+    	if( m_Services.containsKey(pName))
     	{
-    		return m_Services.get(p_Name);
+    		return m_Services.get(pName);
     	}
     	return null;
     }
-    public static void startService(String p_Name)
+    public static void startService(String pName)
     {
-        if (m_Services.containsKey(p_Name))
+        if (m_Services.containsKey(pName))
         {
-        	m_Services.get(p_Name).start();
+        	m_Services.get(pName).start();
         }
     }
-    public static void stopService(String p_Name)
+    public static void stopService(String pName)
     {
-        if (m_Services.containsKey(p_Name))
+        if (m_Services.containsKey(pName))
         {
-        	m_Services.get(p_Name).stop();
+        	m_Services.get(pName).stop();
         }
     }
-    public static boolean isStopService(String p_Name)
+    public static boolean isStopService(String pName)
     {
-        if (m_Services.containsKey(p_Name))
+        if (m_Services.containsKey(pName))
         {
-            return m_Services.get(p_Name).isStop();
+            return m_Services.get(pName).isStop();
         }
         return true;
     
@@ -132,14 +134,14 @@ public class ServiceFactory {
     /// <summary>
     /// 注册一个服务
     /// </summary>
-    /// <param name="p_Service"></param>
-    public static void register(BaseService p_Service) throws APPErrorException
+    /// <param name="pService"></param>
+    public static void register(BaseService pService) throws APPErrorException
     {
-        if (m_Services.containsKey(p_Service.getName()))
+        if (m_Services.containsKey(pService.getName()))
         {
             throw new APPErrorException("注册的服务重复，请检查！");
         }
-        m_Services.put(p_Service.getName(), p_Service);
+        m_Services.put(pService.getName(), pService);
         
 
     }
@@ -147,24 +149,24 @@ public class ServiceFactory {
     /// <summary>
     /// 注销一个服务
     /// </summary>
-    /// <param name="p_Service"></param>
-    public static void unRegister(BaseService p_Service) throws APPErrorException
+    /// <param name="pService"></param>
+    public static void unRegister(BaseService pService) throws APPErrorException
     {
-        unRegister(p_Service.getName());
+        unRegister(pService.getName());
     }
     /// <summary>
     /// 注销一个服务
     /// </summary>
-    /// <param name="p_ServiceName"></param>
-    public static void unRegister(String p_ServiceName) throws APPErrorException
+    /// <param name="pServiceName"></param>
+    public static void unRegister(String pServiceName) throws APPErrorException
     {
-        if (m_Services.containsKey(p_ServiceName))
+        if (m_Services.containsKey(pServiceName))
         {
-            if (m_Services.get(p_ServiceName).isBusy())
+            if (m_Services.get(pServiceName).isBusy())
             {
                 throw new APPErrorException("服务正在运行！无法注销！");
             }
-            m_Services.remove(p_ServiceName);
+            m_Services.remove(pServiceName);
         }
 
 
@@ -214,7 +216,7 @@ public class ServiceFactory {
         }
 
         @Override
-        public void run(TaskContext p_Param) {
+        public void run(TaskContext pParam) {
             System.out.println("线程:" + curindex + ";开始");
             try {
                 DataTable dt= tgtools.db.DataBaseFactory.getDefault().Query("select top 10000 * from loginfo");

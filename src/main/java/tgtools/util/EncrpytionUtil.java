@@ -113,15 +113,15 @@ public class EncrpytionUtil {
      *
      * @param pContent      待解密内容
      * @param pKey         解密密钥
-     * @param pIVParameter IV 变量（byte[16]）
+     * @param pIvParameter IV 变量（byte[16]）
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static byte[] decodeCbcAes(byte[] pContent, SecretKey pKey, byte[] pIVParameter) throws APPErrorException {
+    public static byte[] decodeCbcAes(byte[] pContent, SecretKey pKey, byte[] pIvParameter) throws APPErrorException {
         try {
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(pIVParameter);
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(pIvParameter);
             Cipher cipher = Cipher.getInstance(AES_CBC_CIPHER_ALGORITHM);
 
             cipher.init(Cipher.DECRYPT_MODE, pKey, ivParameterSpec);
@@ -171,16 +171,16 @@ public class EncrpytionUtil {
      *
      * @param pContent     需要加密的内容
      * @param pKey         加密密码
-     * @param pIVParameter IV 变量（byte[16]）
+     * @param pIvParameter IV 变量（byte[16]）
      *
      * @return
      *
      * @throws APPErrorException
      */
-    public static byte[] encodeCbcAes(byte[] pContent, SecretKey pKey, byte[] pIVParameter)
+    public static byte[] encodeCbcAes(byte[] pContent, SecretKey pKey, byte[] pIvParameter)
             throws APPErrorException {
         try {
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(pIVParameter);
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(pIvParameter);
             Cipher cipher = Cipher.getInstance(AES_CBC_CIPHER_ALGORITHM);
 
             cipher.init(Cipher.ENCRYPT_MODE, pKey, ivParameterSpec);

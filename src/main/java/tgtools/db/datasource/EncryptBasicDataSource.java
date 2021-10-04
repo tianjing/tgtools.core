@@ -8,10 +8,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * 名  称：
- * 编写者：田径
- * 功  能：
- * 时  间：13:29
+ * @author tianjing
  */
 public class EncryptBasicDataSource extends org.apache.commons.dbcp.BasicDataSource {
 

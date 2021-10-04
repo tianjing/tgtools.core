@@ -1,12 +1,27 @@
 package tgtools.plugin;
-
+/**
+ * @author tianjing
+ */
 public interface IPlugin {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	/**
+	 * load
+	 * @throws Exception
+	 */
 	void load()throws Exception;
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+	/**
+	 * unload
+	 * @throws Exception
+	 */
 	void unload()throws Exception;
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+	/**
+	 * execute
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
 	Object execute(Object... params)throws Exception;
 	
 }

@@ -7,41 +7,42 @@ import java.util.HashMap;
 /**
  * 通用日志工厂
  * 适合 不想在每个类中写 Loger的人
+ * @author tianjing
  */
 public class LoggerFactory {
 
-    private static HashMap<String, ILoger> m_Logers;
-    private static String m_DefaultName = "Default";
+    private static HashMap<String, ILoger> logers;
+    private static String defaultName = "Default";
 
     private static HashMap<String, ILoger> getLogers() {
-        if (null == m_Logers) {
-            m_Logers = new HashMap<String, ILoger>();
-            m_Logers.put(m_DefaultName, createLoger(m_DefaultName));
+        if (null == logers) {
+            logers = new HashMap(10);
+            logers.put(defaultName, createLoger(defaultName));
         }
-        return m_Logers;
+        return logers;
     }
 
     public static ILoger getDefault() {
-        return get(m_DefaultName);
+        return get(defaultName);
     }
 
     /**
      * 获取指定名称的日志，如果不存在则创建
      *
-     * @param p_Name
+     * @param pName
      *
      * @return
      */
-    public static ILoger get(String p_Name) {
-        if (!getLogers().containsKey(p_Name)) {
-            ILoger loger = createLoger(p_Name);
+    public static ILoger get(String pName) {
+        if (!getLogers().containsKey(pName)) {
+            ILoger loger = createLoger(pName);
             if (null != loger) {
-                getLogers().put(p_Name, loger);
+                getLogers().put(pName, loger);
             } else {
                 return null;
             }
         }
-        return getLogers().get(p_Name);
+        return getLogers().get(pName);
 
     }
 
@@ -77,17 +78,17 @@ public class LoggerFactory {
 
     /**
      * 创建日志
-     * @param p_Name
+     * @param pName
      *
      * @return
      */
-    private static ILoger createLoger(String p_Name) {
-        if (!getLogers().containsKey(p_Name)) {
+    private static ILoger createLoger(String pName) {
+        if (!getLogers().containsKey(pName)) {
             if( org.slf4j.LoggerFactory.getLogger(StringUtil.EMPTY_STRING).getClass().getName().indexOf("org.slf4j.impl.Log4jLoggerAdapter")>=0)
             {
-                return new Log4jLoger(p_Name);
+                return new Log4jLoger(pName);
             }
-            return new DefaultLoger(p_Name);
+            return new DefaultLoger(pName);
         }
         return null;
     }

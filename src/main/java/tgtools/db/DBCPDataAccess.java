@@ -10,18 +10,34 @@ import tgtools.util.JsonParseHelper;
 import tgtools.util.LogHelper;
 import tgtools.util.StringUtil;
 
-import javax.sql.DataSource;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ *
+ * @author tianjing
+ */
 public class DBCPDataAccess extends AbstractDataAccess {
-    // private static String driver = "net.sourceforge.jtds.jdbc.Driver"; // 驱动
-    private static String url = ""; // URL
-    private static String name = "sa"; // 用户名
-    private static String password = ""; // 密码
+    /**
+     * URL
+     */
+    private static String url = "";
+    /**
+     * 用户名
+     */
+    private static String name = "sa";
+    /**
+     * 密码
+     */
+    private static String password = "";
+    /**
+     * connectionPool
+     */
     private static ObjectPool<?> connectionPool = null;
+    /**
+     * poolname
+     */
     private static String poolname = "";
 
 
@@ -72,13 +88,13 @@ public class DBCPDataAccess extends AbstractDataAccess {
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
-        return m_DataSource.getConnection();
+        return dataSource.getConnection();
     }
 
-    private void close(Connection p_Conn) {
+    private void close(Connection pConn) {
         try {
-            if (null != p_Conn) {
-                p_Conn.close();
+            if (null != pConn) {
+                pConn.close();
             }
         } catch (Exception e) {
         }
@@ -113,7 +129,6 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
 
-
     @Override
     public int executeUpdate(String sql) throws APPErrorException {
         Connection conn = null;
@@ -124,7 +139,6 @@ public class DBCPDataAccess extends AbstractDataAccess {
             if (conn != null) {
                 Statement statement = conn.createStatement();
                 return statement.executeUpdate(sql);
-                // rs.close();
             }
 
         } catch (SQLException e) {
@@ -158,7 +172,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public boolean init(Object... params)// String p_Connstr, String p_UserName,
+    public boolean init(Object... params)// String pConnstr, String p_UserName,
         // String p_Password)
             throws APPErrorException {
         String driver = "dm.jdbc.driver.DmDriver";
@@ -178,7 +192,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
             p.setProperty("removeAbandonedTimeout", "120");
             p.setProperty("testOnBorrow", "true");
             p.setProperty("logAbandoned", "true");
-            m_DataSource = (BasicDataSource) BasicDataSourceFactory
+            dataSource = (BasicDataSource) BasicDataSourceFactory
                     .createDataSource(p);
         } catch (Exception e) {
         }
@@ -190,66 +204,68 @@ public class DBCPDataAccess extends AbstractDataAccess {
     public void close() {
         ShutdownPool();
     }
-    protected void closeBatch(Statement p_Statement) {
+
+    protected void closeBatch(Statement pStatement) {
         try {
-            if (null != p_Statement) {
-                p_Statement.clearBatch();
-                p_Statement.close();
+            if (null != pStatement) {
+                pStatement.clearBatch();
+                pStatement.close();
             }
         } catch (Exception e) {
         }
-        p_Statement = null;
-    }
-    protected void close(ResultSet p_Result) {
-        try {
-            if (null != p_Result)
-                p_Result.close();
-        } catch (Exception e) {
-        }
-        p_Result = null;
+        pStatement = null;
     }
 
-    protected void close(Statement p_Statement) {
+    protected void close(ResultSet pResult) {
         try {
-            if (null != p_Statement)
-                p_Statement.close();
+            if (null != pResult) {
+                pResult.close();
+            }
         } catch (Exception e) {
         }
-        p_Statement = null;
+        pResult = null;
+    }
+
+    protected void close(Statement pStatement) {
+        try {
+            if (null != pStatement) {
+                pStatement.close();
+            }
+        } catch (Exception e) {
+        }
+        pStatement = null;
     }
 
     @Override
     public Connection createConnection() {
-        // TODO Auto-generated method stub
         try {
-            return m_DataSource.getConnection();
+            return dataSource.getConnection();
         } catch (SQLException e) {
             return null;
         }
     }
 
 
-    protected void setParams(PreparedStatement p_Statement, Object[] p_Params, boolean pUseSetInputStream)
+    protected void setParams(PreparedStatement pStatement, Object[] pParams, boolean pUseSetInputStream)
             throws SQLException {
-        if (null != p_Params) {
-            for (int i = 0; i < p_Params.length; i++) {
-                if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
+        if (null != pParams) {
+            for (int i = 0; i < pParams.length; i++) {
+                if (pUseSetInputStream && (pParams[i] instanceof InputStream)) {
                     try {
-                        p_Statement.setBinaryStream(i + 1, (InputStream)p_Params[i], ((InputStream) p_Params[i]).available());
+                        pStatement.setBinaryStream(i + 1, (InputStream) pParams[i], ((InputStream) pParams[i]).available());
                     } catch (Exception ex) {
                         throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
                     }
                 } else {
-                    p_Statement.setObject(i + 1, p_Params[i]);
+                    pStatement.setObject(i + 1, pParams[i]);
                 }
             }
         }
     }
 
 
-
     @Override
-    public int executeUpdate(String sql, Object[] p_Params)
+    public int executeUpdate(String sql, Object[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -258,9 +274,8 @@ public class DBCPDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params,false);
+                setParams(statement, pParams, false);
                 return statement.executeUpdate();
-                // rs.close();
             }
 
         } catch (SQLException e) {
@@ -272,16 +287,15 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+    public int executeUpdate(String sql, Object[] pParams, boolean pUseSetInputStream) throws APPErrorException {
         Connection conn = null;
         try {
 
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params,pUseSetInputStream);
+                setParams(statement, pParams, pUseSetInputStream);
                 return statement.executeUpdate();
-                // rs.close();
             }
 
         } catch (SQLException e) {
@@ -294,7 +308,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int executeBlob(String sql, byte[] p_Params)
+    public int executeBlob(String sql, byte[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -303,7 +317,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                statement.setBytes(1, p_Params);
+                statement.setBytes(1, pParams);
                 return statement.executeUpdate();
             }
             throw new APPErrorException("获取连接失败！");
@@ -315,9 +329,9 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int[] executeSqlFile(String p_SqlFile) throws APPErrorException {
-        if (!StringUtil.isNullOrEmpty(p_SqlFile)) {
-            String[] sqls = p_SqlFile.split(";");
+    public int[] executeSqlFile(String pSqlFile) throws APPErrorException {
+        if (!StringUtil.isNullOrEmpty(pSqlFile)) {
+            String[] sqls = pSqlFile.split(";");
             if (sqls.length > 0) {
                 return executeBatch(sqls);
             }
@@ -336,11 +350,11 @@ public class DBCPDataAccess extends AbstractDataAccess {
             }
             Statement statment = conn.createStatement();
 
-            for (String sql : sqls)
+            for (String sql : sqls) {
                 if (!StringUtil.isNullOrEmpty(sql)) {
                     statment.addBatch(sql);
                 }
-
+            }
             statment.executeBatch();
             conn.commit();
             return true;
@@ -359,23 +373,24 @@ public class DBCPDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public DataTable Query(String sql, Object[] p_Params)
+    public DataTable Query(String sql, Object[] pParams)
             throws APPErrorException {
-        return query(sql,p_Params);
+        return query(sql, pParams);
     }
+
     @Override
     public DataTable Query(String sql) throws APPErrorException {
         return query(sql);
     }
 
     @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
-        return query(sql,p_BlobUseStream);
+    public DataTable Query(String sql, boolean pBlobUseStream) throws APPErrorException {
+        return query(sql, pBlobUseStream);
     }
 
     @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-       return query(sql,p_Class);
+    public <T> T Query(String sql, Class<T> pClass) throws APPErrorException {
+        return query(sql, pClass);
     }
 
 
@@ -388,7 +403,7 @@ public class DBCPDataAccess extends AbstractDataAccess {
             conn = getConnection();
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
-            return new DataTable(rs, sql,p_BlobUseStream);
+            return new DataTable(rs, sql, p_BlobUseStream);
         } catch (Exception e) {
             throw new APPErrorException("sql执行失败：" + sql, e);
         } finally {
@@ -399,14 +414,14 @@ public class DBCPDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+    public DataTable query(String sql, Object[] pParams) throws APPErrorException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params,false);
+            setParams(statement, pParams, false);
             rs = statement.executeQuery();
             return new DataTable(rs, sql);
         } catch (Exception e) {
@@ -420,12 +435,12 @@ public class DBCPDataAccess extends AbstractDataAccess {
 
     @Override
     public DataTable query(String sql) throws APPErrorException {
-        return query(sql,false);
+        return query(sql, false);
     }
 
     @Override
-    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(query(sql), p_Class, true);
+    public <T> T query(String sql, Class<T> pClass) throws APPErrorException {
+        return (T) JsonParseHelper.parseToObject(query(sql), pClass, true);
     }
 
 }

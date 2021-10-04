@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by tian_ on 2016-06-25.
+ * @author tianjing
  */
 public interface IWebClient {
 
@@ -24,9 +24,9 @@ public interface IWebClient {
     void setReadTimeout(int pTimeOut);
     /**
      * 设置url
-     * @param p_Url
+     * @param pUrl
      */
-    void setUrl(String p_Url);
+    void setUrl(String pUrl);
 
     /**
      *获取URL
@@ -36,9 +36,9 @@ public interface IWebClient {
 
     /**
      *设置字符编码
-     * @param p_Encoding
+     * @param pEncoding
      */
-    void setEncoding(String p_Encoding);
+    void setEncoding(String pEncoding);
 
     /**
      * 获取字符编码
@@ -48,9 +48,9 @@ public interface IWebClient {
 
     /**
      * 设置 方法 如 GET POST等
-     * @param p_Method
+     * @param pMethod
      */
-    void setMethod(String p_Method);
+    void setMethod(String pMethod);
 
     /**
      * 获取 方法
@@ -60,9 +60,9 @@ public interface IWebClient {
 
     /**
      * 设置 是否启用gzip
-     * @param p_GZip
+     * @param pGZip
      */
-    void setGZip(boolean p_GZip);
+    void setGZip(boolean pGZip);
 
     /**
      * 获取是否使用gzip
@@ -72,10 +72,10 @@ public interface IWebClient {
 
     /**
      * 添加请求头
-     * @param p_Name
-     * @param p_Value
+     * @param pName
+     * @param pValue
      */
-    void addHead(String p_Name, String p_Value);
+    void addHead(String pName, String pValue);
 
     /**
      * 获取 请求头
@@ -133,11 +133,11 @@ public interface IWebClient {
 
     /**
      * 请求并返回字节集
-     * @param p_Input
+     * @param pInput
      * @return
      * @throws APPErrorException
      */
-    byte[] doInvokeAsByte (InputStream p_Input) throws APPErrorException;
+    byte[] doInvokeAsByte (InputStream pInput) throws APPErrorException;
 
     /**
      * 获取响应的头信息

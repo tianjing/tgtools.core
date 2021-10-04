@@ -2,6 +2,10 @@ package tgtools.data.mapping;
 
 import java.util.ArrayList;
 
+/**
+ *
+ * @author tianjing
+ */
 public class ConditionCollection extends ArrayList<Condition>
 {
 

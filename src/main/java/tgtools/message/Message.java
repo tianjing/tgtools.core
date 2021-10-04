@@ -9,66 +9,66 @@ import java.util.Date;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：15:24
  */
 public class Message implements Serializable {
     public Message()
     {
-        m_CreateTime= DateUtil.getCurrentDate();
-        m_MessageID= GUID.newGUID();
-        m_IsComplete=false;
-        m_Sender= StringUtil.EMPTY_STRING;
-        m_Reciver= StringUtil.EMPTY_STRING;
-        m_Content= StringUtil.EMPTY_STRING;
+        createTime= DateUtil.getCurrentDate();
+        messageId= GUID.newGUID();
+        isComplete=false;
+        sender= StringUtil.EMPTY_STRING;
+        receiver= StringUtil.EMPTY_STRING;
+        content= StringUtil.EMPTY_STRING;
     }
-    private String m_MessageID;
-    private String m_Sender;
-    private String m_Reciver;
-    private String m_Content;
-    private String m_Event;
-    private Date m_CreateTime;
-    private boolean m_IsComplete;
+    private String messageId;
+    private String sender;
+    private String receiver;
+    private String content;
+    private String event;
+    private Date createTime;
+    private boolean isComplete;
 
 
     public String getEvent() {
-        return m_Event;
+        return event;
     }
 
-    public void setEvent(String p_Event) {
-        m_Event = p_Event;
+    public void setEvent(String pEvent) {
+        event = pEvent;
     }
 
     /**
      * 获取消息ID
      * @return
      */
-    public String getMessageID() {
-        return m_MessageID;
+    public String getmessageId() {
+        return messageId;
     }
 
     /**
      * 设置消息ID
-     * @param p_MessageID
+     * @param pMessageId
      */
-    public void setMessageID(String p_MessageID) {
-        m_MessageID = p_MessageID;
+    public void setmessageId(String pMessageId) {
+        messageId = pMessageId;
     }
     /**
      * 获取发送者
      * @return
      */
     public String getSender() {
-        return m_Sender;
+        return sender;
     }
 
     /**
      * 设置发送者
      * @return
      */
-    public void setSender(String p_Sender) {
-        m_Sender = p_Sender;
+    public void setSender(String pSender) {
+        sender = pSender;
     }
 
     /**
@@ -76,15 +76,15 @@ public class Message implements Serializable {
      * @return
      */
     public String getReciver() {
-        return m_Reciver;
+        return receiver;
     }
 
     /**
      * 设置接收者
-     * @param p_Reciver
+     * @param pReciver
      */
-    public void setReciver(String p_Reciver) {
-        m_Reciver = p_Reciver;
+    public void setReciver(String pReciver) {
+        receiver = pReciver;
     }
 
     /**
@@ -92,15 +92,15 @@ public class Message implements Serializable {
      * @return
      */
     public String getContent() {
-        return m_Content;
+        return content;
     }
 
     /**
      * 设置内容
-     * @param p_Content
+     * @param pContent
      */
-    public void setContent(String p_Content) {
-        m_Content = p_Content;
+    public void setContent(String pContent) {
+        content = pContent;
     }
 
     /**
@@ -108,29 +108,29 @@ public class Message implements Serializable {
      * @return
      */
     public Date getCreateTime() {
-        return m_CreateTime;
+        return createTime;
     }
 
     /**
      * 设置创建时间
-     * @param p_CreateTime
+     * @param pCreateTime
      */
-    public void setCreateTime(Date p_CreateTime) {
-        m_CreateTime = p_CreateTime;
+    public void setCreateTime(Date pCreateTime) {
+        createTime = pCreateTime;
     }
     /**
      * 是否消息处理结束，true：表示不再剩下的让监听处理 默认false
      * @return
      */
     public boolean getIsComplete() {
-        return m_IsComplete;
+        return isComplete;
     }
 
     /**
      * 设置消息结束标识
-     * @param p_IsComplete
+     * @param pIsComplete
      */
-    public void setIsComplete(boolean p_IsComplete) {
-        m_IsComplete = p_IsComplete;
+    public void setIsComplete(boolean pIsComplete) {
+        isComplete = pIsComplete;
     }
 }

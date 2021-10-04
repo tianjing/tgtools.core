@@ -4,16 +4,16 @@ import tgtools.interfaces.Event;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：16:13
  */
 public class UDPErrorEvent extends Event {
-    private Throwable m_Error;
-    private Object m_Sender;
-    public UDPErrorEvent(Object p_Sender, Throwable p_Error) {
-        m_Sender = p_Sender;
-        m_Error = p_Error;
+    private Throwable error;
+    private Object sender;
+    public UDPErrorEvent(Object pSender, Throwable pError) {
+        sender = pSender;
+        error = pError;
     }
 
     /**
@@ -21,7 +21,7 @@ public class UDPErrorEvent extends Event {
      * @return
      */
     public Throwable getError() {
-        return m_Error;
+        return error;
     }
 
     /**
@@ -29,6 +29,6 @@ public class UDPErrorEvent extends Event {
      * @return
      */
     public Object getSender() {
-        return m_Sender;
+        return sender;
     }
 }

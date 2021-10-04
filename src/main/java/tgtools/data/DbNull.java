@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import tgtools.util.StringUtil;
 
+/**
+ *
+ * @author tianjing
+ */
 public class DbNull implements Serializable {
 
 	/**
@@ -12,8 +16,8 @@ public class DbNull implements Serializable {
 	private static final long serialVersionUID = -1828151024542016621L;
 
 	@Override
-	public boolean equals(Object p_value) {
-		return p_value instanceof DbNull;
+	public boolean equals(Object pValue) {
+		return pValue instanceof DbNull;
 	}
 
 	@Override

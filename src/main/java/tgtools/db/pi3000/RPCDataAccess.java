@@ -9,70 +9,60 @@ import tgtools.util.LogHelper;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
-
+/**
+ * @author tianjing
+ */
 public class RPCDataAccess implements tgtools.db.IDataAccess {
 
-    private RPCClient m_Client;
-    private String m_DataBaseType = "PI3000";
-    private String m_Url = "";
+    private RPCClient client;
+    private String dataBaseType = "PI3000";
+    private String url = "";
 
     public RPCDataAccess() {
     }
 
 
 
-    public RPCDataAccess(String p_Url) {
-        m_Url = p_Url;
+    public RPCDataAccess(String pUrl) {
+        url = pUrl;
         try {
-            init(p_Url);
-            LogHelper.info("", "初始化参数：" + p_Url, "RPCDataAccess");
+            init(pUrl);
+            LogHelper.info("", "初始化参数：" + pUrl, "RPCDataAccess");
         } catch (Exception e) {
-            LogHelper.error("", "初始化失败,参数：" + p_Url, "RPCDataAccess", e);
+            LogHelper.error("", "初始化失败,参数：" + pUrl, "RPCDataAccess", e);
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            tgtools.db.DataBaseFactory.add("PI3000SecondDatatest", new Object[]{"http://217.0.0.1/MWWebSite/services/dataservice"});
-
-            //DataTable dt= tgtools.db.DataBaseFactory.getDefault().Query("select * from MW_SYS.MWT_IS_DBIT");
-            tgtools.db.DataBaseFactory.getDefault().executeUpdate("UPDATE MW_SYS.MWT_IS_DBIT SET DBIT_ID='BLOB' WHERE DBIT_ID='BLOB'");
-            System.out.println("");
-        } catch (APPErrorException e) {
-            e.printStackTrace();
-        }
-
-    }
     public int getConnectTimeout() {
-        return m_Client.getConnectTimeout();
+        return client.getConnectTimeout();
     }
 
     public void setConnectTimeout(int pTimeOut) {
-        m_Client.setConnectTimeout(pTimeOut);
+        client.setConnectTimeout(pTimeOut);
     }
 
     public int getReadTimeout() {
-        return m_Client.getReadTimeout();
+        return client.getReadTimeout();
     }
 
     public void setReadTimeout(int pTimeOut) {
-        m_Client.setReadTimeout(pTimeOut);
+        client.setReadTimeout(pTimeOut);
     }
 
 
     @Override
     public String getDataBaseType() {
-        return m_DataBaseType;
+        return dataBaseType;
     }
 
     @Override
-    public void setDataBaseType(String p_DataBaseType) {
-        m_DataBaseType = p_DataBaseType;
+    public void setDataBaseType(String pDataBaseType) {
+        dataBaseType = pDataBaseType;
     }
 
     @Override
     public String getUrl() {
-        return m_Url;
+        return url;
     }
 
     @Override
@@ -90,7 +80,7 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     @Override
     public int executeUpdate(String sql) throws APPErrorException {
         WsDsResult result = new WsDsResult();
-        m_Client.invoke("executeNonQuery", new Object[]{sql}, result);
+        client.invoke("executeNonQuery", new Object[]{sql}, result);
         if (result.isSuccessful()) {
             return result.getRows();
         } else {
@@ -107,7 +97,7 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     @Override
     public boolean init(Object... params) throws APPErrorException {
         try {
-            m_Client = new RPCClient(params[0].toString());
+            client = new RPCClient(params[0].toString());
             return true;
         } catch (Exception e) {
             return false;
@@ -127,18 +117,18 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
 
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params)
+    public int executeUpdate(String sql, Object[] pParams)
             throws APPErrorException {
         throw new APPErrorException("executeUpdate 没有实现");
     }
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
+    public int executeUpdate(String sql, Object[] pParams, boolean pUseSetInputStream) throws APPErrorException {
         throw new APPErrorException("executeUpdate 没有实现");
     }
 
     @Override
-    public int executeBlob(String sql, byte[] p_Params)
+    public int executeBlob(String sql, byte[] pParams)
             throws APPErrorException {
         throw new APPErrorException("executeBlob 没有实现");
     }
@@ -159,36 +149,36 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     }
 
     @Override
-    public DataTable Query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+    public DataTable Query(String sql, boolean pBlobUseStream) throws APPErrorException {
         throw new APPErrorException("Query流没有实现");
     }
 
     @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return query(sql, p_Class);
+    public <T> T Query(String sql, Class<T> pClass) throws APPErrorException {
+        return query(sql, pClass);
     }
 
     @Override
-    public DataTable Query(String sql, Object[] p_Params)
+    public DataTable Query(String sql, Object[] pParams)
             throws APPErrorException {
         throw new APPErrorException("Query 没有实现");
     }
 
 
     @Override
-    public DataTable query(String sql, boolean p_BlobUseStream) throws APPErrorException {
+    public DataTable query(String sql, boolean pBlobUseStream) throws APPErrorException {
         throw new APPErrorException("Query 没有实现");
     }
 
     @Override
-    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+    public DataTable query(String sql, Object[] pParams) throws APPErrorException {
         throw new APPErrorException("Query 没有实现");
     }
 
     @Override
     public DataTable query(String sql) throws APPErrorException {
         WsDsResult result = new WsDsResult();
-        m_Client.invoke("executeQuery", new Object[]{sql}, result);
+        client.invoke("executeQuery", new Object[]{sql}, result);
         if (result.isSuccessful()) {
             return result.getTable();
         } else {
@@ -198,8 +188,8 @@ public class RPCDataAccess implements tgtools.db.IDataAccess {
     }
 
     @Override
-    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
-        Object obj = JsonParseHelper.parseToObject(Query(sql), p_Class, true);
-        return (T) JsonParseHelper.parseToObject(Query(sql), p_Class, true);
+    public <T> T query(String sql, Class<T> pClass) throws APPErrorException {
+        Object obj = JsonParseHelper.parseToObject(Query(sql), pClass, true);
+        return (T) JsonParseHelper.parseToObject(Query(sql), pClass, true);
     }
 }

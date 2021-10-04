@@ -14,14 +14,14 @@ public  class ListTask<T extends Task> extends ArrayList<T> {
 		this("", null);
 	}
 
-	public ListTask(String p_Name) {
-		this(p_Name, null);
+	public ListTask(String pName) {
+		this(pName, null);
 	}
 
-	public ListTask(String p_Name, Collection<? extends T> p_Tasks) {
-		setName(p_Name);
-		if (null != p_Tasks && p_Tasks.size() > 0) {
-			super.addAll(p_Tasks);
+	public ListTask(String pName, Collection<? extends T> pTasks) {
+		setName(pName);
+		if (null != pTasks && pTasks.size() > 0) {
+			super.addAll(pTasks);
 		}
 	}
 
@@ -37,10 +37,10 @@ public  class ListTask<T extends Task> extends ArrayList<T> {
 	/**
 	 * 设置任务集合的名称
 	 * 
-	 * @param p_Name
+	 * @param pName
 	 */
-	public void setName(String p_Name) {
-		m_Name = p_Name;
+	public void setName(String pName) {
+		m_Name = pName;
 	}
 
 	private String m_Name;
@@ -52,10 +52,10 @@ public  class ListTask<T extends Task> extends ArrayList<T> {
 	/**
 	 * 将一个任务集合添加到当前任务集合的末尾
 	 * 
-	 * @param p_ListTask
+	 * @param pListTask
 	 */
-	public void Merge(ListTask<T> p_ListTask) {
-		super.addAll(p_ListTask);
+	public void Merge(ListTask<T> pListTask) {
+		super.addAll(pListTask);
 	}
 
 }

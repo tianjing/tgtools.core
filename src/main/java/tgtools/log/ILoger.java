@@ -1,13 +1,33 @@
 package tgtools.log;
-
+/**
+ * @author tianjing
+ */
 public interface ILoger {
-    void error(Object p_Message, Throwable p_Error);
+    /**
+     * 错误
+     * @param pMessage
+     * @param pError
+     */
+    void error(Object pMessage, Throwable pError);
 
-    void warn(Object p_Message);
+    /**
+     * 告警
+     * @param pMessage
+     */
+    void warn(Object pMessage);
 
-    void warn(Object p_Message, Throwable p_Error);
+    /**
+     * 告警
+     * @param pMessage
+     * @param pError
+     */
+    void warn(Object pMessage, Throwable pError);
 
-    void info(Object p_Message);
+    /**
+     * 信息
+     * @param pMessage
+     */
+    void info(Object pMessage);
 
 
 }

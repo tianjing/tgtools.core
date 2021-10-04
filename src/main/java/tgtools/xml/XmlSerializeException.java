@@ -1,22 +1,24 @@
 package tgtools.xml;
 
 import tgtools.exceptions.APPRuntimeException;
-
+/**
+ * @author tianjing
+ */
 public class XmlSerializeException extends APPRuntimeException{
 	  private static final long serialVersionUID = 8731745468346909325L;
 
-	  public XmlSerializeException(Throwable p_exception)
+	  public XmlSerializeException(Throwable pException)
 	  {
-	    super(p_exception);
+	    super(pException);
 	  }
 
-	  public XmlSerializeException(String p_excptMsg)
+	  public XmlSerializeException(String pExcptMsg)
 	  {
-	    super(p_excptMsg);
+	    super(pExcptMsg);
 	  }
 
-	  public XmlSerializeException(String p_excptMsg, Throwable p_excpt)
+	  public XmlSerializeException(String pExcptMsg, Throwable pExcpt)
 	  {
-	    super(p_excptMsg, p_excpt);
+	    super(pExcptMsg, pExcpt);
 	  }
 }

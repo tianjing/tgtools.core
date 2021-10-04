@@ -1,14 +1,28 @@
 package tgtools.net.udp.listener;
 
 /**
- * 名  称：
- * 编写者：田径
- * 功  能：
- * 时  间：16:09
+ * @author tianjing
  */
 public interface IUDPServerListener {
-    void onError(UDPErrorEvent p_Event);
-    void onMessage(UDPMessageEvent p_Event);
+    /**
+     * onError
+     * @param pEvent
+     */
+    void onError(UDPErrorEvent pEvent);
+
+    /**
+     *  onMessage
+     * @param pEvent
+     */
+    void onMessage(UDPMessageEvent pEvent);
+
+    /**
+     * onClose
+     */
     void onClose();
+
+    /**
+     * onStart
+     */
     void onStart();
 }

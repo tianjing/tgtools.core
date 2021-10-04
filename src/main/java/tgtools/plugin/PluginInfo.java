@@ -2,7 +2,9 @@ package tgtools.plugin;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-
+/**
+ * @author tianjing
+ */
 @Root
 public class PluginInfo {
 
@@ -66,6 +68,12 @@ public class PluginInfo {
 			return this.name.equals(info.getName())|| this.path.equals(info.getPath());
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
 	}
 	public String getDescription() {
 		return description;

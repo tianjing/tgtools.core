@@ -2,67 +2,53 @@ package tgtools.data;
 
 import tgtools.exceptions.APPRuntimeException;
 import tgtools.util.ReflectionUtil;
+import tgtools.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.Date;
 
+/**
+ * @author tianjing
+ */
 public class DbTypeConverter {
-    public static Object convertIntegerValue(Object p_value) {
+    public static Object convertIntegerValue(Object pValue) {
         try {
-            Long longValue = Long.valueOf(p_value.toString().trim());
+            Long longValue = Long.valueOf(pValue.toString().trim());
             if (longValue.longValue() > 2147483647L) {
                 return longValue;
             }
-            return Integer.valueOf(p_value.toString().trim());
+            return Integer.valueOf(pValue.toString().trim());
         } catch (Exception ex) {
         }
-        return p_value;
+        return pValue;
     }
 
-    public static Object toCommonType(Object p_value, int p_commonType, boolean p_BolbUseStream) {
-        Object value = p_value;
+    public static Object toCommonType(Object pValue, int pCommonType, boolean pBolbUseStream) {
+        Object value = pValue;
         if (value == null) {
             value = new DbNull();
-        } else if (p_commonType == 4) {
-            if ((p_value instanceof Integer)) {
-                value = Integer.valueOf(p_value.toString());
-            } else if ((value instanceof BigDecimal)) {
-//				BigDecimal bg = (BigDecimal) value;
-//
-//				if (bg.scale() <= 0) {
-//					value = convertIntegerValue(bg.toPlainString());
-//				} else {
-//					int v = (int) Math.round(Double.parseDouble(bg
-//							.toPlainString()));
-//
-//					value = new Integer(v);
-                //}
+        } else if (pCommonType == 4) {
+            if ((pValue instanceof Integer)) {
+                value = Integer.valueOf(pValue.toString());
             } else if ((value instanceof Double)) {
                 int v = (int) Math.round(((Double) value).doubleValue());
                 value = new Integer(v);
             } else {
-                value = convertIntegerValue(p_value);
+                value = convertIntegerValue(pValue);
             }
         } else if ((value instanceof Number)) {
-            if ((value instanceof BigDecimal)) {
-                //BigDecimal bg = (BigDecimal) value;
-                //if (bg.scale() <= 0) {
-                //		value = convertIntegerValue(bg.toPlainString());
-                //}
-            }
-
             if ((value instanceof BigDecimal)) {
                 value = new BigDecimal(value.toString());
             } else if ((!(value instanceof Integer))
                     && (!(value instanceof Long))) {
-                value = Double.valueOf(p_value.toString());
+                value = Double.valueOf(pValue.toString());
             }
         } else if ((value instanceof Blob)) {
             Blob blob = (Blob) value;
             try {
-                if (p_BolbUseStream) {
+                if (pBolbUseStream) {
                     value = blob.getBinaryStream();
                 } else {
                     value = blob.getBytes(1L, (int) blob.length());
@@ -78,15 +64,9 @@ public class DbTypeConverter {
                 throw new APPRuntimeException("将Clob字段值以String格式读出时发生异常。", e);
             }
         } else {
-            // throw new APPRuntimeException("不支持将Clob字段值转换为：" + p_commonType);
-            // value = DbmsSpecificImpl.toCommonType(value, p_commonType);
         }
 
         if ((value instanceof Number)) {
-            /*
-			 * if (!(value instanceof Integer)) { value =
-			 * NumberUtility.toInteger((Number) value); }
-			 */
             if (value.toString().equals(Integer.valueOf(-2147483648))) {
                 value = new DbNull();
             }
@@ -94,57 +74,61 @@ public class DbTypeConverter {
         }
 
         if (((value instanceof Date))
-                && (value.toString().equals("0001-01-01 00:00:00.000000"))) {
+                && (StringUtil.equals(value.toString(), "0001-01-01 00:00:00.000000"))) {
             value = new DbNull();
         }
 
         return value;
     }
 
-    public static Object toCommonType(Object p_value, int p_commonType) {
-        return toCommonType(p_value, p_commonType, false);
+    public static Object toCommonType(Object pValue, int pCommonType) {
+        return toCommonType(pValue, pCommonType, false);
     }
 
-    public static Object toCommonType(String p_value, int p_dbType) {
-        if (p_dbType == 2004) {
-            // if (p_value != null) {
-            // return Base64.decodeBase64(p_value.getBytes());
-            // }
+    public static Object toCommonType(String pValue, int pDbType) {
+        if (pDbType == 2004) {
             return new byte[0];
         }
 
         Class<?> c = String.class;
-        if ((p_dbType == Types.NUMERIC) || (p_dbType == Types.FLOAT)
-                || (p_dbType == Types.DOUBLE)) {
+        if ((pDbType == Types.NUMERIC) || (pDbType == Types.FLOAT)
+                || (pDbType == Types.DOUBLE)) {
             c = Double.class;
         }
-        if (p_dbType == Types.INTEGER)
+        if (pDbType == Types.INTEGER) {
             c = Integer.class;
-        if (p_dbType == Types.BIGINT)
+        }
+        if (pDbType == Types.BIGINT) {
             c = BigInteger.class;
-        if (p_dbType == Types.DATE)
+        }
+        if (pDbType == Types.DATE) {
             c = Timestamp.class;
-        if (p_dbType == Types.TIME)
+        }
+        if (pDbType == Types.TIME) {
             c = Time.class;
-        if (p_dbType == Types.TIMESTAMP)
+        }
+        if (pDbType == Types.TIMESTAMP) {
             c = Timestamp.class;
-        return ReflectionUtil.instanceSimpleClass(c, p_value);
+        }
+        return ReflectionUtil.instanceSimpleClass(c, pValue);
     }
 
-    public static Object validateDbNullToNull(Object p_value) {
-        if ((p_value == null) || ((p_value instanceof DbNull)))
+    public static Object validateDbNullToNull(Object pValue) {
+        if ((pValue == null) || ((pValue instanceof DbNull))) {
             return null;
-        return p_value;
+        }
+        return pValue;
     }
 
-    public static Object validateNullToDbNull(Object p_value) {
-        if (p_value == null)
+    public static Object validateNullToDbNull(Object pValue) {
+        if (pValue == null) {
             return new DbNull();
-        return p_value;
+        }
+        return pValue;
     }
 
-    public static String getDbTypeName(int p_dbType) {
-        switch (p_dbType) {
+    public static String getDbTypeName(int pDbType) {
+        switch (pDbType) {
             case Types.CHAR:
                 return "CHAR";
             case Types.VARCHAR:
@@ -181,36 +165,47 @@ public class DbTypeConverter {
                 return "NUMERIC";
             case Types.BOOLEAN:
                 return "VARCHAR";
+            default:
+                throw new DataAccessException(String.format("无法映射的数据库数据类型[%1$s]",
+                        new Object[]{Integer.valueOf(pDbType)}));
         }
-        throw new DataAccessException(String.format("无法映射的数据库数据类型[%1$s]",
-                new Object[]{Integer.valueOf(p_dbType)}));
     }
 
-    public static int getDbType(String p_dbTypeName) {
-        if (p_dbTypeName.equalsIgnoreCase("CHAR"))
+    public static int getDbType(String pDbTypeName) {
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"CHAR")) {
             return Types.CHAR;
-        if (p_dbTypeName.equalsIgnoreCase("INT32"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"INT32")) {
             return Types.INTEGER;
-        if (p_dbTypeName.equalsIgnoreCase("VARCHAR"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"VARCHAR")) {
             return Types.VARCHAR;
-        if (p_dbTypeName.equalsIgnoreCase("INTEGER"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"INTEGER")) {
             return Types.INTEGER;
-        if (p_dbTypeName.equalsIgnoreCase("NUMERIC"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"NUMERIC")) {
             return Types.NUMERIC;
-        if (p_dbTypeName.equalsIgnoreCase("DATE"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"DATE")) {
             return Types.DATE;
-        if (p_dbTypeName.equalsIgnoreCase("TIME"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"TIME")) {
             return Types.TIME;
-        if (p_dbTypeName.equalsIgnoreCase("TIMESTAMP"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"TIMESTAMP")) {
             return Types.TIMESTAMP;
-        if (p_dbTypeName.equalsIgnoreCase("DATETIME"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"DATETIME")) {
             return Types.TIMESTAMP;
-        if (p_dbTypeName.equalsIgnoreCase("BLOB"))
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"BLOB")) {
             return Types.BLOB;
-        if (p_dbTypeName.equalsIgnoreCase("CLOB")) {
+        }
+        if (StringUtil.equalsIgnoreCase(pDbTypeName,"CLOB")) {
             return Types.CLOB;
         }
         throw new DataAccessException(String.format("无法映射的中立数据类型[%1$s]",
-                new Object[]{p_dbTypeName}));
+                new Object[]{pDbTypeName}));
     }
 }

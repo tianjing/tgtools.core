@@ -13,6 +13,7 @@ import java.sql.*;
 
 /**
  * 通过数据源创建 DataAccess
+ * @author tianjing
  */
 public class DataSourceDataAccess extends AbstractDataAccess {
 
@@ -89,48 +90,48 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     }
 
     protected Connection getConnection() throws APPErrorException, SQLException {
-        return m_DataSource.getConnection();
+        return dataSource.getConnection();
     }
 
-    protected void close(Statement p_Statement) {
+    protected void close(Statement pStatement) {
         try {
-            if (null != p_Statement) {
-                p_Statement.close();
+            if (null != pStatement) {
+                pStatement.close();
             }
         } catch (Exception e) {
         }
-        p_Statement = null;
+        pStatement = null;
     }
 
-    protected void closeBatch(Statement p_Statement) {
+    protected void closeBatch(Statement pStatement) {
         try {
-            if (null != p_Statement) {
-                p_Statement.clearBatch();
-                p_Statement.close();
+            if (null != pStatement) {
+                pStatement.clearBatch();
+                pStatement.close();
             }
         } catch (Exception e) {
         }
-        p_Statement = null;
+        pStatement = null;
     }
 
-    protected void close(ResultSet p_Result) {
+    protected void close(ResultSet pResult) {
         try {
-            if (null != p_Result) {
-                p_Result.close();
+            if (null != pResult) {
+                pResult.close();
             }
         } catch (Exception e) {
         }
-        p_Result = null;
+        pResult = null;
     }
 
-    protected void close(Connection p_Conn) {
+    protected void close(Connection pConn) {
         try {
-            if (null != p_Conn) {
-                p_Conn.close();
+            if (null != pConn) {
+                pConn.close();
             }
         } catch (Exception e) {
         }
-        p_Conn = null;
+        pConn = null;
     }
 
     /**
@@ -143,7 +144,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     @Override
     public boolean init(Object... objects) throws APPErrorException {
         if (null != objects && objects.length == 1 && objects[0] instanceof DataSource) {
-            m_DataSource = (DataSource) objects[0];
+            dataSource = (DataSource) objects[0];
             return true;
         }
         return false;
@@ -151,8 +152,8 @@ public class DataSourceDataAccess extends AbstractDataAccess {
 
     @Override
     public void close() {
-        if (null != m_DataSource) {
-            m_DataSource = null;
+        if (null != dataSource) {
+            dataSource = null;
         }
     }
 
@@ -160,24 +161,24 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     public Connection createConnection() {
 
         try {
-            return m_DataSource.getConnection();
+            return dataSource.getConnection();
         } catch (SQLException e) {
             return null;
         }
     }
 
-    protected void setParams(PreparedStatement p_Statement, Object[] p_Params, boolean pUseSetInputStream)
+    protected void setParams(PreparedStatement pStatement, Object[] pParams, boolean pUseSetInputStream)
             throws SQLException {
-        if (null != p_Params) {
-            for (int i = 0; i < p_Params.length; i++) {
-                if (pUseSetInputStream && (p_Params[i] instanceof InputStream)) {
+        if (null != pParams) {
+            for (int i = 0; i < pParams.length; i++) {
+                if (pUseSetInputStream && (pParams[i] instanceof InputStream)) {
                     try {
-                        p_Statement.setBinaryStream(i + 1, (InputStream) p_Params[i], ((InputStream) p_Params[i]).available());
+                        pStatement.setBinaryStream(i + 1, (InputStream) pParams[i], ((InputStream) pParams[i]).available());
                     } catch (Exception ex) {
                         throw new SQLException("文件流设置错误；原因：" + ex.toString(), ex);
                     }
                 } else {
-                    p_Statement.setObject(i + 1, p_Params[i]);
+                    pStatement.setObject(i + 1, pParams[i]);
                 }
             }
         }
@@ -185,7 +186,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params)
+    public int executeUpdate(String sql, Object[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -194,7 +195,28 @@ public class DataSourceDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params, false);
+                setParams(statement, pParams, false);
+                return statement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new APPErrorException("sql执行失败：" + sql, e);
+        } finally {
+            close(conn);
+        }
+        return -1;
+    }
+
+    @Override
+    public int executeUpdate(String sql, Object[] pParams, boolean pUseSetInputStream) throws APPErrorException {
+        Connection conn = null;
+
+        try {
+
+            conn = getConnection();
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                setParams(statement, pParams, pUseSetInputStream);
                 return statement.executeUpdate();
                 // rs.close();
             }
@@ -208,29 +230,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public int executeUpdate(String sql, Object[] p_Params, boolean pUseSetInputStream) throws APPErrorException {
-        Connection conn = null;
-
-        try {
-
-            conn = getConnection();
-            if (conn != null) {
-                PreparedStatement statement = conn.prepareStatement(sql);
-                setParams(statement, p_Params, pUseSetInputStream);
-                return statement.executeUpdate();
-                // rs.close();
-            }
-
-        } catch (SQLException e) {
-            throw new APPErrorException("sql执行失败：" + sql, e);
-        } finally {
-            close(conn);
-        }
-        return -1;
-    }
-
-    @Override
-    public int executeBlob(String sql, byte[] p_Params)
+    public int executeBlob(String sql, byte[] pParams)
             throws APPErrorException {
         Connection conn = null;
 
@@ -238,7 +238,7 @@ public class DataSourceDataAccess extends AbstractDataAccess {
             conn = getConnection();
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                statement.setBytes(1, p_Params);
+                statement.setBytes(1, pParams);
                 return statement.executeUpdate();
             }
             throw new APPErrorException("获取连接失败！");
@@ -310,9 +310,9 @@ public class DataSourceDataAccess extends AbstractDataAccess {
 
 
     @Override
-    public DataTable Query(String sql, Object[] p_Params)
+    public DataTable Query(String sql, Object[] pParams)
             throws APPErrorException {
-        return query(sql, p_Params);
+        return query(sql, pParams);
     }
 
 
@@ -327,8 +327,8 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public <T> T Query(String sql, Class<T> p_Class) throws APPErrorException {
-        return query(sql, p_Class);
+    public <T> T Query(String sql, Class<T> pClass) throws APPErrorException {
+        return query(sql, pClass);
     }
 
     @Override
@@ -352,14 +352,14 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public DataTable query(String sql, Object[] p_Params) throws APPErrorException {
+    public DataTable query(String sql, Object[] pParams) throws APPErrorException {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
-            setParams(statement, p_Params, false);
+            setParams(statement, pParams, false);
             rs = statement.executeQuery();
             LogHelper.info("", sql, "SpringDataAccess.Query");
             return new DataTable(rs, sql);
@@ -378,8 +378,8 @@ public class DataSourceDataAccess extends AbstractDataAccess {
     }
 
     @Override
-    public <T> T query(String sql, Class<T> p_Class) throws APPErrorException {
-        return (T) JsonParseHelper.parseToObject(query(sql), p_Class, true);
+    public <T> T query(String sql, Class<T> pClass) throws APPErrorException {
+        return (T) JsonParseHelper.parseToObject(query(sql), pClass, true);
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.Vector;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：15:24
  */
@@ -22,7 +22,7 @@ public class MessageFactory {
     private static Vector<IMessageListening> m_TempAddListens = new Vector<IMessageListening>();
     private static Vector<IMessageListening> m_TempDelListens = new Vector<IMessageListening>();
     private static IMessageStore m_MessageStroe=null;
-    private static boolean m_IsRun;
+    private static boolean m_isRun;
 
     public static void setMessageStroe(IMessageStore pMessageStroe) {
         m_MessageStroe = pMessageStroe;
@@ -33,15 +33,15 @@ public class MessageFactory {
      * @return
      */
     public static boolean isRun() {
-        return m_IsRun;
+        return m_isRun;
     }
 
     /**
      * 设置运行状态
-     * @param m_IsRun
+     * @param pIsRun
      */
-    private static void setIsRun(boolean m_IsRun) {
-        MessageFactory.m_IsRun = m_IsRun;
+    private static void setIsRun(boolean pIsRun) {
+        MessageFactory.m_isRun = pIsRun;
     }
     /**
      * 启动消息处理器
@@ -55,7 +55,7 @@ public class MessageFactory {
         {
             m_MessageStroe = new MessageEhcacheStore();
         }
-        m_IsRun = true;
+        m_isRun = true;
         ThreadPoolFactory.addTask(new Runnable() {
 
             @Override
@@ -72,12 +72,12 @@ public class MessageFactory {
     }
     public static void stop()
     {
-        m_IsRun=false;
+        m_isRun=false;
     }
 
     public static void processMesage() {
-        while (m_IsRun) {
-            if (!m_IsRun) {
+        while (m_isRun) {
+            if (!m_isRun) {
                 return;
             }
             Message message = null;
@@ -99,7 +99,7 @@ public class MessageFactory {
                     }
                 }
             }
-            if (!m_IsRun) {
+            if (!m_isRun) {
                 return;
             }
             try {
@@ -128,46 +128,46 @@ public class MessageFactory {
 
     /**
      * 发送消息
-     * @param p_Message
+     * @param pMessage
      * @throws APPErrorException
      */
-    public static void sendMessage(Message p_Message) throws APPErrorException {
-        m_MessageStroe.addMessage(p_Message);
+    public static void sendMessage(Message pMessage) throws APPErrorException {
+        m_MessageStroe.addMessage(pMessage);
     }
 
     /**
      * 注册一个监听
-     * @param p_MessageListening
+     * @param pMessageListening
      * @throws APPErrorException
      */
-    public static void registerListening(IMessageListening p_MessageListening) throws APPErrorException {
-        m_TempAddListens.add(p_MessageListening);
+    public static void registerListening(IMessageListening pMessageListening) throws APPErrorException {
+        m_TempAddListens.add(pMessageListening);
     }
 
     /**
      * 注销一个监听
      *
-     * @param p_MessageListening
+     * @param pMessageListening
      * @throws APPErrorException
      */
-    public static void unRegisterListening(IMessageListening p_MessageListening) throws APPErrorException {
-        m_TempDelListens.remove(p_MessageListening);
+    public static void unRegisterListening(IMessageListening pMessageListening) throws APPErrorException {
+        m_TempDelListens.remove(pMessageListening);
     }
 
     /**
      * 注销监听，根据监听名称注销所有监听
      *
-     * @param p_ListenName
+     * @param pListenName
      * @throws APPErrorException
      */
-    public static void unRegisterListening(String p_ListenName) throws APPErrorException {
-        if (StringUtil.isNullOrEmpty(p_ListenName)) {
+    public static void unRegisterListening(String pListenName) throws APPErrorException {
+        if (StringUtil.isNullOrEmpty(pListenName)) {
             return;
         }
 
         List<IMessageListening> result = new ArrayList<IMessageListening>();
         for (int i = 0; i < m_Listens.size(); i++) {
-            if (p_ListenName.equals(m_Listens.get(i).getName())) {
+            if (pListenName.equals(m_Listens.get(i).getName())) {
                 result.add(m_Listens.get(i));
             }
         }

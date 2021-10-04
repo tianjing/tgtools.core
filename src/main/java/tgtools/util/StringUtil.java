@@ -1,14 +1,17 @@
 package tgtools.util;
 
-import java.io.*;
+import tgtools.exceptions.APPErrorException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import tgtools.exceptions.APPErrorException;
 
 /**
  * 字符串帮助类
@@ -17,13 +20,187 @@ import tgtools.exceptions.APPErrorException;
  */
 public final class StringUtil {
     public static final byte[] UTF16LEBom = new byte[]{(byte) 0xFF, (byte) 0xFE};
-    public static final byte[]  UTF16BEBom = new byte[]{(byte) 0xFE, (byte) 0xFF,
+    public static final byte[] UTF16BEBom = new byte[]{(byte) 0xFE, (byte) 0xFF,
             (byte) 0xbf};
     public static final byte[] UTF8Bom = new byte[]{(byte) 0xef, (byte) 0xbb,
             (byte) 0xbf};
     public static final String EMPTY_STRING = "";
     public static final String NEW_LINE = System.getProperty("line.separator", "\n");
     public static final String NEW_LINE_WINDOWS = "\r\n";
+    /**
+     * 驼峰拼写法 转换器
+     */
+    private static final WordTokenizer CAMEL_CASE_TOKENIZER = new WordTokenizer() {
+        @Override
+        protected void startSentence(StringBuffer buffer, char ch) {
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void startWord(StringBuffer buffer, char ch) {
+            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                buffer.append(Character.toUpperCase(ch));
+            } else {
+                buffer.append(Character.toLowerCase(ch));
+            }
+        }
+
+        @Override
+        protected void inWord(StringBuffer buffer, char ch) {
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void startDigitSentence(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void startDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDelimiter(StringBuffer buffer, char ch) {
+            if (ch != '_') {
+                buffer.append(ch);
+            }
+        }
+    };
+    /**
+     * 帕斯卡拼写法 转换器
+     */
+    private static final WordTokenizer PASCAL_CASE_TOKENIZER = new WordTokenizer() {
+        @Override
+        protected void startSentence(StringBuffer buffer, char ch) {
+            buffer.append(Character.toUpperCase(ch));
+        }
+
+        @Override
+        protected void startWord(StringBuffer buffer, char ch) {
+            buffer.append(Character.toUpperCase(ch));
+        }
+
+        @Override
+        protected void inWord(StringBuffer buffer, char ch) {
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void startDigitSentence(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void startDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDelimiter(StringBuffer buffer, char ch) {
+            if (ch != '_') {
+                buffer.append(ch);
+            }
+        }
+    };
+    private static final WordTokenizer UPPER_CASE_WITH_UNDERSCORES_TOKENIZER = new WordTokenizer() {
+        @Override
+        protected void startSentence(StringBuffer buffer, char ch) {
+            buffer.append(Character.toUpperCase(ch));
+        }
+
+        @Override
+        protected void startWord(StringBuffer buffer, char ch) {
+            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                buffer.append('_');
+            }
+
+            buffer.append(Character.toUpperCase(ch));
+        }
+
+        @Override
+        protected void inWord(StringBuffer buffer, char ch) {
+            buffer.append(Character.toUpperCase(ch));
+        }
+
+        @Override
+        protected void startDigitSentence(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void startDigitWord(StringBuffer buffer, char ch) {
+            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                buffer.append('_');
+            }
+
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDelimiter(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+    };
+    private static final WordTokenizer LOWER_CASE_WITH_UNDERSCORES_TOKENIZER = new WordTokenizer() {
+        @Override
+        protected void startSentence(StringBuffer buffer, char ch) {
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void startWord(StringBuffer buffer, char ch) {
+            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                buffer.append('_');
+            }
+
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void inWord(StringBuffer buffer, char ch) {
+            buffer.append(Character.toLowerCase(ch));
+        }
+
+        @Override
+        protected void startDigitSentence(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void startDigitWord(StringBuffer buffer, char ch) {
+            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                buffer.append('_');
+            }
+
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDigitWord(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+
+        @Override
+        protected void inDelimiter(StringBuffer buffer, char ch) {
+            buffer.append(ch);
+        }
+    };
 
     public static String addUTF8Bom(String value) {
         try {
@@ -32,153 +209,6 @@ public final class StringUtil {
             return value;
         }
     }
-
-    /**
-     * 驼峰拼写法 转换器
-     */
-    private static final WordTokenizer CAMEL_CASE_TOKENIZER = new WordTokenizer() {
-
-        protected void startSentence(StringBuffer buffer, char ch) {
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void startWord(StringBuffer buffer, char ch) {
-            if (!isDelimiter(buffer.charAt(buffer.length() - 1)))
-                buffer.append(Character.toUpperCase(ch));
-            else
-                buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void inWord(StringBuffer buffer, char ch) {
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void startDigitSentence(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void startDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDelimiter(StringBuffer buffer, char ch) {
-            if (ch != '_')
-                buffer.append(ch);
-        }
-    };
-    /**
-     * 帕斯卡拼写法 转换器
-     */
-    private static final WordTokenizer PASCAL_CASE_TOKENIZER = new WordTokenizer() {
-        protected void startSentence(StringBuffer buffer, char ch) {
-            buffer.append(Character.toUpperCase(ch));
-        }
-
-        protected void startWord(StringBuffer buffer, char ch) {
-            buffer.append(Character.toUpperCase(ch));
-        }
-
-        protected void inWord(StringBuffer buffer, char ch) {
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void startDigitSentence(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void startDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDelimiter(StringBuffer buffer, char ch) {
-            if (ch != '_')
-                buffer.append(ch);
-        }
-    };
-
-    private static final WordTokenizer UPPER_CASE_WITH_UNDERSCORES_TOKENIZER = new WordTokenizer() {
-        protected void startSentence(StringBuffer buffer, char ch) {
-            buffer.append(Character.toUpperCase(ch));
-        }
-
-        protected void startWord(StringBuffer buffer, char ch) {
-            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
-                buffer.append('_');
-            }
-
-            buffer.append(Character.toUpperCase(ch));
-        }
-
-        protected void inWord(StringBuffer buffer, char ch) {
-            buffer.append(Character.toUpperCase(ch));
-        }
-
-        protected void startDigitSentence(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void startDigitWord(StringBuffer buffer, char ch) {
-            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
-                buffer.append('_');
-            }
-
-            buffer.append(ch);
-        }
-
-        protected void inDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDelimiter(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-    };
-
-    private static final WordTokenizer LOWER_CASE_WITH_UNDERSCORES_TOKENIZER = new WordTokenizer() {
-        protected void startSentence(StringBuffer buffer, char ch) {
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void startWord(StringBuffer buffer, char ch) {
-            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
-                buffer.append('_');
-            }
-
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void inWord(StringBuffer buffer, char ch) {
-            buffer.append(Character.toLowerCase(ch));
-        }
-
-        protected void startDigitSentence(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void startDigitWord(StringBuffer buffer, char ch) {
-            if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
-                buffer.append('_');
-            }
-
-            buffer.append(ch);
-        }
-
-        protected void inDigitWord(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-
-        protected void inDelimiter(StringBuffer buffer, char ch) {
-            buffer.append(ch);
-        }
-    };
 
     /**
      * 判断字符串为空 （含空格）
@@ -195,14 +225,16 @@ public final class StringUtil {
      *
      * @param s1           字串1
      * @param s2           字串2
-     * @param p_ignoreCase 是否忽略大小写
+     * @param pIgnoreCase 是否忽略大小写
      * @return 相等返回true
      */
-    public static boolean equal(String s1, String s2, boolean p_ignoreCase) {
-        if ((s1 == null) || (s2 == null))
+    public static boolean equal(String s1, String s2, boolean pIgnoreCase) {
+        if ((s1 == null) || (s2 == null)) {
             return false;
-        if (p_ignoreCase)
+        }
+        if (pIgnoreCase) {
             return s1.equalsIgnoreCase(s2);
+        }
         return s1.equals(s2);
     }
 
@@ -234,8 +266,9 @@ public final class StringUtil {
      */
     public static boolean isBlank(String str) {
         int length;
-        if ((str == null) || ((length = str.length()) == 0))
+        if ((str == null) || ((length = str.length()) == 0)) {
             return true;
+        }
         for (int i = 0; i < length; i++) {
             if (!Character.isWhitespace(str.charAt(i))) {
                 return false;
@@ -253,8 +286,9 @@ public final class StringUtil {
      */
     public static boolean isNotBlank(String str) {
         int length;
-        if ((str == null) || ((length = str.length()) == 0))
+        if ((str == null) || ((length = str.length()) == 0)) {
             return false;
+        }
         for (int i = 0; i < length; i++) {
             if (!Character.isWhitespace(str.charAt(i))) {
                 return true;
@@ -334,8 +368,9 @@ public final class StringUtil {
      * @return 返回移除空格后的字符串
      */
     public static String trimAll(String str) {
-        if (isNullOrEmpty(str))
+        if (isNullOrEmpty(str)) {
             return "";
+        }
         str = trim(str);
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
@@ -484,8 +519,9 @@ public final class StringUtil {
         if (mode <= 0) {
             if (stripChars == null) {
                 while ((start < end)
-                        && (Character.isWhitespace(str.charAt(start))))
+                        && (Character.isWhitespace(str.charAt(start)))) {
                     start++;
+                }
             }
             if (stripChars.length() == 0) {
                 return str;
@@ -501,8 +537,9 @@ public final class StringUtil {
         if (mode >= 0) {
             if (stripChars == null) {
                 while ((start < end)
-                        && (Character.isWhitespace(str.charAt(end - 1))))
+                        && (Character.isWhitespace(str.charAt(end - 1)))) {
                     end--;
+                }
             }
             if (stripChars.length() == 0) {
                 return str;
@@ -738,26 +775,30 @@ public final class StringUtil {
     /**
      * 将字符串的第一个字符大写，并将字符长度放在一位
      * 如 thisismy  转换后 8Thisismy
+     *
      * @param str
      * @return
      */
     public static String capitalize(String str) {
         int strLen;
-        if ((str == null) || ((strLen = str.length()) == 0))
+        if ((str == null) || ((strLen = str.length()) == 0)) {
             return str;
+        }
         return strLen + Character.toTitleCase(str.charAt(0)) + str.substring(1);
     }
 
     /**
      * 将字符串的第一个字符小写，并将字符长度放在一位
      * 如 Thisismy  转换后 8thisismy
+     *
      * @param str
      * @return
      */
     public static String uncapitalize(String str) {
         int strLen;
-        if ((str == null) || ((strLen = str.length()) == 0))
+        if ((str == null) || ((strLen = str.length()) == 0)) {
             return str;
+        }
         return strLen + Character.toLowerCase(str.charAt(0)) + str.substring(1);
     }
 
@@ -769,8 +810,9 @@ public final class StringUtil {
      */
     public static String swapCase(String str) {
         int strLen;
-        if ((str == null) || ((strLen = str.length()) == 0))
+        if ((str == null) || ((strLen = str.length()) == 0)) {
             return str;
+        }
         StringBuffer buffer = new StringBuffer(strLen);
 
         char ch = '\000';
@@ -778,11 +820,11 @@ public final class StringUtil {
         for (int i = 0; i < strLen; i++) {
             ch = str.charAt(i);
 
-            if (Character.isUpperCase(ch))
+            if (Character.isUpperCase(ch)) {
                 ch = Character.toLowerCase(ch);
-            else if (Character.isTitleCase(ch))
+            } else if (Character.isTitleCase(ch)) {
                 ch = Character.toLowerCase(ch);
-            else if (Character.isLowerCase(ch)) {
+            } else if (Character.isLowerCase(ch)) {
                 ch = Character.toUpperCase(ch);
             }
 
@@ -794,6 +836,7 @@ public final class StringUtil {
 
     /**
      * 将词组转换为 骆驼拼写法
+     *
      * @param str
      * @return
      */
@@ -803,6 +846,7 @@ public final class StringUtil {
 
     /**
      * 将词组转换为 帕斯卡拼写法
+     *
      * @param str
      * @return
      */
@@ -811,7 +855,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @return
      */
@@ -837,6 +880,7 @@ public final class StringUtil {
 
     /**
      * 分割字符串
+     *
      * @param str
      * @param separatorChar
      * @return
@@ -882,6 +926,7 @@ public final class StringUtil {
 
     /**
      * 分割字符串
+     *
      * @param str
      * @param separatorChars
      * @return
@@ -892,6 +937,7 @@ public final class StringUtil {
 
     /**
      * 分割字符串
+     *
      * @param str
      * @param separatorChars
      * @param max
@@ -988,6 +1034,7 @@ public final class StringUtil {
 
     /**
      * 拼接字符串
+     *
      * @param array
      * @return
      */
@@ -997,6 +1044,7 @@ public final class StringUtil {
 
     /**
      * 拼接字符串
+     *
      * @param array
      * @param separator
      * @return
@@ -1027,6 +1075,7 @@ public final class StringUtil {
 
     /**
      * 拼接字符串
+     *
      * @param array
      * @param separator
      * @return
@@ -1066,22 +1115,24 @@ public final class StringUtil {
     /**
      * 拼接固定长度的字符串
      * 初始化长度 256
+     *
      * @param array
-     * @param sep 分割符
+     * @param sep   分割符
      * @return
      */
     public static String joinWithoutSpace(String[] array, String sep) {
-        if ((array == null) || (array.length == 0))
+        if ((array == null) || (array.length == 0)) {
             return null;
+        }
         if (isNullOrEmpty(sep)) {
             sep = "";
         }
         StringBuffer buf = new StringBuffer(256);
         for (int i = 0; i < array.length; i++) {
             if (!isNullOrEmpty(array[i])) {
-                if (i == 0)
+                if (i == 0) {
                     buf.append(array[i]);
-                else {
+                } else {
                     buf.append(sep).append(array[i]);
                 }
             }
@@ -1091,6 +1142,7 @@ public final class StringUtil {
 
     /**
      * 拼接字符串
+     *
      * @param iterator
      * @param separator 分割符
      * @return
@@ -1119,6 +1171,7 @@ public final class StringUtil {
 
     /**
      * 拼接字符串
+     *
      * @param iterator
      * @param separator 分割符
      * @return
@@ -1147,6 +1200,7 @@ public final class StringUtil {
 
     /**
      * 找到字符所在字符串的位置
+     *
      * @param str
      * @param searchChar 要查找的字符
      * @return
@@ -1161,9 +1215,10 @@ public final class StringUtil {
 
     /**
      * 找到字符所在字符串的位置
+     *
      * @param str
      * @param searchChar 要查找的字符
-     * @param startPos 起点位置
+     * @param startPos   起点位置
      * @return
      */
     public static int indexOf(String str, char searchChar, int startPos) {
@@ -1176,6 +1231,7 @@ public final class StringUtil {
 
     /**
      * 找到字符所在字符串的位置
+     *
      * @param str
      * @param searchStr 要查找的字符
      * @return
@@ -1190,9 +1246,10 @@ public final class StringUtil {
 
     /**
      * 找到字符所在字符串的位置
+     *
      * @param str
      * @param searchStr 要查找的字符
-     * @param startPos 开始查找的位置
+     * @param startPos  开始查找的位置
      * @return
      */
     public static int indexOf(String str, String searchStr, int startPos) {
@@ -1209,6 +1266,7 @@ public final class StringUtil {
 
     /**
      * 找到字符数组中第一个匹配到的所在的位置
+     *
      * @param str
      * @param searchChars 要查找的字符
      * @return
@@ -1234,6 +1292,7 @@ public final class StringUtil {
 
     /**
      * 找到字符数组中第一个匹配到的所在的位置
+     *
      * @param str
      * @param searchChars 要查找的字符
      * @return
@@ -1259,6 +1318,7 @@ public final class StringUtil {
 
     /**
      * 找到字符数组中第一个匹配到的所在的位置
+     *
      * @param str
      * @param searchStrs 要查找的字符
      * @return
@@ -1311,15 +1371,17 @@ public final class StringUtil {
             char ch = str.charAt(i);
 
             int j = 0;
-            while (true)
+            while (true) {
                 if (j < searchChars.length) {
-                    if (searchChars[j] == ch)
+                    if (searchChars[j] == ch) {
                         break;
+                    }
                     j++;
                     continue;
                 } else {
                     return i;
                 }
+            }
         }
         return -1;
     }
@@ -1327,6 +1389,7 @@ public final class StringUtil {
     /**
      * 查找当前字符串中没有匹配的第一个字符的位置
      * 如：字符串：123456  查找字符 12 结果2
+     *
      * @param str
      * @param searchChars
      * @return
@@ -1348,6 +1411,7 @@ public final class StringUtil {
 
     /**
      * 从结尾开始查找，匹配到的第一字符所在的索引
+     *
      * @param str
      * @param searchChar
      * @return
@@ -1362,6 +1426,7 @@ public final class StringUtil {
 
     /**
      * 从结尾开始查找，匹配到的第一字符所在的索引
+     *
      * @param str
      * @param searchChar
      * @param startPos
@@ -1377,6 +1442,7 @@ public final class StringUtil {
 
     /**
      * 从结尾开始查找，匹配到的第一字符所在的索引
+     *
      * @param str
      * @param searchStr
      * @return
@@ -1391,6 +1457,7 @@ public final class StringUtil {
 
     /**
      * 从结尾开始查找，匹配到的第一字符所在的索引
+     *
      * @param str
      * @param searchStr
      * @param startPos
@@ -1405,7 +1472,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param searchStrs
      * @return
@@ -1436,7 +1502,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param searchChar
      * @return
@@ -1450,7 +1515,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param searchStr
      * @return
@@ -1464,7 +1528,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param valid
      * @return
@@ -1486,7 +1549,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param valid
      * @return
@@ -1500,7 +1562,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param invalid
      * @return
@@ -1527,7 +1588,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param invalidChars
      * @return
@@ -1541,7 +1601,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param subStr
      * @return
@@ -1564,7 +1623,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param start
      * @return
@@ -1590,7 +1648,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param start
      * @param end
@@ -1631,7 +1688,6 @@ public final class StringUtil {
     /**
      * 从头开始保留指定长度的字符串
      *
-     *
      * @param str
      * @param len
      * @return
@@ -1654,6 +1710,7 @@ public final class StringUtil {
     /**
      * 从结尾开始保留指定长度的字符串
      * 如：abcdefghijk 长度4 结果：hijk
+     *
      * @param str
      * @param len
      * @return
@@ -1674,7 +1731,6 @@ public final class StringUtil {
     }
 
     /**
-     *
      * @param str
      * @param pos
      * @param len
@@ -1945,9 +2001,9 @@ public final class StringUtil {
                 int pos = 0;
 
                 for (int j = 0; j < len; j++) {
-                    if (chars[j] != searchChar)
+                    if (chars[j] != searchChar) {
                         chars[(pos++)] = chars[j];
-                    else {
+                    } else {
                         modified = true;
                     }
                 }
@@ -2033,8 +2089,9 @@ public final class StringUtil {
         char last = str.charAt(lastIdx);
 
         if (last == '\n') {
-            if (str.charAt(lastIdx - 1) == '\r')
+            if (str.charAt(lastIdx - 1) == '\r') {
                 lastIdx--;
+            }
         } else if (last != '\r') {
             lastIdx++;
         }
@@ -2162,8 +2219,9 @@ public final class StringUtil {
             return str;
         }
 
-        if (pads == padLen)
+        if (pads == padLen) {
             return str.concat(padStr);
+        }
         if (pads < padLen) {
             return str.concat(padStr.substring(0, pads));
         }
@@ -2212,8 +2270,9 @@ public final class StringUtil {
             return str;
         }
 
-        if (pads == padLen)
+        if (pads == padLen) {
             return padStr.concat(str);
+        }
         if (pads < padLen) {
             return padStr.substring(0, pads).concat(str);
         }
@@ -2375,14 +2434,14 @@ public final class StringUtil {
         }
 
         for (int i = 1; i <= n; i++) {
-            char s_i = s.charAt(i - 1);
+            char si = s.charAt(i - 1);
 
             for (int j = 1; j <= m; j++) {
-                char t_j = t.charAt(j - 1);
+                char tj = t.charAt(j - 1);
                 int cost;
-                if (s_i == t_j)
+                if (si == tj) {
                     cost = 0;
-                else {
+                } else {
                     cost = 1;
                 }
 
@@ -2408,8 +2467,9 @@ public final class StringUtil {
     }
 
     public static String generateSqlInStr(String str) {
-        if (isBlank(str))
+        if (isBlank(str)) {
             return "";
+        }
         String[] strs = split(str, ",");
         return generateSqlInStr(strs);
     }
@@ -2438,9 +2498,9 @@ public final class StringUtil {
         String str = "";
         for (String tmp : strColl) {
             if (isNotBlank(tmp)) {
-                if (isBlank(str))
+                if (isBlank(str)) {
                     str = "'" + tmp + "'";
-                else {
+                } else {
                     str = str + ",'" + tmp + "'";
                 }
             }
@@ -2449,8 +2509,9 @@ public final class StringUtil {
     }
 
     public static String serialize(Object value) {
-        if (value == null)
+        if (value == null) {
             return "";
+        }
         Class<?> clz = value.getClass();
 
         if ((clz == java.util.Date.class) || (clz == java.sql.Date.class)) {
@@ -2474,216 +2535,51 @@ public final class StringUtil {
         return String.valueOf(value);
     }
 
-    private static abstract class WordTokenizer {
-        protected static final char UNDERSCORE = '_';
-
-        public String parse(String str) {
-            if (StringUtil.isEmpty(str)) {
-                return str;
-            }
-
-            int length = str.length();
-            StringBuffer buffer = new StringBuffer(length);
-
-            for (int index = 0; index < length; index++) {
-                char ch = str.charAt(index);
-
-                if (Character.isWhitespace(ch)) {
-                    continue;
-                }
-
-                if (Character.isUpperCase(ch)) {
-                    int wordIndex = index + 1;
-
-                    while (wordIndex < length) {
-                        char wordChar = str.charAt(wordIndex);
-
-                        if (Character.isUpperCase(wordChar)) {
-                            wordIndex++;
-                        } else {
-                            if (!Character.isLowerCase(wordChar))
-                                break;
-                            wordIndex--;
-                            break;
-                        }
-
-                    }
-
-                    if ((wordIndex == length) || (wordIndex > index)) {
-                        index = parseUpperCaseWord(buffer, str, index,
-                                wordIndex);
-                    } else {
-                        index = parseTitleCaseWord(buffer, str, index);
-                    }
-
-                } else if (Character.isLowerCase(ch)) {
-                    index = parseLowerCaseWord(buffer, str, index);
-                } else if (Character.isDigit(ch)) {
-                    index = parseDigitWord(buffer, str, index);
-                } else {
-                    inDelimiter(buffer, ch);
-                }
-            }
-            return buffer.toString();
+    public static String removeLast(String pSource, char pMark) {
+        if (StringUtil.isNullOrEmpty(pSource)) {
+            return pSource;
         }
-
-        private int parseUpperCaseWord(StringBuffer buffer, String str,
-                                       int index, int length) {
-            char ch = str.charAt(index++);
-
-            if (buffer.length() == 0)
-                startSentence(buffer, ch);
-            else {
-                startWord(buffer, ch);
-            }
-
-            for (; index < length; index++) {
-                ch = str.charAt(index);
-                inWord(buffer, ch);
-            }
-
-            return index - 1;
+        if (pSource.charAt(pSource.length() - 1) == pMark) {
+            return pSource.substring(0, pSource.length() - 1);
         }
-
-        private int parseLowerCaseWord(StringBuffer buffer, String str,
-                                       int index) {
-            char ch = str.charAt(index++);
-
-            if (buffer.length() == 0)
-                startSentence(buffer, ch);
-            else {
-                startWord(buffer, ch);
-            }
-
-            int length = str.length();
-
-            for (; index < length; index++) {
-                ch = str.charAt(index);
-
-                if (!Character.isLowerCase(ch))
-                    break;
-                inWord(buffer, ch);
-            }
-
-            return index - 1;
-        }
-
-        private int parseTitleCaseWord(StringBuffer buffer, String str,
-                                       int index) {
-            char ch = str.charAt(index++);
-
-            if (buffer.length() == 0)
-                startSentence(buffer, ch);
-            else {
-                startWord(buffer, ch);
-            }
-
-            int length = str.length();
-
-            for (; index < length; index++) {
-                ch = str.charAt(index);
-
-                if (!Character.isLowerCase(ch))
-                    break;
-                inWord(buffer, ch);
-            }
-
-            return index - 1;
-        }
-
-        private int parseDigitWord(StringBuffer buffer, String str, int index) {
-            char ch = str.charAt(index++);
-
-            if (buffer.length() == 0)
-                startDigitSentence(buffer, ch);
-            else {
-                startDigitWord(buffer, ch);
-            }
-
-            int length = str.length();
-
-            for (; index < length; index++) {
-                ch = str.charAt(index);
-
-                if (!Character.isDigit(ch))
-                    break;
-                inDigitWord(buffer, ch);
-            }
-
-            return index - 1;
-        }
-
-        protected boolean isDelimiter(char ch) {
-            return (!Character.isUpperCase(ch)) && (!Character.isLowerCase(ch))
-                    && (!Character.isDigit(ch));
-        }
-
-        protected abstract void startSentence(StringBuffer paramStringBuffer,
-                                              char paramChar);
-
-        protected abstract void startWord(StringBuffer paramStringBuffer,
-                                          char paramChar);
-
-        protected abstract void inWord(StringBuffer paramStringBuffer,
-                                       char paramChar);
-
-        protected abstract void startDigitSentence(
-                StringBuffer paramStringBuffer, char paramChar);
-
-        protected abstract void startDigitWord(StringBuffer paramStringBuffer,
-                                               char paramChar);
-
-        protected abstract void inDigitWord(StringBuffer paramStringBuffer,
-                                            char paramChar);
-
-        protected abstract void inDelimiter(StringBuffer paramStringBuffer,
-                                            char paramChar);
-    }
-
-    public static String removeLast(String p_Source, char p_Mark) {
-        if(StringUtil.isNullOrEmpty(p_Source))
-        {return p_Source;}
-        if (p_Source.charAt(p_Source.length() - 1) == p_Mark) {
-            return p_Source.substring(0, p_Source.length() - 1);
-        }
-        return p_Source;
+        return pSource;
     }
 
     /**
      * 检查并转换特殊字符
      *
-     * @param p_Source
+     * @param pSource
      * @return
      */
-    public static String convertJson(String p_Source) {
+    public static String convertJson(String pSource) {
 
 
-        if (p_Source.indexOf("\\") >= 0) {
-            p_Source = p_Source.replaceAll("\\\\", "\\\\\\\\");
-            System.out.println(p_Source);
+        if (pSource.indexOf("\\") >= 0) {
+            pSource = pSource.replaceAll("\\\\", "\\\\\\\\");
+            System.out.println(pSource);
         }
-        if (p_Source.indexOf("/") >= 0) {
-            p_Source = p_Source.replaceAll("/", "\\\\/");
+        if (pSource.indexOf("/") >= 0) {
+            pSource = pSource.replaceAll("/", "\\\\/");
         }
-        if (p_Source.indexOf("\"") >= 0) {
-            p_Source = p_Source.replaceAll("\\\"", "\\\\\"");
+        if (pSource.indexOf("\"") >= 0) {
+            pSource = pSource.replaceAll("\\\"", "\\\\\"");
         }
-        if (p_Source.indexOf("\t") >= 0) {
-            p_Source = p_Source.replaceAll("\\\t", "\\\\t");
+        if (pSource.indexOf("\t") >= 0) {
+            pSource = pSource.replaceAll("\\\t", "\\\\t");
         }
-        if (p_Source.indexOf("\f") >= 0) {
-            p_Source = p_Source.replaceAll("\\\f", "\\\\f");
+        if (pSource.indexOf("\f") >= 0) {
+            pSource = pSource.replaceAll("\\\f", "\\\\f");
         }
-        if (p_Source.indexOf("\b") >= 0) {
-            p_Source = p_Source.replaceAll("\\\b", "\\\\b");
+        if (pSource.indexOf("\b") >= 0) {
+            pSource = pSource.replaceAll("\\\b", "\\\\b");
         }
-        if (p_Source.indexOf("\n") >= 0) {
-            p_Source = p_Source.replaceAll("\\\n", "\\\\n");
+        if (pSource.indexOf("\n") >= 0) {
+            pSource = pSource.replaceAll("\\\n", "\\\\n");
         }
-        if (p_Source.indexOf("\r") >= 0) {
-            p_Source = p_Source.replaceAll("\\\r", "\\\\r");
+        if (pSource.indexOf("\r") >= 0) {
+            pSource = pSource.replaceAll("\\\r", "\\\\r");
         }
-        return p_Source;
+        return pSource;
     }
 
     /**
@@ -2767,5 +2663,210 @@ public final class StringUtil {
             }
         }
         return tmp.toString();
+    }
+
+    private static abstract class WordTokenizer {
+        protected static final char UNDERSCORE = '_';
+
+        public String parse(String str) {
+            if (StringUtil.isEmpty(str)) {
+                return str;
+            }
+
+            int length = str.length();
+            StringBuffer buffer = new StringBuffer(length);
+
+            for (int index = 0; index < length; index++) {
+                char ch = str.charAt(index);
+
+                if (Character.isWhitespace(ch)) {
+                    continue;
+                }
+
+                if (Character.isUpperCase(ch)) {
+                    int wordIndex = index + 1;
+
+                    while (wordIndex < length) {
+                        char wordChar = str.charAt(wordIndex);
+
+                        if (Character.isUpperCase(wordChar)) {
+                            wordIndex++;
+                        } else {
+                            if (!Character.isLowerCase(wordChar)) {
+                                break;
+                            }
+                            wordIndex--;
+                            break;
+                        }
+
+                    }
+
+                    if ((wordIndex == length) || (wordIndex > index)) {
+                        index = parseUpperCaseWord(buffer, str, index,
+                                wordIndex);
+                    } else {
+                        index = parseTitleCaseWord(buffer, str, index);
+                    }
+
+                } else if (Character.isLowerCase(ch)) {
+                    index = parseLowerCaseWord(buffer, str, index);
+                } else if (Character.isDigit(ch)) {
+                    index = parseDigitWord(buffer, str, index);
+                } else {
+                    inDelimiter(buffer, ch);
+                }
+            }
+            return buffer.toString();
+        }
+
+        private int parseUpperCaseWord(StringBuffer buffer, String str,
+                                       int index, int length) {
+            char ch = str.charAt(index++);
+
+            if (buffer.length() == 0) {
+                startSentence(buffer, ch);
+            } else {
+                startWord(buffer, ch);
+            }
+
+            for (; index < length; index++) {
+                ch = str.charAt(index);
+                inWord(buffer, ch);
+            }
+
+            return index - 1;
+        }
+
+        private int parseLowerCaseWord(StringBuffer buffer, String str,
+                                       int index) {
+            char ch = str.charAt(index++);
+
+            if (buffer.length() == 0) {
+                startSentence(buffer, ch);
+            } else {
+                startWord(buffer, ch);
+            }
+
+            int length = str.length();
+
+            for (; index < length; index++) {
+                ch = str.charAt(index);
+
+                if (!Character.isLowerCase(ch)) {
+                    break;
+                }
+                inWord(buffer, ch);
+            }
+
+            return index - 1;
+        }
+
+        private int parseTitleCaseWord(StringBuffer buffer, String str,
+                                       int index) {
+            char ch = str.charAt(index++);
+
+            if (buffer.length() == 0) {
+                startSentence(buffer, ch);
+            } else {
+                startWord(buffer, ch);
+            }
+
+            int length = str.length();
+
+            for (; index < length; index++) {
+                ch = str.charAt(index);
+
+                if (!Character.isLowerCase(ch)) {
+                    break;
+                }
+                inWord(buffer, ch);
+            }
+
+            return index - 1;
+        }
+
+        private int parseDigitWord(StringBuffer buffer, String str, int index) {
+            char ch = str.charAt(index++);
+
+            if (buffer.length() == 0) {
+                startDigitSentence(buffer, ch);
+            } else {
+                startDigitWord(buffer, ch);
+            }
+
+            int length = str.length();
+
+            for (; index < length; index++) {
+                ch = str.charAt(index);
+
+                if (!Character.isDigit(ch)) {
+                    break;
+                }
+                inDigitWord(buffer, ch);
+            }
+
+            return index - 1;
+        }
+
+        protected boolean isDelimiter(char ch) {
+            return (!Character.isUpperCase(ch)) && (!Character.isLowerCase(ch))
+                    && (!Character.isDigit(ch));
+        }
+
+        /**
+         * startSentence
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void startSentence(StringBuffer paramStringBuffer,
+                                              char paramChar);
+
+        /**
+         * startWord
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void startWord(StringBuffer paramStringBuffer,
+                                          char paramChar);
+
+        /**
+         * inWord
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void inWord(StringBuffer paramStringBuffer,
+                                       char paramChar);
+
+        /**
+         * startDigitSentence
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void startDigitSentence(
+                StringBuffer paramStringBuffer, char paramChar);
+
+        /**
+         * startDigitWord
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void startDigitWord(StringBuffer paramStringBuffer,
+                                               char paramChar);
+
+        /**
+         * inDigitWord
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void inDigitWord(StringBuffer paramStringBuffer,
+                                            char paramChar);
+
+        /**
+         *  inDelimiter
+         * @param paramStringBuffer
+         * @param paramChar
+         */
+        protected abstract void inDelimiter(StringBuffer paramStringBuffer,
+                                            char paramChar);
     }
 }

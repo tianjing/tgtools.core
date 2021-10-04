@@ -45,28 +45,28 @@ public class XmlSerialize {
 	 * @author tian.jing
 	 * @date 2016年3月11日
 	 * @param xml xml的内容
-	 * @param p_class 需要转换的实体类
+	 * @param pClass 需要转换的实体类
 	 * @return
 	 * @throws Exception
 	 */
-	public static Object deserialize(String xml, String name, Class<?> p_class) throws Exception // 反序列化单个Java对象
+	public static Object deserialize(String xml, String name, Class<?> pClass) throws Exception // 反序列化单个Java对象
 	{
 		Serializer serializer = new Persister();	
-		return serializer.read(p_class, xml);
+		return serializer.read(pClass, xml);
 	}
 	/**
 	 * 反序列化 将XML转换为对应实体
 	 * @author tian.jing
 	 * @date 2016年3月11日
 	 * @param xml xml的内容
-	 * @param p_class 需要转换的实体类
+	 * @param pClass 需要转换的实体类
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T>T deserialize(String xml,  Class<? extends T> p_class) throws Exception // 反序列化单个Java对象
+	public static <T>T deserialize(String xml,  Class<? extends T> pClass) throws Exception // 反序列化单个Java对象
 	{
 		Serializer serializer = new Persister();	
-		return serializer.read(p_class, xml);
+		return serializer.read(pClass, xml);
 	}
 
 }

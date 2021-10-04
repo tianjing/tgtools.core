@@ -2,32 +2,87 @@ package tgtools.xml;
 
 /**
  * 表示xml读取的通用接口
+ * @author tianjing
  */
 public interface XMLStreamReader {
-        public  int next()
+        /**
+         * next
+         * @return
+         * @throws XMLStreamException
+         */
+        int next()
             throws XMLStreamException;
 
-        public  String getElementText()
+        /**
+         * getElementText
+         * @return
+         * @throws XMLStreamException
+         */
+         String getElementText()
             throws XMLStreamException;
-        
-        public  void close()
+
+        /**
+         * close
+         * @throws XMLStreamException
+         */
+        void close()
             throws XMLStreamException;
-        
-        public  int getAttributeCount();
-        
-        public  String getAttributeName(int i);
-        
-        public String getAttributeValue(int i);
-        
-        public  int getEventType();
-        
-        public  String getLocalName();
-        
+
+        /**
+         * getAttributeCount
+         * @return
+         */
+        int getAttributeCount();
+
+        /**
+         * getAttributeName
+         * @param i
+         * @return
+         */
+        String getAttributeName(int i);
+
+        /**
+         * getAttributeValue
+         * @param i
+         * @return
+         */
+        String getAttributeValue(int i);
+
+        /**
+         * getEventType
+         * @return
+         */
+        int getEventType();
+
+        /**
+         * getLocalName
+         * @return
+         */
+        String getLocalName();
+
+        /**
+         * isStartElement
+         * @return
+         */
         boolean isStartElement();
-        
+
+        /**
+         * isEndElement
+         * @return
+         */
         boolean isEndElement();
 
+        /**
+         * nextTag
+         * @return
+         * @throws XMLStreamException
+         */
         int nextTag()throws XMLStreamException;
 
+        /**
+         * hasNext
+         * @return
+         * @throws XMLStreamException
+         */
         boolean hasNext()  throws XMLStreamException;
 }

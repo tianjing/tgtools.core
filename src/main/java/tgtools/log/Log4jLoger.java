@@ -2,7 +2,9 @@ package tgtools.log;
 
 
 import org.apache.log4j.Logger;
-
+/**
+ * @author tianjing
+ */
 public class Log4jLoger implements ILoger{
 
 	public Log4jLoger(String pName)

@@ -6,6 +6,7 @@ import org.slf4j.MarkerFactory;
 
 /**
  * slf4j 默认的logger
+ * @author tianjing
  */
 public class DefaultLoger implements ILoger{
 

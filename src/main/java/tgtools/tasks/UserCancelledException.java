@@ -10,14 +10,14 @@ import tgtools.exceptions.APPRuntimeException;
  */
 public class UserCancelledException extends APPRuntimeException {
 
-	public UserCancelledException(String p_Message) {
-		super(p_Message);
+	public UserCancelledException(String pMessage) {
+		super(pMessage);
 	}
-	public UserCancelledException(Throwable p_Exception) {
-		super(p_Exception);
+	public UserCancelledException(Throwable pException) {
+		super(pException);
 	}
-	public UserCancelledException(String p_Message, Throwable p_Exception) {
-		super(p_Message,p_Exception);
+	public UserCancelledException(String pMessage, Throwable pException) {
+		super(pMessage,pException);
 	}
 	/**
 	 * 

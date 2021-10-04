@@ -3,25 +3,27 @@ package tgtools.data.mapping;
 import tgtools.data.DataParameterCollection;
 import tgtools.data.DataRow;
 
+/**
+ * @author tianjing
+ */
+public class NotCondition extends Condition {
+    private Condition innerCondition;
 
-public class NotCondition extends Condition
-{
-  private Condition innerCondition;
+    public NotCondition(Condition pCondition) {
+        this.innerCondition = pCondition;
+    }
 
-  public NotCondition(Condition p_condition)
-  {
-    this.innerCondition = p_condition;
-  }
-  @Override
-  public boolean isValid(DataRow p_row)
-  {
-    return !this.innerCondition.isValid(p_row);
-  }
-  @Override
-  public String toSQL(DataParameterCollection p_params)
-  {
-    String sql = this.innerCondition.toSQL(p_params);
-    if (sql.equals("")) return "";
-    return "not " + sql;
-  }
+    @Override
+    public boolean isValid(DataRow pRow) {
+        return !this.innerCondition.isValid(pRow);
+    }
+
+    @Override
+    public String toSQL(DataParameterCollection pParams) {
+        String sql = this.innerCondition.toSQL(pParams);
+        if ("".equals(sql)) {
+            return "";
+        }
+        return "not " + sql;
+    }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * 名  称：
- * 编写者：田径
+ * @author tianjing
  * 功  能：
  * 时  间：14:44
  */
@@ -33,17 +33,17 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
      * 运行所有任务直到全部结束（一个任务一个线程）
      */
     @Deprecated
-    public void runThreanTillEnd(TaskContext p_TaskContext) {
-        runThreadTillEnd(p_TaskContext);
+    public void runThreanTillEnd(TaskContext pTaskContext) {
+        runThreadTillEnd(pTaskContext);
     }
 
     /**
      * 运行所有任务直到全部结束（一个任务一个线程）
      */
-    public void runThreadTillEnd(TaskContext p_TaskContext) {
+    public void runThreadTillEnd(TaskContext pTaskContext) {
         restCancel();
         for (int i = 0; i < this.size(); i++) {
-            this.get(i).runThreadWait(p_TaskContext);
+            this.get(i).runThreadWait(pTaskContext);
         }
         for (int i = 0; i < this.size(); i++) {
             if (this.get(i).isBusy()) {
@@ -69,10 +69,10 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
      * 使用循环等待，和runThreadTillEnd 用 synchronized 锁的方式区分开
      * 因为如果 task 内部有锁的话 容易引起死锁
      *
-     * @param p_TaskContext
+     * @param pTaskContext
      * @param pWaitMillis   等待间隔  默认100ms
      */
-    public void runThreadTillEndWithOutLock(TaskContext p_TaskContext, int pWaitMillis) {
+    public void runThreadTillEndWithOutLock(TaskContext pTaskContext, int pWaitMillis) {
         restCancel();
 
         if (pWaitMillis < 1) {
@@ -80,7 +80,7 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
         }
 
         for (int i = 0; i < this.size(); i++) {
-            this.get(i).runThread(p_TaskContext);
+            this.get(i).runThread(pTaskContext);
         }
 
         while (true) {
@@ -107,21 +107,21 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
     /**
      * 运行所有任务 不等待 （一个任务一个线程）
      */
-    public void runThread(TaskContext p_TaskContext) {
+    public void runThread(TaskContext pTaskContext) {
         restCancel();
         for (int i = 0; i < this.size(); i++) {
-            this.get(i).runThread(p_TaskContext);
+            this.get(i).runThread(pTaskContext);
         }
     }
 
     /**
      * 一个任务一个任务的执行（不使用线程）
      */
-    public void run(TaskContext p_TaskContext) {
+    public void run(TaskContext pTaskContext) {
         restCancel();
         for (int i = 0; i < this.size(); i++) {
             try {
-                this.get(i).run(p_TaskContext);
+                this.get(i).run(pTaskContext);
             } catch (Exception ex) {
                 this.get(i).onError(ex);
             }
@@ -147,8 +147,8 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
      * 运行所有任务 不等待 （一个任务一个线程）
      */
     @Deprecated
-    public void runThrean(TaskContext p_TaskContext) {
-        runThread(p_TaskContext);
+    public void runThrean(TaskContext pTaskContext) {
+        runThread(pTaskContext);
     }
 
     /**
@@ -162,15 +162,15 @@ public class TaskRunner<E extends Task> extends ArrayList<E> implements IDispose
     /**
      * 通过任务名称查找任务是否存在
      *
-     * @param p_TaskName
+     * @param pTaskName
      * @return
      */
-    public boolean hasTask(String p_TaskName) {
-        if (StringUtil.isNullOrEmpty(p_TaskName)) {
+    public boolean hasTask(String pTaskName) {
+        if (StringUtil.isNullOrEmpty(pTaskName)) {
             return false;
         }
         for (int i = 0; i < this.size(); i++) {
-            if (p_TaskName.equals(this.get(i).getName())) {
+            if (pTaskName.equals(this.get(i).getName())) {
                 return true;
             }
         }

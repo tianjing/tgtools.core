@@ -5,19 +5,20 @@ import tgtools.exceptions.APPRuntimeException;
 
 import java.io.*;
 import java.util.ArrayList;
-
+/**
+ * @author tianjing
+ */
 public final class FileUtil {
     /**
      * 根据目录和文件扩展名找到所有符合条件的文件
      *
-     * @param p_dirName
-     * @param p_extName
-     *
+     * @param pDirName
+     * @param pExtName
      * @return
      */
-    public static String[] listFiles(String p_dirName, String[] p_extName) {
+    public static String[] listFiles(String pDirName, String[] pExtName) {
         ArrayList<String> fileNames = new ArrayList<String>();
-        File dir = new File(p_dirName);
+        File dir = new File(pDirName);
         if (dir.exists()) {
             File[] files = dir.listFiles();
             for (File file : files) {
@@ -27,11 +28,11 @@ public final class FileUtil {
                         if (s.length > 0) {
                             if (file.isFile()) {
                                 String fileExtName = s[(s.length - 1)];
-                                if (null == p_extName || p_extName.length == 0) {
+                                if (null == pExtName || pExtName.length == 0) {
                                     fileNames.add(file.getCanonicalPath());
                                     continue;
                                 }
-                                for (String extName : p_extName) {
+                                for (String extName : pExtName) {
                                     if (fileExtName.equalsIgnoreCase(extName)) {
                                         fileNames.add(file.getCanonicalPath());
                                         break;
@@ -51,12 +52,11 @@ public final class FileUtil {
     /**
      * 根据目录和文件扩展名找到所有符合条件的文件
      *
-     * @param p_dirName
-     *
+     * @param pDirName
      * @return
      */
-    public static File[] listAll(String p_dirName) {
-        File dir = new File(p_dirName);
+    public static File[] listAll(String pDirName) {
+        File dir = new File(pDirName);
         if (dir.exists()) {
             return dir.listFiles();
         }
@@ -66,56 +66,55 @@ public final class FileUtil {
     /**
      * 删除目录下所有文件（如果dir是一个文件则删除，目录则是删除目录下所有文件）
      *
-     * @param p_dir
-     *
+     * @param pDir
      * @return
      */
-    public static boolean deleteDir(File p_dir) {
-        if (p_dir.isFile()) {
-            return p_dir.delete();
+    public static boolean deleteDir(File pDir) {
+        if (pDir.isFile()) {
+            return pDir.delete();
         }
-        String[] fileNames = p_dir.list();
+        String[] fileNames = pDir.list();
         for (String fileName : fileNames) {
             File file = null;
             try {
-                file = new File(p_dir.getCanonicalPath() + File.separator
+                file = new File(pDir.getCanonicalPath() + File.separator
                         + fileName);
             } catch (IOException e) {
                 return false;
             }
             if (file.isFile()) {
-                if (!file.delete())
+                if (!file.delete()) {
                     return false;
+                }
             } else if (!deleteDir(file)) {
                 return false;
             }
         }
-        return p_dir.delete();
+        return pDir.delete();
     }
 
     /**
      * 删除目录 文件
      *
-     * @param p_dir
-     * @param p_force true为删除文件 ；fasle为删除文件和目录
-     *
+     * @param pDir
+     * @param pForce true为删除文件 ；fasle为删除文件和目录
      * @return
      */
-    public static boolean deleteDir(File p_dir, boolean p_force) {
-        if (p_force) {
-            return deleteDir(p_dir);
+    public static boolean deleteDir(File pDir, boolean pForce) {
+        if (pForce) {
+            return deleteDir(pDir);
         }
-        if (p_dir.isFile()) {
-            return p_dir.delete();
+        if (pDir.isFile()) {
+            return pDir.delete();
         }
-        String[] fileNames = p_dir.list();
+        String[] fileNames = pDir.list();
         if (fileNames == null) {
             return true;
         }
         for (String fileName : fileNames) {
             File file = null;
             try {
-                file = new File(p_dir.getCanonicalPath() + File.separator
+                file = new File(pDir.getCanonicalPath() + File.separator
                         + fileName);
             } catch (IOException e) {
                 return false;
@@ -128,14 +127,13 @@ public final class FileUtil {
                 return false;
             }
         }
-        return p_dir.delete();
+        return pDir.delete();
     }
 
     /**
      * 读取一个文件返回所有字符串
      *
      * @param fileName
-     *
      * @return
      */
     public static String readFile(String fileName) {
@@ -159,17 +157,16 @@ public final class FileUtil {
     /**
      * 读取一个文件返回所有字符串
      *
-     * @param p_FileName    文件全路径
-     * @param p_CharsetName 编码
-     *
+     * @param pFileName    文件全路径
+     * @param pCharsetName 编码
      * @return
      */
-    public static String readFile(String p_FileName, String p_CharsetName) {
-        File f = new File(p_FileName);
+    public static String readFile(String pFileName, String pCharsetName) {
+        File f = new File(pFileName);
         StringBuffer buf = new StringBuffer();
         BufferedReader fr = null;
         try {
-            fr = new BufferedReader(new InputStreamReader(new FileInputStream(f), p_CharsetName));
+            fr = new BufferedReader(new InputStreamReader(new FileInputStream(f), pCharsetName));
             while (true) {
                 String line = fr.readLine();
                 if (line == null) {
@@ -194,31 +191,29 @@ public final class FileUtil {
     /**
      * 获取文件名（不含扩展名）
      *
-     * @param p_FileName
-     *
+     * @param pFileName
      * @return
      */
-    public static String getNoExtensionName(String p_FileName) {
+    public static String getNoExtensionName(String pFileName) {
         int index = 0;
-        if (!StringUtil.isNullOrEmpty(p_FileName) && (index = p_FileName.lastIndexOf(".")) >= 0) {
-            return p_FileName.substring(0, index);
+        if (!StringUtil.isNullOrEmpty(pFileName) && (index = pFileName.lastIndexOf(".")) >= 0) {
+            return pFileName.substring(0, index);
         }
-        return p_FileName;
+        return pFileName;
 
 
     }
 
     /**
-     * 如果 p_FileName 有扩展名则返回扩展名 否则 空
+     * 如果 pFileName 有扩展名则返回扩展名 否则 空
      *
-     * @param p_FileName
-     *
+     * @param pFileName
      * @return
      */
-    public static String getExtensionName(String p_FileName) {
+    public static String getExtensionName(String pFileName) {
         int index = 0;
-        if (!StringUtil.isNullOrEmpty(p_FileName) && (index = p_FileName.lastIndexOf(".")) >= 0) {
-            return p_FileName.substring(index + 1);
+        if (!StringUtil.isNullOrEmpty(pFileName) && (index = pFileName.lastIndexOf(".")) >= 0) {
+            return pFileName.substring(index + 1);
         }
         return StringUtil.EMPTY_STRING;
     }
@@ -226,42 +221,40 @@ public final class FileUtil {
     /**
      * 将文本写入到文件  字符集UTF-8
      *
-     * @param p_FileName 文件
-     * @param p_Data     内容
-     *
+     * @param pFileName 文件
+     * @param pData     内容
      * @throws APPErrorException
      */
-    public static void writeFile(String p_FileName, String p_Data) throws APPErrorException {
-        writeFile(p_FileName, p_Data, "UTF-8");
+    public static void writeFile(String pFileName, String pData) throws APPErrorException {
+        writeFile(pFileName, pData, "UTF-8");
     }
 
     /**
      * 将流写入到文件 (写入完成后关闭InputStream)
      *
-     * @param p_FileName 文件
-     * @param p_Data     内容
-     *
+     * @param pFileName 文件
+     * @param pData     内容
      * @throws APPErrorException
      */
-    public static void writeFile(String p_FileName, InputStream p_Data) throws APPErrorException {
+    public static void writeFile(String pFileName, InputStream pData) throws APPErrorException {
         FileOutputStream fop = null;
         try {
-            File file = new File(p_FileName);
+            File file = new File(pFileName);
             fop = new FileOutputStream(file);
             byte[] data = new byte[10 * 1024];
             int length = 0;
-            while ((length = p_Data.read(data)) > 0) {
+            while ((length = pData.read(data)) > 0) {
                 fop.write(data, 0, length);
             }
         } catch (Exception e) {
-            throw new APPErrorException("文件写入失败:" + p_FileName, e);
+            throw new APPErrorException("文件写入失败:" + pFileName, e);
         } finally {
             try {
                 fop.close();
             } catch (IOException e) {
             }
             try {
-                p_Data.close();
+                pData.close();
             } catch (IOException e) {
             }
         }
@@ -270,24 +263,23 @@ public final class FileUtil {
     /**
      * 将文本写入到文件 默认：字符集UTF-8
      *
-     * @param p_FileName 文件及全路径
-     * @param p_Data     内容
-     * @param p_Charset  字符集UTF-8
-     *
+     * @param pFileName 文件及全路径
+     * @param pData     内容
+     * @param pCharset  字符集UTF-8
      * @throws APPErrorException
      */
-    public static void writeFile(String p_FileName, String p_Data, String p_Charset) throws APPErrorException {
-        if (StringUtil.isNullOrEmpty(p_Charset)) {
-            p_Charset = "UTF-8";
+    public static void writeFile(String pFileName, String pData, String pCharset) throws APPErrorException {
+        if (StringUtil.isNullOrEmpty(pCharset)) {
+            pCharset = "UTF-8";
         }
         OutputStreamWriter write = null;
         try {
-            File file = new File(p_FileName);
+            File file = new File(pFileName);
             FileOutputStream fop = new FileOutputStream(file);
-            write = new OutputStreamWriter(fop, p_Charset);
-            write.write(p_Data);
+            write = new OutputStreamWriter(fop, pCharset);
+            write.write(pData);
         } catch (Exception e) {
-            throw new APPErrorException("文件写入失败:" + p_FileName, e);
+            throw new APPErrorException("文件写入失败:" + pFileName, e);
         } finally {
             if (null != write) {
                 try {
@@ -308,19 +300,18 @@ public final class FileUtil {
     /**
      * 写文件
      *
-     * @param p_FileName 文件全称 如：/home/tianjing/1.txt
-     * @param p_Data     文件内容
-     *
+     * @param pFileName 文件全称 如：/home/tianjing/1.txt
+     * @param pData     文件内容
      * @throws APPErrorException
      */
-    public static void writeFile(String p_FileName, byte[] p_Data) throws APPErrorException {
+    public static void writeFile(String pFileName, byte[] pData) throws APPErrorException {
         FileOutputStream fop = null;
         try {
-            File file = new File(p_FileName);
+            File file = new File(pFileName);
             fop = new FileOutputStream(file);
-            fop.write(p_Data);
+            fop.write(pData);
         } catch (Exception e) {
-            throw new APPErrorException("文件写入失败:" + p_FileName, e);
+            throw new APPErrorException("文件写入失败:" + pFileName, e);
         } finally {
             if (null != fop) {
                 try {
@@ -341,29 +332,28 @@ public final class FileUtil {
     /**
      * 读文件
      *
-     * @param p_FileName 文件全称 如：/home/tianjing/1.txt
-     *
+     * @param pFileName 文件全称 如：/home/tianjing/1.txt
      * @throws APPErrorException
      */
-    public static byte[] readFileToByte(String p_FileName) throws APPErrorException {
-        File f = new File(p_FileName);
+    public static byte[] readFileToByte(String pFileName) throws APPErrorException {
+        File f = new File(pFileName);
         if (!f.exists()) {
-            throw new APPErrorException("文件未找到：" + p_FileName);
+            throw new APPErrorException("文件未找到：" + pFileName);
         }
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
         BufferedInputStream in = null;
         try {
             in = new BufferedInputStream(new FileInputStream(f));
-            int buf_size = 1024;
-            byte[] buffer = new byte[buf_size];
+            int bufSize = 1024;
+            byte[] buffer = new byte[bufSize];
             int len = 0;
-            while (-1 != (len = in.read(buffer, 0, buf_size))) {
+            while (-1 != (len = in.read(buffer, 0, bufSize))) {
                 bos.write(buffer, 0, len);
             }
             return bos.toByteArray();
         } catch (Exception e) {
-            throw new APPErrorException("文件读取失败:" + p_FileName, e);
+            throw new APPErrorException("文件读取失败:" + pFileName, e);
         } finally {
             try {
                 in.close();
@@ -382,7 +372,6 @@ public final class FileUtil {
      * 获取文件字符集
      *
      * @param path 文件路径
-     *
      * @return
      */
     public static String getFileEncode(String path) {
@@ -394,13 +383,16 @@ public final class FileUtil {
             bis = new BufferedInputStream(new FileInputStream(path));
             bis.mark(0);
             int read = bis.read(first3Bytes, 0, 3);
-            if (read == -1)
+            if (read == -1) {
                 return charset;
+            }
             if (first3Bytes[0] == StringUtil.UTF16LEBom[0] && first3Bytes[1] == StringUtil.UTF16LEBom[1]) {
-                charset = "Unicode";// UTF-16LE
+                // UTF-16LE
+                charset = "Unicode";
                 checked = true;
             } else if (first3Bytes[0] == StringUtil.UTF16BEBom[0] && first3Bytes[1] == StringUtil.UTF16BEBom[1]) {
-                charset = "Unicode";// UTF-16BE
+                // UTF-16BE
+                charset = "Unicode";
                 checked = true;
             } else if (first3Bytes[0] == StringUtil.UTF8Bom[0] && first3Bytes[1] == StringUtil.UTF8Bom[1]
                     && first3Bytes[2] == StringUtil.UTF8Bom[2]) {
@@ -413,32 +405,38 @@ public final class FileUtil {
                 int loc = 0;
                 while ((read = bis.read()) != -1) {
                     loc++;
-                    if (read >= 0xF0)
+                    if (read >= 0xF0) {
                         break;
-                    if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
+                    }
+                    // 单独出现BF以下的，也算是GBK
+                    if (0x80 <= read && read <= 0xBF) {
                         break;
+                    }
                     if (0xC0 <= read && read <= 0xDF) {
                         read = bis.read();
-                        if (0x80 <= read && read <= 0xBF)
+                        if (0x80 <= read && read <= 0xBF) {
                             // 双字节 (0xC0 - 0xDF) (0x80 - 0xBF),也可能在GB编码内
                             continue;
-                        else
+                        } else {
                             break;
-                    } else if (0xE0 <= read && read <= 0xEF) { // 也有可能出错，但是几率较小
+                        }
+                    }
+                    // 也有可能出错，但是几率较小
+                    else if (0xE0 <= read && read <= 0xEF) {
                         read = bis.read();
                         if (0x80 <= read && read <= 0xBF) {
                             read = bis.read();
                             if (0x80 <= read && read <= 0xBF) {
                                 charset = "UTF-8";
                                 break;
-                            } else
+                            } else {
                                 break;
-                        } else
+                            }
+                        } else {
                             break;
+                        }
                     }
                 }
-                // TextLogger.getLogger().info(loc + " " +
-                // Integer.toHexString(read));
             }
         } catch (Exception e) {
             e.printStackTrace();

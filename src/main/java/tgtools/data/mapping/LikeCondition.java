@@ -4,37 +4,41 @@ import java.util.regex.Pattern;
 
 import tgtools.data.DataParameterCollection;
 import tgtools.data.DataRow;
-
+/**
+ * @author tianjing
+ */
 public class LikeCondition extends Condition
 {
   private String fieldName;
   private String likeExpression;
   private Pattern likeExpressionPattern;
 
-  private Pattern getLikeExpressionPattern(String p_likeExpression)
+  private Pattern getLikeExpressionPattern(String pLikeExpression)
   {
     if (this.likeExpressionPattern == null)
     {
-      this.likeExpressionPattern = Pattern.compile(p_likeExpression.replaceAll("%", ".*").replaceAll("_", "."));
+      this.likeExpressionPattern = Pattern.compile(pLikeExpression.replaceAll("%", ".*").replaceAll("_", "."));
     }
     return this.likeExpressionPattern;
   }
 
-  public LikeCondition(String p_fieldName, String p_expression)
+  public LikeCondition(String pFieldName, String pExpression)
   {
-    this.fieldName = p_fieldName;
-    this.likeExpression = p_expression;
+    this.fieldName = pFieldName;
+    this.likeExpression = pExpression;
     this.likeExpressionPattern = null;
   }
   @Override
-  public boolean isValid(DataRow p_row)
+  public boolean isValid(DataRow pRow)
   {
-    Object fv = p_row.getValue(this.fieldName);
-    if (fv == null) return false;
+    Object fv = pRow.getValue(this.fieldName);
+    if (fv == null) {
+      return false;
+    }
     return getLikeExpressionPattern(this.likeExpression).matcher(fv.toString()).matches();
   }
   @Override
-  public String toSQL(DataParameterCollection p_params)
+  public String toSQL(DataParameterCollection pParams)
   {
     return String.format("%1$s like '%2$s'", new Object[] { this.fieldName, this.likeExpression });
   }

@@ -5,7 +5,9 @@ import tgtools.log.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
+/**
+ * @author tianjing
+ */
 public class LogHelper {
 	private static boolean m_IsDebug=true;
 
@@ -20,11 +22,11 @@ public class LogHelper {
 
 	/**
 	 * 设置日志是否是调试模式
-	 * @param p_IsDebug
+	 * @param pIsDebug
      */
-	public static void setIsDegug(boolean p_IsDebug)
+	public static void setIsDegug(boolean pIsDebug)
 	{
-		m_IsDebug=p_IsDebug;
+		m_IsDebug=pIsDebug;
 	}
 
 	/**
@@ -81,14 +83,14 @@ public class LogHelper {
 	 * @param name 名称 比如用户名
 	 * @param message 信息
 	 * @param biztype 业务类型
-	 * @param p_Throwable
+	 * @param pThrowable
      */
-	public static void warn(String name, String message, String biztype,Throwable p_Throwable) {
+	public static void warn(String name, String message, String biztype,Throwable pThrowable) {
 		LogEntity entity = new LogEntity();
 		entity.setUsername(name);
 		entity.setBiztype(biztype);
 		entity.setLogtype("warn");
-		entity.setLogcontent(message+":"+getFullErrorMessage(p_Throwable));
+		entity.setLogcontent(message+":"+getFullErrorMessage(pThrowable));
 		LoggerFactory.getDefault().warn(entity);
 	}
 
@@ -97,23 +99,23 @@ public class LogHelper {
 	 * @param name 名称 比如用户名
 	 * @param message 信息
 	 * @param biztype 业务类型
-	 * @param p_Throwable 错误信息
+	 * @param pThrowable 错误信息
      */
-	public static void error(String name, String message, String biztype,Throwable p_Throwable) {
+	public static void error(String name, String message, String biztype,Throwable pThrowable) {
 		LogEntity entity = new LogEntity();
 		entity.setUsername(name);
 		entity.setBiztype(biztype);
 		entity.setLogtype("error");
-		entity.setLogcontent(message+":"+getFullErrorMessage(p_Throwable));
-		LoggerFactory.getDefault().error(entity,p_Throwable);
+		entity.setLogcontent(message+":"+getFullErrorMessage(pThrowable));
+		LoggerFactory.getDefault().error(entity,pThrowable);
 	}
 	
-	private static String getFullErrorMessage(Throwable p_Throwable)
+	private static String getFullErrorMessage(Throwable pThrowable)
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try{ 
 		java.io.PrintWriter ss=new PrintWriter(baos);
-		p_Throwable.printStackTrace(ss);
+		pThrowable.printStackTrace(ss);
 		ss.flush();
 		return baos.toString();
 		}finally{
