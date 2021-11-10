@@ -1,6 +1,7 @@
 package tgtools.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import tgtools.db.DataBaseFactory;
 import tgtools.exceptions.APPErrorException;
 import tgtools.json.JSONArray;
@@ -11,6 +12,7 @@ import java.util.List;
 
 /**
  * 名  称：json转sql字符串
+ *
  * @author tianjing
  * 功  能：
  * 时  间：9:42
@@ -23,9 +25,7 @@ public class JsonSqlFactory {
      * @param pJson      json对象
      * @param pKeys      主键集合
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseUpdateSql(JSONObject pJson, List<String> pKeys, String pTableName) throws APPErrorException {
@@ -39,9 +39,7 @@ public class JsonSqlFactory {
      * @param pDbType    数据库类型
      * @param pKeys      主键集合
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseUpdateSql(JSONObject pJson, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
@@ -77,14 +75,13 @@ public class JsonSqlFactory {
         sql = StringUtil.replace(sql, "${filters}", filters);
         return sql;
     }
+
     /**
      * 转换json 为 insert sql语句
      *
      * @param pJson      json 对象
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseInsertSql(JSONObject pJson, String pTableName) throws APPErrorException {
@@ -97,9 +94,7 @@ public class JsonSqlFactory {
      * @param pJson      json 对象
      * @param pDbType    数据库类型
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseInsertSql(JSONObject pJson, String pDbType, String pTableName) throws APPErrorException {
@@ -113,7 +108,7 @@ public class JsonSqlFactory {
                 String value = pJson.getString(key);
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
-                    values += pJson.isNull(key) ? "NULL," : "'" + SqlStrHelper.escape(pDbType,value) + "',";
+                    values += pJson.isNull(key) ? "NULL," : "'" + SqlStrHelper.escape(pDbType, value) + "',";
                 }
             } catch (Exception e) {
                 throw new APPErrorException("数据不完整");
@@ -134,9 +129,7 @@ public class JsonSqlFactory {
      * @param pDbType    数据库类型
      * @param pKeys      主键集合
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseUpdateSql(JsonNode pJson, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
@@ -179,9 +172,7 @@ public class JsonSqlFactory {
      *
      * @param pJson      json 对象
      * @param pTableName 表名称
-     *
      * @return
-     *
      * @throws APPErrorException
      */
     public static String parseInsertSql(JsonNode pJson, String pDbType, String pTableName) throws APPErrorException {
@@ -216,4 +207,103 @@ public class JsonSqlFactory {
         sql = StringUtil.replace(sql, "${tablename}", pTableName);
         return sql;
     }
+
+//---------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * 转换json 为 insert sql语句
+     *
+     * @param pData      json 对象
+     * @param pMapper    json mapper 对象
+     * @param pDbType    数据库类型
+     * @param pTableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
+    public static String parseInsertSql(Object pData, ObjectMapper pMapper, String pDbType, String pTableName) throws APPErrorException {
+        JsonNode pJsonNode = null;
+        try {
+            String vJson = pMapper.writeValueAsString(pData);
+            pJsonNode = pMapper.readTree(vJson);
+        } catch (Throwable e) {
+            throw new APPErrorException("json 转换失败！" + pData.getClass());
+        }
+        if (null == pJsonNode) {
+            throw new APPErrorException("输入的 JsonNod 错误！");
+        }
+        return parseInsertSql(pJsonNode, pDbType, pTableName);
+    }
+
+    /**
+     * 转换json 为 insert sql语句
+     *
+     * @param pData      json 对象
+     * @param pDbType    数据库类型
+     * @param pTableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
+    public static String parseInsertSql(Object pData, String pDbType, String pTableName) throws APPErrorException {
+        JsonNode pJsonNode = null;
+        try {
+            String vJson = tgtools.util.JsonParseHelper.getMapper(false).writeValueAsString(pData);
+            pJsonNode = tgtools.util.JsonParseHelper.getMapper(false).readTree(vJson);
+        } catch (Throwable e) {
+            throw new APPErrorException("json 转换失败！" + pData.getClass());
+        }
+        if (null == pJsonNode) {
+            throw new APPErrorException("输入的 JsonNod 错误！");
+        }
+        return parseInsertSql(pJsonNode, pDbType, pTableName);
+
+    }
+
+
+    /**
+     * 转换 实体类 为 update sql语句
+     * @param pData      json 对象
+     * @param pMapper    json mapper 对象
+     * @param pDbType    数据库类型
+     * @param pTableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
+    public static String parseUpdateSql(Object pData, ObjectMapper pMapper, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
+        JsonNode pJsonNode = null;
+        try {
+            String vJson = pMapper.writeValueAsString(pData);
+            pJsonNode = pMapper.readTree(vJson);
+        } catch (Throwable e) {
+            throw new APPErrorException("json 转换失败！" + pData.getClass());
+        }
+        if (null == pJsonNode) {
+            throw new APPErrorException("输入的 JsonNod 错误！");
+        }
+        return parseUpdateSql(pJsonNode, pDbType,pKeys, pTableName);
+    }
+
+    /**
+     * 转换 实体类 为 update sql语句
+     * @param pData      json 对象
+     * @param pDbType    数据库类型
+     * @param pTableName 表名称
+     * @return
+     * @throws APPErrorException
+     */
+    public static String parseUpdateSql(Object pData, String pDbType, List<String> pKeys, String pTableName) throws APPErrorException {
+        JsonNode pJsonNode = null;
+        try {
+            String vJson = tgtools.util.JsonParseHelper.getMapper(false).writeValueAsString(pData);
+            pJsonNode = tgtools.util.JsonParseHelper.getMapper(false).readTree(vJson);
+        } catch (Throwable e) {
+            throw new APPErrorException("json 转换失败！" + pData.getClass());
+        }
+        if (null == pJsonNode) {
+            throw new APPErrorException("输入的 JsonNod 错误！");
+        }
+        return parseUpdateSql(pJsonNode, pDbType,pKeys, pTableName);
+
+    }
+
 }
