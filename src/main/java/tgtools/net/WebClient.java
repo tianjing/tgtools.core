@@ -1,6 +1,7 @@
 package tgtools.net;
 
 import tgtools.exceptions.APPErrorException;
+import tgtools.util.GUID;
 import tgtools.util.StringUtil;
 
 import java.io.*;
@@ -163,6 +164,24 @@ public class WebClient implements IWebClient {
     @Override
     public Map<String, String> getHead() {
         return head;
+    }
+
+    @Override
+    public File doInvokeAsFile(String params) throws APPErrorException {
+        URLConnection conn = null;
+        try {
+            conn = doInvoke(params);
+            return parseFile(getResponseStream(conn));
+        } catch (IOException e) {
+            throw new APPErrorException("获取返回信息出错", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+
+    @Override
+    public File doInvokeAsFile(Map<String, String> params) throws APPErrorException {
+        return doInvokeAsFile(getParamsString(params));
     }
 
     public void setContentType(String pType) {
@@ -372,6 +391,43 @@ public class WebClient implements IWebClient {
             throw new APPErrorException("字符串转换失败", e);
         } catch (IOException e) {
             throw new APPErrorException("输入信息获取错误", e);
+        } finally {
+            if (null != outStream) {
+                try {
+                    outStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 将输入的流转换成 字节
+     *
+     * @param pStream
+     * @return
+     * @throws APPErrorException
+     */
+    protected File parseFile(InputStream pStream) throws APPErrorException {
+        FileOutputStream outStream = null;
+        try {
+
+            File vFile = File.createTempFile(GUID.newGUID() + "_tmp", ".tmp");
+
+            outStream = new FileOutputStream(vFile);
+
+            byte[] data = new byte[4096];
+            int count = -1;
+
+            while ((count = pStream.read(data, 0, 4096)) != -1) {
+                outStream.write(data, 0, count);
+            }
+
+            data = null;
+            return vFile;
+        } catch (IOException e) {
+            throw new APPErrorException("写入临时文件出错", e);
         } finally {
             if (null != outStream) {
                 try {
