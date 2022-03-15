@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 /**
- *
  * @author tianjing
  */
 public class DataBaseFactory {
@@ -73,8 +72,10 @@ public class DataBaseFactory {
      */
     public static void remove(String pName) {
         if (getConnections().containsKey(pName)) {
+            IDataAccess vDataAccess = getConnections().get(pName);
+            getConnections().remove(pName);
             try {
-                getConnections().get(pName).close();
+                vDataAccess.close();
             } catch (Exception e) {
             }
         }
@@ -88,8 +89,7 @@ public class DataBaseFactory {
      * @param pParams
      * @throws APPErrorException
      */
-    public static void add(String pName, Object... pParams)
-            throws APPErrorException {
+    public static void add(String pName, Object... pParams) throws APPErrorException {
         if (StringUtil.isNullOrEmpty(pName)) {
             throw new APPErrorException("数据源名称不能为空");
         }
@@ -98,12 +98,10 @@ public class DataBaseFactory {
             return;
         }
 
-        if (pName.toUpperCase().startsWith("DM6")
-                || pName.toUpperCase().startsWith("DAMENG6")) {
+        if (pName.toUpperCase().startsWith("DM6") || pName.toUpperCase().startsWith("DAMENG6")) {
             dataacc = new DM6DataAccess();
             dataacc.init(pParams);
-        } else if (pName.toUpperCase().startsWith("DM")
-                || pName.toUpperCase().startsWith("DAMENG")) {
+        } else if (pName.toUpperCase().startsWith("DM") || pName.toUpperCase().startsWith("DAMENG")) {
             dataacc = new DMDataAccess();
             dataacc.init(pParams);
         } else if (pName.toUpperCase().startsWith("DBCP")) {
@@ -139,13 +137,5 @@ public class DataBaseFactory {
 
     }
 
-//    public static void main(String[] args) throws APPErrorException {
-//        String str1[] = {"jdbc:dm://172.17.3.66:5236", "SYSDBA", "SYSDBA"};
-//        DataBaseFactory.add("DM1", (Object[]) str1);
-//        DataBaseFactory.add("DM2", (Object[]) str1);
-//
-//        IDataAccess dm1 = DataBaseFactory.get("DM1");
-//        IDataAccess dm2 = DataBaseFactory.get("DM2");
-//        System.out.println("" + dm1 + dm2);
-//    }
+
 }

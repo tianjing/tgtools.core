@@ -188,9 +188,12 @@ public class JsonSqlFactory {
                 if (!value.isNull() && value.isTextual()) {
                     valuestr = "'" + SqlStrHelper.escapeAll(pDbType, value.asText()) + "'";
                 } else if (!value.isNull()) {
-                    valuestr = value.toString();
+                    if (value.isPojo() && StringUtil.isNullOrEmpty(value.asText())) {
+                        valuestr = "null";
+                    } else {
+                        valuestr = value.toString();
+                    }
                 }
-
 
                 if (!StringUtil.isNullOrEmpty(key)) {
                     keys += key + ",";
@@ -200,6 +203,7 @@ public class JsonSqlFactory {
                 throw new APPErrorException("数据不完整");
             }
         }
+
         values = StringUtil.removeLast(values, ',');
         keys = StringUtil.removeLast(keys, ',');
         sql = StringUtil.replace(sql, "${keys}", keys);
@@ -262,6 +266,7 @@ public class JsonSqlFactory {
 
     /**
      * 转换 实体类 为 update sql语句
+     *
      * @param pData      json 对象
      * @param pMapper    json mapper 对象
      * @param pDbType    数据库类型
@@ -280,11 +285,12 @@ public class JsonSqlFactory {
         if (null == pJsonNode) {
             throw new APPErrorException("输入的 JsonNod 错误！");
         }
-        return parseUpdateSql(pJsonNode, pDbType,pKeys, pTableName);
+        return parseUpdateSql(pJsonNode, pDbType, pKeys, pTableName);
     }
 
     /**
      * 转换 实体类 为 update sql语句
+     *
      * @param pData      json 对象
      * @param pDbType    数据库类型
      * @param pTableName 表名称
@@ -302,7 +308,7 @@ public class JsonSqlFactory {
         if (null == pJsonNode) {
             throw new APPErrorException("输入的 JsonNod 错误！");
         }
-        return parseUpdateSql(pJsonNode, pDbType,pKeys, pTableName);
+        return parseUpdateSql(pJsonNode, pDbType, pKeys, pTableName);
 
     }
 
