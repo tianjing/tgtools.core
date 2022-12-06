@@ -23,6 +23,7 @@ public class WebClientTest {
 
         vClient.setMethod("GET");
         vClient.setUrl(url1);
+
         InputStream stream = vClient.doInvokeAsStream("");
 
 

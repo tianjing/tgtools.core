@@ -4,15 +4,13 @@ import tgtools.exceptions.APPErrorException;
 import tgtools.util.GUID;
 import tgtools.util.StringUtil;
 
+import javax.net.ssl.TrustManager;
 import java.io.*;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -30,6 +28,9 @@ public class WebClient implements IWebClient {
     private int readTimeout = -1;
     private HashMap<String, List<HttpCookie>> cookies;
     private boolean useAutoRedirect = true;
+    private boolean ignoreSsl = true;
+    private javax.net.ssl.TrustManager trustManager;
+
 
     public WebClient() {
         cookies = new HashMap<String, List<HttpCookie>>();
@@ -58,6 +59,22 @@ public class WebClient implements IWebClient {
 
     public void setUseAutoRedirect(boolean pUseAutoRedirect) {
         useAutoRedirect = pUseAutoRedirect;
+    }
+
+    public boolean getIgnoreSsl() {
+        return ignoreSsl;
+    }
+
+    public void setIgnoreSsl(boolean ignoreSsl) {
+        this.ignoreSsl = ignoreSsl;
+    }
+
+    public TrustManager getTrustManager() {
+        return trustManager;
+    }
+
+    public void setTrustManager(TrustManager trustManager) {
+        this.trustManager = trustManager;
     }
 
     @Override
@@ -280,10 +297,7 @@ public class WebClient implements IWebClient {
     }
 
     public InputStream getResponseStream(URLConnection pUrlConnection) throws IOException {
-        sun.net.www.protocol.http.HttpURLConnection conn1 = null;
-        if (pUrlConnection instanceof sun.net.www.protocol.http.HttpURLConnection) {
-            conn1 = (sun.net.www.protocol.http.HttpURLConnection) pUrlConnection;
-        }
+        java.net.HttpURLConnection conn1 = (java.net.HttpURLConnection) pUrlConnection;
         if (responseCode == HttpURLConnection.HTTP_BAD_METHOD || responseCode == HttpURLConnection.HTTP_BAD_REQUEST
                 || responseCode == HttpURLConnection.HTTP_NOT_FOUND || responseCode == HttpURLConnection.HTTP_BAD_GATEWAY ||
                 responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
@@ -587,6 +601,9 @@ public class WebClient implements IWebClient {
         String vUrl = url;
         OutputStream out = null;
         try {
+            if (getIgnoreSsl()) {
+                trustAllHttpsCertificates();
+            }
 
             setResponseCode(0);
             clearResponseHeader();
@@ -596,8 +613,8 @@ public class WebClient implements IWebClient {
             // 打开和URL之间的连接
             URLConnection conn = realUrl.openConnection();
 
-            ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
 
+            ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
 
             if (connectTimeout > 0) {
                 conn.setConnectTimeout(connectTimeout);
@@ -648,6 +665,7 @@ public class WebClient implements IWebClient {
                 java.net.HttpURLConnection conn1 = (java.net.HttpURLConnection) conn;
                 setResponseCode(conn1.getResponseCode());
             }
+
             //302 自动跳转
             if (useAutoRedirect && 302 == getResponseCode()) {
                 conn = doRedirect(conn);
@@ -694,5 +712,42 @@ public class WebClient implements IWebClient {
             return vUrlConnection;
         }
         return null;
+    }
+
+    private void trustAllHttpsCertificates() throws Exception {
+        javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[1];
+        javax.net.ssl.TrustManager tm = Objects.isNull(trustManager) ? new MyTrustManager() : trustManager;
+
+        trustAllCerts[0] = tm;
+        javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, null);
+        javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+
+    static class MyTrustManager implements javax.net.ssl.TrustManager, javax.net.ssl.X509TrustManager {
+        @Override
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public boolean isServerTrusted(java.security.cert.X509Certificate[] certs) {
+            return true;
+        }
+
+        public boolean isClientTrusted(java.security.cert.X509Certificate[] certs) {
+            return true;
+        }
+
+        @Override
+        public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+                throws java.security.cert.CertificateException {
+            return;
+        }
+
+        @Override
+        public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+                throws java.security.cert.CertificateException {
+            return;
+        }
     }
 }

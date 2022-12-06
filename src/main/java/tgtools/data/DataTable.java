@@ -6,7 +6,6 @@ import tgtools.data.mapping.Order;
 import tgtools.exceptions.APPErrorException;
 import tgtools.exceptions.APPRuntimeException;
 import tgtools.json.JSONArray;
-import tgtools.json.JSONObject;
 import tgtools.util.NumberUtility;
 import tgtools.util.StringUtil;
 import tgtools.xml.XmlSerializable;
@@ -15,7 +14,6 @@ import tgtools.xml.XmlSerializeException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- *
  * @author tianjing
  */
 @XmlSerializable
@@ -495,7 +492,7 @@ public class DataTable implements Serializable {
      * 根据条件筛选数据
      *
      * @param pCondition 条件
-     * @param p_orders    排序
+     * @param p_orders   排序
      * @return
      */
     public DataRowCollection select(Condition pCondition, Order[] p_orders) {
@@ -829,19 +826,19 @@ public class DataTable implements Serializable {
 
     public void readXml(XMLStreamReader pReader) {
         try {
-            if (!StringUtil.equalsIgnoreCase(pReader.getLocalName(),"DataTable")) {
+            if (!StringUtil.equalsIgnoreCase(pReader.getLocalName(), "DataTable")) {
                 throw new XmlSerializeException("无法反序列化 DataTable 对象，当前 XMLStreamReader 的游标位置有误。");
             }
 
             for (int i = 0; i < pReader.getAttributeCount(); i++) {
                 String attrName = pReader.getAttributeName(i).toString();
                 String attrValue = pReader.getAttributeValue(i);
-                if (StringUtil.equalsIgnoreCase(attrName,"tableName")) {
+                if (StringUtil.equalsIgnoreCase(attrName, "tableName")) {
                     setTableName(attrValue);
                 }
             }
             pReader.nextTag();
-            if (StringUtil.equalsIgnoreCase(pReader.getLocalName(),"Columns")) {
+            if (StringUtil.equalsIgnoreCase(pReader.getLocalName(), "Columns")) {
                 while (pReader.hasNext()) {
                     pReader.nextTag();
                     if (pReader.isEndElement()) {
@@ -852,7 +849,7 @@ public class DataTable implements Serializable {
                         for (int i = 0; i < pReader.getAttributeCount(); i++) {
                             String attrName = pReader.getAttributeName(i).toString();
 
-                            if (StringUtil.equalsIgnoreCase(attrName,"columnName")) {
+                            if (StringUtil.equalsIgnoreCase(attrName, "columnName")) {
                                 columnName = pReader.getAttributeValue(i);
                                 break;
                             }
@@ -864,7 +861,7 @@ public class DataTable implements Serializable {
             }
             pReader.nextTag();
 
-            if (StringUtil.equalsIgnoreCase(pReader.getLocalName(),"Rows")) {
+            if (StringUtil.equalsIgnoreCase(pReader.getLocalName(), "Rows")) {
                 while (pReader.hasNext()) {
                     pReader.nextTag();
                     if (pReader.isEndElement()) {
