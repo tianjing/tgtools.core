@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * @author tianjing
  */
-public final class FileUtil {
+public class FileUtil {
     /**
      * 根据目录和文件扩展名找到所有符合条件的文件
      *

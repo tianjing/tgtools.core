@@ -18,7 +18,7 @@ import java.util.Locale;
  *
  * @author tianjing
  */
-public final class StringUtil {
+public class StringUtil {
     public static final byte[] UTF16LEBom = new byte[]{(byte) 0xFF, (byte) 0xFE};
     public static final byte[] UTF16BEBom = new byte[]{(byte) 0xFE, (byte) 0xFF,
             (byte) 0xbf};
