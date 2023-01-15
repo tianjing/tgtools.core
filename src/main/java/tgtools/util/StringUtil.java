@@ -223,8 +223,8 @@ public class StringUtil {
     /**
      * 判断字符串是否相等
      *
-     * @param s1           字串1
-     * @param s2           字串2
+     * @param s1          字串1
+     * @param s2          字串2
      * @param pIgnoreCase 是否忽略大小写
      * @return 相等返回true
      */
@@ -410,7 +410,7 @@ public class StringUtil {
      * @return 返回移除后的新字符串
      */
     public static String trimStart(String str) {
-        return trim(str, null, -1);
+        return trim(str, " ", -1);
     }
 
     /**
@@ -523,7 +523,7 @@ public class StringUtil {
                     start++;
                 }
             }
-            if (stripChars.length() == 0) {
+            if (null == stripChars || stripChars.length() == 0) {
                 return str;
             }
 
@@ -541,7 +541,7 @@ public class StringUtil {
                     end--;
                 }
             }
-            if (stripChars.length() == 0) {
+            if (null == stripChars || stripChars.length() == 0) {
                 return str;
             }
 
@@ -2815,6 +2815,7 @@ public class StringUtil {
 
         /**
          * startSentence
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2823,6 +2824,7 @@ public class StringUtil {
 
         /**
          * startWord
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2831,6 +2833,7 @@ public class StringUtil {
 
         /**
          * inWord
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2839,6 +2842,7 @@ public class StringUtil {
 
         /**
          * startDigitSentence
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2847,6 +2851,7 @@ public class StringUtil {
 
         /**
          * startDigitWord
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2855,6 +2860,7 @@ public class StringUtil {
 
         /**
          * inDigitWord
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
@@ -2862,11 +2868,17 @@ public class StringUtil {
                                             char paramChar);
 
         /**
-         *  inDelimiter
+         * inDelimiter
+         *
          * @param paramStringBuffer
          * @param paramChar
          */
         protected abstract void inDelimiter(StringBuffer paramStringBuffer,
                                             char paramChar);
+    }
+
+    public static void main(String[] args) {
+        String dd = " a b ";
+        System.out.println("'"+StringUtil.trim(dd," ")+"'");
     }
 }
