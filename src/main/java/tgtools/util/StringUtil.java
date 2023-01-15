@@ -2877,8 +2877,4 @@ public class StringUtil {
                                             char paramChar);
     }
 
-    public static void main(String[] args) {
-        String dd = " a b ";
-        System.out.println("'"+StringUtil.trim(dd," ")+"'");
-    }
 }
