@@ -451,8 +451,4 @@ public class FileUtil {
         return charset;
     }
 
-    public static void main(String[] args) {
-        String ss = FileUtil.readFile("C:\\tianjing\\Desktop\\JS.变电站接线图目录.fac.pic.g");
-        System.out.println(ss);
-    }
 }
