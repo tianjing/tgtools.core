@@ -1,7 +1,5 @@
 package tgtools.log;
 
-import tgtools.util.StringUtil;
-
 import java.util.HashMap;
 
 /**
@@ -84,10 +82,10 @@ public class LoggerFactory {
      */
     private static ILoger createLoger(String pName) {
         if (!getLogers().containsKey(pName)) {
-            if( org.slf4j.LoggerFactory.getLogger(StringUtil.EMPTY_STRING).getClass().getName().indexOf("org.slf4j.impl.Log4jLoggerAdapter")>=0)
-            {
-                return new Log4jLoger(pName);
-            }
+//            if( org.slf4j.LoggerFactory.getLogger(StringUtil.EMPTY_STRING).getClass().getName().indexOf("org.slf4j.impl.Log4jLoggerAdapter")>=0)
+//            {
+//                return new Log4jLoger(pName);
+//            }
             return new DefaultLoger(pName);
         }
         return null;

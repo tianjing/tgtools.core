@@ -2,6 +2,7 @@ package tgtools.tasks.cron;
 
 import tgtools.tasks.Task;
 import tgtools.tasks.TaskContext;
+import tgtools.util.DateUtil;
 import tgtools.util.LogHelper;
 
 import java.text.ParseException;
@@ -17,6 +18,8 @@ public class CronExpressionTask extends Task {
     protected CronExpression teamCronExpression;
     protected Consumer<TaskContext> cronExpressionAction;
     protected Date lastRunDate;
+    //第一次强制运行
+    protected boolean useFirstRun = true;
 
     public CronExpressionTask() {
 
@@ -27,9 +30,11 @@ public class CronExpressionTask extends Task {
     }
 
     public static void main(String[] args) {
-        new CronExpressionTask(content -> {
-            System.out.println("1");
-        }).run(null);
+        CronExpressionTask vtask = new CronExpressionTask(content -> {
+            System.out.println(DateUtil.formatLongtime(new Date()));
+        });
+        //vtask.setUseFirstRun(false);
+        vtask.run(null);
 
     }
 
@@ -37,6 +42,22 @@ public class CronExpressionTask extends Task {
         CronExpressionTask vCronExpressionTask = new CronExpressionTask(pCronExpressionAction);
         vCronExpressionTask.setTeamCronExpression(pCronExpression);
         return vCronExpressionTask;
+    }
+
+    public Date getLastRunDate() {
+        return lastRunDate;
+    }
+
+    public void setLastRunDate(Date lastRunDate) {
+        this.lastRunDate = lastRunDate;
+    }
+
+    public boolean isUseFirstRun() {
+        return useFirstRun;
+    }
+
+    public void setUseFirstRun(boolean useFirstRun) {
+        this.useFirstRun = useFirstRun;
     }
 
     public CronExpression getTeamCronExpression() {
@@ -80,11 +101,20 @@ public class CronExpressionTask extends Task {
         if (null == teamCronExpression) {
             createDefaultTeamCronExpression();
         }
+
+        //非第一次执行时，初始化当前时间，下个周期再运行
+        if (!useFirstRun && null == lastRunDate) {
+            lastRunDate = new Date();
+        }
         while (true) {
             if (null != lastRunDate) {
                 Date vNextDate = teamCronExpression.getTimeAfter(lastRunDate);
 
                 if (vNextDate.getTime() > System.currentTimeMillis()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
                     continue;
                 }
             }
