@@ -221,7 +221,7 @@ public class WebClient implements IWebClient {
             conn = doInvoke(params);
             return getResponseStream(doInvoke(params));
         } catch (IOException e) {
-            throw new APPErrorException("获取返回信息出错", e);
+            throw new APPErrorException("获取返回信息出错" + e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
@@ -258,7 +258,7 @@ public class WebClient implements IWebClient {
             }
             return parseString(getResponseStream(conn), encoding);
         } catch (IOException e) {
-            throw new APPErrorException("获取返回信息出错", e);
+            throw new APPErrorException("获取返回信息出错"+ e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
@@ -290,7 +290,7 @@ public class WebClient implements IWebClient {
             conn = doInvoke(params);
             return parseByte(getResponseStream(conn));
         } catch (IOException e) {
-            throw new APPErrorException("获取返回信息出错", e);
+            throw new APPErrorException("获取返回信息出错"+ e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
@@ -318,7 +318,7 @@ public class WebClient implements IWebClient {
             conn = doInvoke(pInput);
             return getResponseStream(conn);
         } catch (IOException e) {
-            throw new APPErrorException("获取返回信息出错", e);
+            throw new APPErrorException("获取返回信息出错"+ e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
@@ -369,7 +369,7 @@ public class WebClient implements IWebClient {
 
 
         } catch (IOException e) {
-            throw new APPErrorException("GZIP数据解析错误", e);
+            throw new APPErrorException("GZIP数据解析错误"+ e.getMessage(), e);
         }
     }
 
@@ -377,7 +377,7 @@ public class WebClient implements IWebClient {
         try {
             return parseString(getResponseStream(pUrlConnection), encoding);
         } catch (IOException e) {
-            throw new APPErrorException("获取返回信息出错", e);
+            throw new APPErrorException("获取返回信息出错"+ e.getMessage(), e);
         }
     }
 
@@ -402,9 +402,9 @@ public class WebClient implements IWebClient {
             return new String(outStream.toByteArray(), pEncoding);
 
         } catch (UnsupportedEncodingException e) {
-            throw new APPErrorException("字符串转换失败", e);
+            throw new APPErrorException("字符串转换失败"+ e.getMessage(), e);
         } catch (IOException e) {
-            throw new APPErrorException("输入信息获取错误", e);
+            throw new APPErrorException("输入信息获取错误"+ e.getMessage(), e);
         } finally {
             if (null != outStream) {
                 try {
@@ -441,7 +441,7 @@ public class WebClient implements IWebClient {
             data = null;
             return vFile;
         } catch (IOException e) {
-            throw new APPErrorException("写入临时文件出错", e);
+            throw new APPErrorException("写入临时文件出错"+ e.getMessage(), e);
         } finally {
             if (null != outStream) {
                 try {
@@ -475,7 +475,7 @@ public class WebClient implements IWebClient {
             data = null;
             return outStream.toByteArray();
         } catch (IOException e) {
-            throw new APPErrorException("获取输入的信息出错", e);
+            throw new APPErrorException("获取输入的信息出错"+ e.getMessage(), e);
         } finally {
             if (null != outStream) {
                 try {
@@ -585,7 +585,7 @@ public class WebClient implements IWebClient {
             ByteArrayInputStream dd = new ByteArrayInputStream(pParam.getBytes(encoding));
             return doInvoke(dd);
         } catch (UnsupportedEncodingException e) {
-            throw new APPErrorException("参数转码失败；参数：" + pParam + ";编码：" + encoding + ";原因：" + e.getMessage());
+            throw new APPErrorException("参数转码失败；参数：" + pParam + ";编码：" + encoding + ";原因：" + e.getMessage(),e);
         }
     }
 
@@ -673,7 +673,7 @@ public class WebClient implements IWebClient {
             return conn;
 
         } catch (Exception e) {
-            throw new APPErrorException("请求出错！", e);
+            throw new APPErrorException("请求出错！"+ e.getMessage(), e);
         }
     }
 
